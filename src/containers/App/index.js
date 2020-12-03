@@ -1,17 +1,19 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { onLogin, onLogout } from '../../store/user';
-import Button from '../../components/atoms/Button/';
+import { onLogin } from '../../store/user';
+import Header from '../../components/organisms/Header';
 
 const App = ({ onLogin }) => {
   return (
-    <Button onClick={onLogin}></Button>
-  );  
+    <>
+      <Header onLoginClick={onLogin} />
+    </>
+  );
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onLogin : user => dispatch(onLogin(user)),
+    onLogin: user => dispatch(onLogin(user)),
   };
 };
 
