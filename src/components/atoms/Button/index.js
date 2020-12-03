@@ -1,15 +1,17 @@
 import React from 'react';
 
-const Button = ({ onClick, name }) => {
-
-  const onHandleClick = () => {
-    onClick();
+const Button = ({ onClick, text }) => {
+  const clickHandler = event => {
+    onClick(event);
   };
 
   return (
-    <div
-      onClick={onHandleClick}>{name}
-    </div>
+    <button
+      className={text}
+      onClick={clickHandler}
+    >
+      {text}
+    </button>
   );
 };
 
