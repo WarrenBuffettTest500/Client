@@ -1,9 +1,18 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { onLogin, onLogout } from '../../store/user';
+import Button from '../../components/atoms/Button/';
 
-const App = () => {
+const App = ({ onLogin }) => {
   return (
-    <div className='App'></div>
-  );
+    <Button onClick={onLogin}></Button>
+  );  
 };
 
-export default App;
+const mapDispatchToProps = dispatch => {
+  return {
+    onLogin : user => dispatch(onLogin(user)),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(App);
