@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
+import Header from '../../components/organisms/Header';
 import { onLogin, onSignup } from '../../store/user';
-import Button from '../../components/atoms/Button/';
 import LoginModal from '../../components/molecules/LoginModal/';
 
 const App = ({
@@ -10,15 +10,13 @@ const App = ({
   token,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const clickHandler = () => {
+  const loginButtonClickHandler = () => {
     setIsModalOpen(true);
   };
 
   return (
     <>
-      <Button
-        onClick={clickHandler}
-        text={token ? 'logout' : 'login'} />
+      <Header onLoginClick={loginButtonClickHandler} />
       <LoginModal
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}

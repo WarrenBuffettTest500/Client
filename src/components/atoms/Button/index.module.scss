@@ -1,0 +1,46 @@
+@mixin cursorPointer() {
+  cursor: pointer;
+}
+
+@mixin rightAlignedButton() {
+  @include cursorPointer;
+  position: absolute;
+  right: 25px;
+}
+
+.profileButton {
+  @include rightAlignedButton;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+}
+
+.loginButton {
+  @include rightAlignedButton;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 10px;
+  background-color: #FF5391;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.preferencesButton,
+.logoutButton {
+  @include cursorPointer;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 10px;
+  width: 180px;
+  background-color: #FF5391;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.closeModal {
+  @include cursorPointer;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+}
