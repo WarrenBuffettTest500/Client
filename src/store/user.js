@@ -6,11 +6,10 @@ const userSlice = createSlice({
   reducers: {
     onLogin: (state, action) => {
       state.user = action.payload;
-      console.log(state, 'state');
-      console.log(action.payload, 'payload');
     },
     onLogout: (state, action) => {
-      state = null;
+      localStorage.removeItem('token');
+      state.user = null;
     },
     onUpdateUser: (state, action) => {
       state.user.preferences = action.payload; 

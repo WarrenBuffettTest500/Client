@@ -1,23 +1,19 @@
 import React from 'react';
 import styles from './index.module.scss';
 
-const Button = ({
+const Modal = ({
   className,
-  onClick,
-  text,
+  children,
   ...attributes
 }) => {
   return (
-    <button
-      type='button'
+    <div
       className={styles[className]}
-      onClick={onClick}
-      name={text}
       {...attributes}
     >
-      {text}
-    </button>
+      {children}
+    </div>
   );
 };
 
-export default Button;
+export default Modal;

@@ -1,38 +1,46 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { onLogin, onSignup } from '../../store/user';
-import Button from '../../components/atoms/Button/';
+import Header from '../../components/organisms/Header';
+import { onLogin, onLogout } from '../../store/user';
 import LoginModal from '../../components/molecules/LoginModal/';
 
 const App = ({
   onLogin,
-  onSignup,
+  onLogout,
+  currentUser,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const clickHandler = () => {
+  const loginButtonClickHandler = () => {
     setIsModalOpen(true);
   };
 
   return (
     <>
-      <Button
-        onClick={clickHandler}
-        text='login' />
+      <Header
+        currentUser={currentUser}
+        onLoginClick={loginButtonClickHandler}
+        onLogoutClick={onLogout}
+      />
       <LoginModal
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
         onLogin={onLogin}
-        onSignup={onSignup}
       />
     </>
   );
 };
 
-const mapDispatchToProps = dispatch => {
+const mapStateToProps = state => {
   return {
-    onLogin: user => dispatch(onLogin(user)),
-    onSignup: user => dispatch(onSignup(user)),
+    currentUser: state.user.user,
   };
 };
 
-export default connect(null, mapDispatchToProps)(App);
+const mapDispatchToProps = dispatch => {
+  return {
+    onLogin: user => dispatch(onLogin(user)),
+    onLogout: () => dispatch(onLogout()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

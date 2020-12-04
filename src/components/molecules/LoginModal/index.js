@@ -25,7 +25,7 @@ const LoginModal = ({
       photoURL: user.photoURL,
     };
 
-    if (event.target.className === 'login with google') {
+    if (event.target.name === 'login with google') {
       try {
         const { result, user, token } = await requestSignIn(userInfo, PATHS.LOGIN);
 
@@ -33,7 +33,7 @@ const LoginModal = ({
           localStorage.setItem('token', token);
           onLogin(user);
           setIsModalOpen(false);
-          addToast('성공적으로 로그인이 되었습니다', {
+          addToast('성공적으로 로그인했습니다', {
             appearance: 'success',
             autoDismiss: true,
           });
@@ -56,16 +56,21 @@ const LoginModal = ({
         const { result, user, token } = await requestSignIn(userInfo, PATHS.SIGNUP);
 
         if (result === RESPONSE.OK){
+          localStorage.setItem('token', token);
           onLogin(user);
           setIsModalOpen(false);
+          addToast('회원가입에 성공하였습니다', {
+            appearance: 'info',
+            autoDismiss: true,
+          });
           history.push(PATHS.PREFERENCES);
           return;
         }
         if (result === RESPONSE.FAILURE) {
           localStorage.setItem('token', token);
-          onLogin(user, token);
+          onLogin(user);
           setIsModalOpen(false);
-          addToast('이미 회원가입되어있습니다', {
+          addToast('이미 회원가입했습니다', {
             appearance: 'info',
             autoDismiss: true,
           });

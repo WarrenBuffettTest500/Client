@@ -1,0 +1,22 @@
+.searchBarWrapper {
+  position: relative;
+  height: 28px;
+  width: 360px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+.searchBar {
+  height: 100%;
+  width: 100%;
+}
+
+.searchIcon {
+  position: absolute;
+  right: 10px;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
