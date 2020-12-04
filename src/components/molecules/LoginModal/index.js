@@ -3,16 +3,15 @@ import Modal from 'react-modal';
 import { useHistory } from 'react-router-dom';
 import Button from '../../atoms/Button';
 import PATHS from '../../../constants/paths';
-import AUTH from '../../../constants/auth';
 import { authService, provider } from '../../../config/firebase';
 import requestSignIn from '../../../api/requestSignin';
 import { useToasts } from 'react-toast-notifications';
+import RESPONSE from 'constants/response';
 
 const LoginModal = ({
   isModalOpen,
   setIsModalOpen,
   onLogin,
-  onSignup,
 }) => {
   const { addToast } = useToasts();
   const history = useHistory();
@@ -26,20 +25,21 @@ const LoginModal = ({
       photoURL: user.photoURL,
     };
 
-    if (event.target.className === 'login with google') {
+    if (event.target.name === 'login with google') {
       try {
-        const { data: { message, token } } = await requestSignIn(userInfo, PATHS.LOGIN);
+        const { result, user, token } = await requestSignIn(userInfo, PATHS.LOGIN);
 
-        if (message === '이미 가입했어요') {
-          localStorage.setItem(AUTH.GOOGIT_LOGIN_TOKEN, token);
-          onLogin(...userInfo);
+        if (result === RESPONSE.OK) {
+          localStorage.setItem('token', token);
+          onLogin(user);
           setIsModalOpen(false);
-
-          addToast(message, {
+          addToast('성공적으로 로그인했습니다', {
             appearance: 'success',
             autoDismiss: true,
           });
-        } else {
+          return;
+        } 
+        if (result === RESPONSE.FAILURE) {
           addToast('회원가입이 필요합니다', {
             appearance: 'info',
             autoDismiss: true,
@@ -53,19 +53,28 @@ const LoginModal = ({
       }
     } else {
       try {
-        const { data: { message, token } } = await requestSignIn(userInfo, PATHS.SIGNUP);
+        const { result, user, token } = await requestSignIn(userInfo, PATHS.SIGNUP);
 
-        if (message === '이미 가입했어요') {
-          localStorage.setItem(AUTH.GOOGIT_LOGIN_TOKEN, token);
-          onLogin(...userInfo);
+        if (result === RESPONSE.OK){
+          localStorage.setItem('token', token);
+          onLogin(user);
           setIsModalOpen(false);
-          addToast(message, {
-            appearance: 'success',
+          addToast('회원가입에 성공하였습니다', {
+            appearance: 'info',
             autoDismiss: true,
           });
-        } else {
-          onSignup({ ...userInfo });
-          history.push(PATHS.SIGNUP);
+          history.push(PATHS.PREFERENCES);
+          return;
+        }
+        if (result === RESPONSE.FAILURE) {
+          localStorage.setItem('token', token);
+          onLogin(user);
+          setIsModalOpen(false);
+          addToast('이미 회원가입했습니다', {
+            appearance: 'info',
+            autoDismiss: true,
+          });
+          return;
         }
       } catch (error) {
         addToast(error.message, {

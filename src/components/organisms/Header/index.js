@@ -5,7 +5,11 @@ import Button from '../../atoms/Button';
 import Modal from '../../molecules/Modal';
 import './index.scss';
 
-const Header = ({ currentUser, onLoginClick }) => {
+const Header = ({ 
+  currentUser,
+  onLoginClick,
+  onLogoutClick,
+}) => {
   const { pathname } = useLocation();
   const history = useHistory();
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
@@ -55,6 +59,7 @@ const Header = ({ currentUser, onLoginClick }) => {
           <Button
             className='logoutButton'
             text='로그아웃'
+            onClick={onLogoutClick}
           />
         </Modal>
       }

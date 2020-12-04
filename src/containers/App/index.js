@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import Header from '../../components/organisms/Header';
-import { onLogin, onSignup } from '../../store/user';
+import { onLogin, onLogout } from '../../store/user';
 import LoginModal from '../../components/molecules/LoginModal/';
 
 const App = ({
   onLogin,
-  onSignup,
-  token,
+  onLogout,
+  currentUser,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const loginButtonClickHandler = () => {
@@ -16,12 +16,15 @@ const App = ({
 
   return (
     <>
-      <Header onLoginClick={loginButtonClickHandler} />
+      <Header
+        currentUser={currentUser}
+        onLoginClick={loginButtonClickHandler}
+        onLogoutClick={onLogout}
+      />
       <LoginModal
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
         onLogin={onLogin}
-        onSignup={onSignup}
       />
     </>
   );
@@ -29,14 +32,14 @@ const App = ({
 
 const mapStateToProps = state => {
   return {
-    token: state.user.token,
+    currentUser: state.user.user,
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     onLogin: user => dispatch(onLogin(user)),
-    onSignup: user => dispatch(onSignup(user)),
+    onLogout: () => dispatch(onLogout()),
   };
 };
 
