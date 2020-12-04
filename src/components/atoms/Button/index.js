@@ -12,6 +12,7 @@ const Button = ({
       type='button'
       className={styles[className]}
       onClick={onClick}
+      name={text}
       {...attributes}
     >
       {text}
