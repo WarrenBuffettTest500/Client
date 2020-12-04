@@ -7,7 +7,6 @@ import LoginModal from '../../components/molecules/LoginModal/';
 const App = ({
   onLogin,
   onSignup,
-  token,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const clickHandler = () => {
@@ -18,7 +17,7 @@ const App = ({
     <>
       <Button
         onClick={clickHandler}
-        text={token ? 'logout' : 'login'} />
+        text='login' />
       <LoginModal
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
@@ -29,12 +28,6 @@ const App = ({
   );
 };
 
-const mapStateToProps = state => {
-  return {
-    token: state.user.token,
-  };
-};
-
 const mapDispatchToProps = dispatch => {
   return {
     onLogin: user => dispatch(onLogin(user)),
@@ -42,4 +35,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(null, mapDispatchToProps)(App);

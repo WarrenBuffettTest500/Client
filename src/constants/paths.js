@@ -6,6 +6,7 @@ const PATHS = {
   SIGNUP: '/signup',
   LOGIN: '/login',
   USERS: '/users',
+  PREFERENCES: '/preferences',
 };
 
 export default PATHS;

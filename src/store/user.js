@@ -2,22 +2,18 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const userSlice = createSlice({
   name: 'userReducer',
-  initialState: {
-    uid: '',
-    email: '',
-    displayName: '',
-    photoURL: '',
-    token: '',
-  },
+  initialState: {user : null},
   reducers: {
     onLogin: (state, action) => {
-      state = action.payload;
+      state.user = action.payload;
+      console.log(state, 'state');
+      console.log(action.payload, 'payload');
     },
     onLogout: (state, action) => {
       state = null;
     },
-    onSignup: (state, action) => {
-      state = action.payload;
+    onUpdateUser: (state, action) => {
+      state.user.preferences = action.payload; 
     },
   },
 });
