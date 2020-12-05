@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import Header from '../../components/organisms/Header';
 import { onLogin, onLogout } from '../../store/user';
+import { setStockDetails } from '../../store/stock';
 import LoginModal from '../../components/molecules/LoginModal/';
 
 const App = ({
   onLogin,
   onLogout,
   currentUser,
+  setStockDetails,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const loginButtonClickHandler = () => {
@@ -20,6 +22,7 @@ const App = ({
         currentUser={currentUser}
         onLoginClick={loginButtonClickHandler}
         onLogoutClick={onLogout}
+        onSearchBarKeyPress={setStockDetails}
       />
       <LoginModal
         isModalOpen={isModalOpen}
@@ -40,6 +43,7 @@ const mapDispatchToProps = dispatch => {
   return {
     onLogin: user => dispatch(onLogin(user)),
     onLogout: () => dispatch(onLogout()),
+    setStockDetails: stockDetails => dispatch(setStockDetails(stockDetails)),
   };
 };
 

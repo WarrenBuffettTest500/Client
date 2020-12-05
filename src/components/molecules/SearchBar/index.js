@@ -1,18 +1,71 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import './index.scss';
 import SearchIcon from '@material-ui/icons/Search';
-
-const SearchBar = () => {
+import Autosuggest from 'react-autosuggest';
+import Input from '../../atoms/Input';
+import { useToasts } from 'react-toast-notifications';
+import { tickers } from '../../../mock_data/tickers';
+import requestStockDetails from '../../../api/requestStockDetails';
+import {
+  getSuggestions,
+  getSuggestionValue,
+  renderSuggestion,
+} from '../../../utils/autosuggest';
+import PATHS from '../../../constants/paths';
+//todo: tickers mockdata -> db에서 조회
+const SearchBar = ({ onSearchBarKeyPress }) => {
   const [searchKeyword, setSearchKeyword] = useState('');
+  const [suggestions, setSuggestions] = useState([]);
+  const { addToast } = useToasts();
+  const history = useHistory();
+
+  const onChange = (event, { newValue, method }) => {
+    setSearchKeyword(newValue);
+  };
+
+  const onSuggestionsFetchRequested = ({ value }) => {
+    setSuggestions(getSuggestions(value));
+  };
+
+  const onSuggestionsClearRequested = () => {
+    setSuggestions([]);
+  };
+
+  const keyPressHandler = async event => {
+    if (event.key !== 'Enter' || !searchKeyword) return;
+    if (!tickers.includes(searchKeyword)) {
+      addToast('정보가 없는 주식입니다', {
+        appearance: 'info',
+        autoDismiss: true,
+      });
+    } else {
+      const stockDetails = await requestStockDetails(searchKeyword);
+      onSearchBarKeyPress(stockDetails);
+      history.push(PATHS.STOCK_DETAILS);
+    }
+  };
+
+  const inputProps = {
+    placeholder: '관심있는 주식을 검색하세요',
+    value: searchKeyword,
+    onChange,
+    onKeyPress: keyPressHandler,
+    className: 'searchBar',
+  };
 
   return (
     <div className='searchBarWrapper'>
-      <input
-        className='searchBar'
-        value={searchKeyword}
-        onChange={event => setSearchKeyword(event.target.value)}
-      />
       <SearchIcon className='searchIcon' />
+      <Autosuggest
+        suggestions={suggestions}
+        onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+        onSuggestionsClearRequested={onSuggestionsClearRequested}
+        getSuggestionValue={getSuggestionValue}
+        renderSuggestion={renderSuggestion}
+        inputProps={inputProps}
+        renderInputComponent={Input}
+      />
     </div>
   );
 };

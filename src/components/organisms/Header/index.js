@@ -5,10 +5,11 @@ import Button from '../../atoms/Button';
 import Modal from '../../molecules/Modal';
 import './index.scss';
 
-const Header = ({ 
+const Header = ({
   currentUser,
   onLoginClick,
   onLogoutClick,
+  onSearchBarKeyPress,
 }) => {
   const { pathname } = useLocation();
   const history = useHistory();
@@ -34,7 +35,9 @@ const Header = ({
       >
         <h2>버핏테스트500</h2>
       </div>
-      <SearchBar />
+      <SearchBar
+        onSearchBarKeyPress={onSearchBarKeyPress}
+      />
       {
         currentUser
           ? <Button
