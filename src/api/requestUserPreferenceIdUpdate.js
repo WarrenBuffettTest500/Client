@@ -1,21 +1,19 @@
 import METHODS from '../constants/methods';
 import PATHS from '../constants/paths';
 
-const requestSignIn = async (userInfo, path) => {
+const requestUserPreferenceIdUpdate = async (user, info) => {
   const response = await fetch(
-    `${PATHS.HOST}${PATHS.SERVER_PORT}${path}`,
+    `${PATHS.HOST}${PATHS.SERVER_PORT}${PATHS.USERS}/${user.uid}`,
     {
-      method: METHODS.POST,
+      method: METHODS.PUT,
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(
-        userInfo,
-      ),
+      body: JSON.stringify(info),
     },
   );
 
   return await response.json();
 };
 
-export default requestSignIn;
+export default requestUserPreferenceIdUpdate;

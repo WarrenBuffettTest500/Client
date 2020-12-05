@@ -5,7 +5,7 @@ import Button from '../../atoms/Button';
 import Modal from '../../molecules/Modal';
 import './index.scss';
 
-const Header = ({ 
+const Header = ({
   currentUser,
   onLoginClick,
   onLogoutClick,

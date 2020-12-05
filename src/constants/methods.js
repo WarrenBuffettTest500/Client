@@ -1,8 +1,8 @@
-const METHOD = {
+const METHODS = {
   GET: 'GET',
   POST: 'POST',
   PUT: 'PUT',
   DELETE: 'DELETE',
 };
 
-export default METHOD;
+export default METHODS;
