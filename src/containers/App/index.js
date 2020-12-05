@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import Header from '../../components/organisms/Header';
-import { onLogin, onLogout } from '../../store/user';
+import { setCurrentUser, removeCurrentUser, setPreferenceInfo } from '../../store/user';
 import LoginModal from '../../components/molecules/LoginModal/';
+import PreferencesForm from '../../components/templates/PreferencesForm';
 
 const App = ({
   onLogin,
   onLogout,
   currentUser,
+  onUserUpdate,
+  onPreferenceInfoUpdate,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const loginButtonClickHandler = () => {
@@ -26,6 +29,11 @@ const App = ({
         setIsModalOpen={setIsModalOpen}
         onLogin={onLogin}
       />
+      <PreferencesForm
+        currentUser={currentUser}
+        onUserUpdate={onUserUpdate}
+        onPreferenceInfoUpdate={onPreferenceInfoUpdate}
+      />
     </>
   );
 };
@@ -38,8 +46,10 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onLogin: user => dispatch(onLogin(user)),
-    onLogout: () => dispatch(onLogout()),
+    onLogin: user => dispatch(setCurrentUser(user)),
+    onLogout: () => dispatch(removeCurrentUser()),
+    onUserUpdate: user => dispatch(setCurrentUser(user)),
+    onPreferenceInfoUpdate: preferenceInfo => dispatch(setPreferenceInfo(preferenceInfo)),
   };
 };
 
