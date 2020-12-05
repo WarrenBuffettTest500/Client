@@ -4,9 +4,9 @@ import { useHistory } from 'react-router-dom';
 import Button from '../../atoms/Button';
 import PATHS from '../../../constants/paths';
 import { authService, provider } from '../../../config/firebase';
-import requestSignIn from '../../../api/requestSignin';
+import requestSignIn from '../../../api/requestSignIn';
 import { useToasts } from 'react-toast-notifications';
-import RESPONSE from 'constants/response';
+import RESPONSES from 'constants/responses';
 
 const LoginModal = ({
   isModalOpen,
@@ -29,7 +29,7 @@ const LoginModal = ({
       try {
         const { result, user, token } = await requestSignIn(userInfo, PATHS.LOGIN);
 
-        if (result === RESPONSE.OK) {
+        if (result === RESPONSES.OK) {
           localStorage.setItem('token', token);
           onLogin(user);
           setIsModalOpen(false);
@@ -38,8 +38,8 @@ const LoginModal = ({
             autoDismiss: true,
           });
           return;
-        } 
-        if (result === RESPONSE.FAILURE) {
+        }
+        if (result === RESPONSES.FAILURE) {
           addToast('회원가입이 필요합니다', {
             appearance: 'info',
             autoDismiss: true,
@@ -55,7 +55,7 @@ const LoginModal = ({
       try {
         const { result, user, token } = await requestSignIn(userInfo, PATHS.SIGNUP);
 
-        if (result === RESPONSE.OK){
+        if (result === RESPONSES.OK) {
           localStorage.setItem('token', token);
           onLogin(user);
           setIsModalOpen(false);
@@ -66,7 +66,7 @@ const LoginModal = ({
           history.push(PATHS.PREFERENCES);
           return;
         }
-        if (result === RESPONSE.FAILURE) {
+        if (result === RESPONSES.FAILURE) {
           localStorage.setItem('token', token);
           onLogin(user);
           setIsModalOpen(false);

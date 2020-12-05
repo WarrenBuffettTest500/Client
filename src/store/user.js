@@ -2,21 +2,24 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const userSlice = createSlice({
   name: 'userReducer',
-  initialState: {user : null},
+  initialState: {
+    user: null,
+    preferenceInfo: null,
+  },
   reducers: {
-    onLogin: (state, action) => {
+    setCurrentUser: (state, action) => {
       state.user = action.payload;
     },
-    onLogout: (state, action) => {
+    removeCurrentUser: (state, action) => {
       localStorage.removeItem('token');
       state.user = null;
     },
-    onUpdateUser: (state, action) => {
-      state.user.preferences = action.payload; 
+    setPreferenceInfo: (state, action) => {
+      state.preferenceInfo = action.payload;
     },
   },
 });
 
 export default userSlice.reducer;
 
-export const { onLogin, onLogout, onSignup } = userSlice.actions;
+export const { setCurrentUser, removeCurrentUser, setPreferenceInfo } = userSlice.actions;
