@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import Header from '../../components/organisms/Header';
+import { setStockDetails } from '../../store/stock';
 import { setCurrentUser, removeCurrentUser, setPreferenceInfo } from '../../store/user';
 import LoginModal from '../../components/molecules/LoginModal/';
 import PreferencesForm from '../../components/templates/PreferencesForm';
@@ -9,6 +10,7 @@ const App = ({
   onLogin,
   onLogout,
   currentUser,
+  setStockDetails,
   onUserUpdate,
   onPreferenceInfoUpdate,
 }) => {
@@ -23,6 +25,7 @@ const App = ({
         currentUser={currentUser}
         onLoginClick={loginButtonClickHandler}
         onLogoutClick={onLogout}
+        onSearchBarKeyPress={setStockDetails}
       />
       <LoginModal
         isModalOpen={isModalOpen}
@@ -50,6 +53,7 @@ const mapDispatchToProps = dispatch => {
     onLogout: () => dispatch(removeCurrentUser()),
     onUserUpdate: user => dispatch(setCurrentUser(user)),
     onPreferenceInfoUpdate: preferenceInfo => dispatch(setPreferenceInfo(preferenceInfo)),
+    setStockDetails: stockDetails => dispatch(setStockDetails(stockDetails)),
   };
 };
 
