@@ -6,7 +6,7 @@ import PATHS from '../../../constants/paths';
 import { authService, provider } from '../../../config/firebase';
 import requestSignIn from '../../../api/requestSignIn';
 import { useToasts } from 'react-toast-notifications';
-import RESPONSES from 'constants/responses';
+import RESPONSES from '../../../constants/responses';
 
 const LoginModal = ({
   isModalOpen,
