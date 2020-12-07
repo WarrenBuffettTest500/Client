@@ -1,19 +1,19 @@
 import METHODS from '../constants/methods';
 import PATHS from '../constants/paths';
 
-const requestStockDetails = async keyword => {
+const requestUser = async () => {
   const response = await fetch(
-    `${PATHS.HOST}${PATHS.SERVER_PORT}${PATHS.SYMBOLS}/${keyword}`,
+    `${PATHS.HOST}${PATHS.SERVER_PORT}${PATHS.USERS}/current_user`,
     {
       method: METHODS.GET,
       headers: {
         'Content-Type': 'application/json',
-        Authorization: localStorage.getItem('token'),
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
     },
   );
 
-  return response.json();
+  return await response.json();
 };
 
-export default requestStockDetails;
+export default requestUser;

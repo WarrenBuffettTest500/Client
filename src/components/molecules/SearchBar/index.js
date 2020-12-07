@@ -5,7 +5,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import Autosuggest from 'react-autosuggest';
 import Input from '../../atoms/Input';
 import { useToasts } from 'react-toast-notifications';
-import { tickers } from '../../../mock_data/tickers';
+import { symbols } from '../../../mock_data/symbols';
 import requestStockDetails from '../../../api/requestStockDetails';
 import {
   getSuggestions,
@@ -13,7 +13,7 @@ import {
   renderSuggestion,
 } from '../../../utils/autosuggest';
 import PATHS from '../../../constants/paths';
-//todo: tickers mockdata -> db에서 조회
+
 const SearchBar = ({ onSearchBarKeyPress }) => {
   const [searchKeyword, setSearchKeyword] = useState('');
   const [suggestions, setSuggestions] = useState([]);
@@ -34,7 +34,7 @@ const SearchBar = ({ onSearchBarKeyPress }) => {
 
   const keyPressHandler = async event => {
     if (event.key !== 'Enter' || !searchKeyword) return;
-    if (!tickers.includes(searchKeyword)) {
+    if (!symbols.includes(searchKeyword)) {
       addToast('정보가 없는 주식입니다', {
         appearance: 'info',
         autoDismiss: true,
