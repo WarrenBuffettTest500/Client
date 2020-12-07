@@ -8,6 +8,7 @@ const PATHS = {
   USERS: '/users',
   PREFERENCES: '/preferences',
   STOCK_DETAILS: '/stock_details',
+  SYMBOLS: '/symbols',
 };
 
 export default PATHS;

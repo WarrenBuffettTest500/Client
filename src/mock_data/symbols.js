@@ -1,4 +1,4 @@
-export const tickers = [
+export const symbols = [
   'MMM',
   'ABT',
   'ABBV',
@@ -501,4 +501,4 @@ export const tickers = [
   'ZBH',
   'ZION',
   'ZTS',
-]; 
+];

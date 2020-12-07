@@ -1,4 +1,4 @@
-import { tickers } from '../mock_data/tickers';
+import { symbols } from '../mock_data/symbols';
 
 const escapeRegexCharacters = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
@@ -11,7 +11,7 @@ export const getSuggestions = value => {
 
   const regex = new RegExp('^' + escapedValue, 'i');
 
-  return tickers.filter(name => regex.test(name));
+  return symbols.filter(name => regex.test(name));
 };
 
 export const getSuggestionValue = suggestion => suggestion;

@@ -44,3 +44,7 @@
   font-weight: bold;
   border: none;
 }
+
+.stockDataSumbitButton {
+  @include cursorPointer;
+}
