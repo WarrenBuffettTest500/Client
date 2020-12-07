@@ -29,7 +29,7 @@ const MyPage = ({ currentUser }) => {
           const priceResponse = await fetch(`https://twelve-data1.p.rapidapi.com/price?symbol=${item.symbol}&outputsize=30&format=json`, {
             'method': 'GET',
             'headers': {
-              'x-rapidapi-key': 'c0097743c8mshd2307c4fa3944e7p15c1d2jsna518bb8e7329',
+              'x-rapidapi-key': process.env.REACT_APP_X_RAPIDAPI_KEY,
               'x-rapidapi-host': 'twelve-data1.p.rapidapi.com',
             },
           });
