@@ -5,7 +5,7 @@ import { setStockDetails } from '../../store/stock';
 import { setCurrentUser, removeCurrentUser, setPreferenceInfo } from '../../store/user';
 import LoginModal from '../../components/molecules/LoginModal/';
 import PreferencesForm from '../../components/templates/PreferencesForm';
-import StockDetails from '../../pages/StockDetails';
+// import StockDetails from '../../pages/StockDetails';
 import MyPage from '../../pages/MyPage';
 import requestUser from '../../api/requestUser';
 import requestPreferenceInfo from '../../api/requestPreferenceInfo';
@@ -74,7 +74,7 @@ const App = ({
           />
         </Route>
         <Route path={`${PATHS.STOCK_DETAILS}${PATHS.KEYWORD}`}>
-          <StockDetails />
+          {/* <StockDetails /> */}
         </Route>
       </Switch>
     </>
