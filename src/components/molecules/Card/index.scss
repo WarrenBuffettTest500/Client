@@ -1,0 +1,11 @@
+.companyCard {
+  display: flex;
+  width: 12rem;
+  height: 12rem;
+  background-color: salmon;
+  border-radius: $border-radius;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; 
+  margin-left: 1rem;
+};
