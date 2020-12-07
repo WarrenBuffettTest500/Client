@@ -5,6 +5,8 @@ const Button = ({
   className,
   onClick,
   text,
+  imgSrc,
+  children,
   ...attributes
 }) => {
   return (
@@ -16,6 +18,8 @@ const Button = ({
       {...attributes}
     >
       {text}
+      {children}
+      <img src={imgSrc} />
     </button>
   );
 };

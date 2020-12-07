@@ -1,11 +1,11 @@
 import METHODS from '../constants/methods';
 import PATHS from '../constants/paths';
 
-const requestStockDataUpdate = async (user, data) => {
+const requestPortfolioItemUpdate = async (user, data, portfolioItemId) => {
   const response = await fetch(
-    `${PATHS.HOST}${PATHS.SERVER_PORT}${PATHS.USERS}/${user.uid}/stock_data`,
+    `${PATHS.HOST}${PATHS.SERVER_PORT}${PATHS.USERS}/${user.uid}/portfolio_items/${portfolioItemId}`,
     {
-      method: METHODS.POST,
+      method: METHODS.PUT,
       headers: {
         'Content-Type': 'application/json',
       },
@@ -16,4 +16,4 @@ const requestStockDataUpdate = async (user, data) => {
   return await response.json();
 };
 
-export default requestStockDataUpdate;
+export default requestPortfolioItemUpdate;

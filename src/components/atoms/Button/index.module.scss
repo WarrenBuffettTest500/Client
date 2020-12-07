@@ -48,3 +48,11 @@
 .stockDataSumbitButton {
   @include cursorPointer;
 }
+
+.editButton,
+.deleteButton {
+  @include cursorPointer;
+  background: none;
+  border: none;
+  color: white;
+}

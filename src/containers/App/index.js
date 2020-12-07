@@ -36,7 +36,7 @@ const App = ({
         preferenceInfoResponse = await requestPreferenceInfo(user);
       }
 
-      onInitialStatesFetched(user, preferenceInfoResponse.preferenceInfo);
+      onInitialStatesFetched(user, preferenceInfoResponse?.preferenceInfo);
     };
 
     initializeUserState();
@@ -62,7 +62,10 @@ const App = ({
         onUserUpdate={onUserUpdate}
         onPreferenceInfoUpdate={onPreferenceInfoUpdate}
       /> */}
-      <MyPage currentUser={currentUser} />
+      {
+        currentUser
+        && <MyPage currentUser={currentUser} />
+      }
     </>
   );
 };
@@ -77,6 +80,7 @@ const mapDispatchToProps = dispatch => {
   return {
     onInitialStatesFetched: (user, preferenceInfo) => {
       dispatch(setCurrentUser(user));
+      if (!preferenceInfo) return;
       dispatch(setPreferenceInfo(preferenceInfo));
     },
     onLogin: user => dispatch(setCurrentUser(user)),
