@@ -13,6 +13,7 @@ import {
   renderSuggestion,
 } from '../../../utils/autosuggest';
 import PATHS from '../../../constants/paths';
+import RESPONSES from '../../../constants/responses';
 
 const SearchBar = ({ onSearchBarKeyPress }) => {
   const [searchKeyword, setSearchKeyword] = useState('');
@@ -40,9 +41,17 @@ const SearchBar = ({ onSearchBarKeyPress }) => {
         autoDismiss: true,
       });
     } else {
-      const stockDetails = await requestStockDetails(searchKeyword);
-      onSearchBarKeyPress(stockDetails);
-      history.push(PATHS.STOCK_DETAILS);
+      const { result, stockDetails } = await requestStockDetails(searchKeyword);
+
+      if (result === RESPONSES.OK) {
+        onSearchBarKeyPress(stockDetails);
+        history.push(`${PATHS.STOCK_DETAILS}/${searchKeyword}`);
+        return;
+      }
+      if (result === RESPONSES.FAILURE) {
+        history.push(PATHS.FAILURE);
+        return;
+      }
     }
   };
 

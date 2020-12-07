@@ -8,6 +8,8 @@ import PreferencesForm from '../../components/templates/PreferencesForm';
 import MyPage from '../../pages/MyPage';
 import requestUser from '../../api/requestUser';
 import requestPreferenceInfo from '../../api/requestPreferenceInfo';
+import { Switch, Route } from 'react-router-dom';
+import PATHS from '../../constants/paths';
 
 const App = ({
   onInitialStatesFetched,
@@ -57,12 +59,16 @@ const App = ({
           onLogin={onLogin}
         />
       }
-      {/* <PreferencesForm
-        currentUser={currentUser}
-        onUserUpdate={onUserUpdate}
-        onPreferenceInfoUpdate={onPreferenceInfoUpdate}
-      /> */}
       <MyPage currentUser={currentUser} />
+      <Switch>
+        <Route path={PATHS.PREFERENCES}>
+          <PreferencesForm
+            currentUser={currentUser}
+            onUserUpdate={onUserUpdate}
+            onPreferenceInfoUpdate={onPreferenceInfoUpdate}
+          />
+        </Route>
+      </Switch>
     </>
   );
 };
