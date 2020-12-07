@@ -8,6 +8,7 @@ const PATHS = {
   USERS: '/users',
   PREFERENCES: '/preferences',
   STOCK_DETAILS: '/stock_details',
+  KEYWORD: '/:keyword',
   SYMBOLS: '/symbols',
 };
 

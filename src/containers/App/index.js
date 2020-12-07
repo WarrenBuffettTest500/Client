@@ -5,9 +5,13 @@ import { setStockDetails } from '../../store/stock';
 import { setCurrentUser, removeCurrentUser, setPreferenceInfo } from '../../store/user';
 import LoginModal from '../../components/molecules/LoginModal/';
 import PreferencesForm from '../../components/templates/PreferencesForm';
+import StockDetails from '../../pages/StockDetails';
 import MyPage from '../../pages/MyPage';
 import requestUser from '../../api/requestUser';
 import requestPreferenceInfo from '../../api/requestPreferenceInfo';
+import { Switch, Route } from 'react-router-dom';
+import PATHS from '../../constants/paths';
+import '../../sass/app.scss';
 
 const App = ({
   onInitialStatesFetched,
@@ -57,15 +61,22 @@ const App = ({
           onLogin={onLogin}
         />
       }
-      {/* <PreferencesForm
-        currentUser={currentUser}
-        onUserUpdate={onUserUpdate}
-        onPreferenceInfoUpdate={onPreferenceInfoUpdate}
-      /> */}
       {
         currentUser
         && <MyPage currentUser={currentUser} />
       }
+      <Switch>
+        <Route path={PATHS.PREFERENCES}>
+          <PreferencesForm
+            currentUser={currentUser}
+            onUserUpdate={onUserUpdate}
+            onPreferenceInfoUpdate={onPreferenceInfoUpdate}
+          />
+        </Route>
+        <Route path={`${PATHS.STOCK_DETAILS}${PATHS.KEYWORD}`}>
+          <StockDetails />
+        </Route>
+      </Switch>
     </>
   );
 };
