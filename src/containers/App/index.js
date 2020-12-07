@@ -5,6 +5,8 @@ import { setStockDetails } from '../../store/stock';
 import { setCurrentUser, removeCurrentUser, setPreferenceInfo } from '../../store/user';
 import LoginModal from '../../components/molecules/LoginModal/';
 import PreferencesForm from '../../components/templates/PreferencesForm';
+import { Switch, Route } from 'react-router-dom';
+import PATHS from '../../constants/paths';
 
 const App = ({
   onLogin,
@@ -32,11 +34,15 @@ const App = ({
         setIsModalOpen={setIsModalOpen}
         onLogin={onLogin}
       />
-      <PreferencesForm
-        currentUser={currentUser}
-        onUserUpdate={onUserUpdate}
-        onPreferenceInfoUpdate={onPreferenceInfoUpdate}
-      />
+      <Switch>
+        <Route path={PATHS.PREFERENCES}>
+        <PreferencesForm
+          currentUser={currentUser}
+          onUserUpdate={onUserUpdate}
+          onPreferenceInfoUpdate={onPreferenceInfoUpdate}
+        />
+        </Route>
+      </Switch>
     </>
   );
 };
