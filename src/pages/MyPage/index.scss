@@ -1,0 +1,30 @@
+.myPageWrapper {
+  width: 960px;
+  border: 1px solid green;
+  margin: 80px auto;
+  padding: 15px;
+}
+
+.graphsWrapper,
+.dashboardWrapper,
+.tableWrapper {
+  margin: 10px auto;
+}
+
+.graphsWrapper {
+  border: 1px solid yellow;
+}
+
+.dashboardWrapper {
+  border: 1px solid orange;
+}
+
+.tableWrapper {
+  border: 1px solid red;
+}
+
+.tableTitle {
+  border: 1px solid white;
+  display: flex;
+  flex-direction: row;
+}

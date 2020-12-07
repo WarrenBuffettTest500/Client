@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import Header from '../../components/organisms/Header';
 import { setStockDetails } from '../../store/stock';
@@ -6,11 +6,15 @@ import { setCurrentUser, removeCurrentUser, setPreferenceInfo } from '../../stor
 import LoginModal from '../../components/molecules/LoginModal/';
 import PreferencesForm from '../../components/templates/PreferencesForm';
 import StockDetails from '../../pages/StockDetails';
+import MyPage from '../../pages/MyPage';
+import requestUser from '../../api/requestUser';
+import requestPreferenceInfo from '../../api/requestPreferenceInfo';
 import { Switch, Route } from 'react-router-dom';
 import PATHS from '../../constants/paths';
 import '../../sass/app.scss';
 
 const App = ({
+  onInitialStatesFetched,
   onLogin,
   onLogout,
   currentUser,
@@ -18,10 +22,29 @@ const App = ({
   onUserUpdate,
   onPreferenceInfoUpdate,
 }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const loginButtonClickHandler = () => {
-    setIsModalOpen(true);
+    setIsAuthModalOpen(true);
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+
+    if (!token) return;
+
+    const initializeUserState = async () => {
+      const { user } = await requestUser();
+      let preferenceInfoResponse;
+
+      if (user.preferenceInfoId) {
+        preferenceInfoResponse = await requestPreferenceInfo(user);
+      }
+
+      onInitialStatesFetched(user, preferenceInfoResponse.preferenceInfo);
+    };
+
+    initializeUserState();
+  }, []);
 
   return (
     <>
@@ -31,11 +54,14 @@ const App = ({
         onLogoutClick={onLogout}
         onSearchBarKeyPress={setStockDetails}
       />
-      <LoginModal
-        isModalOpen={isModalOpen}
-        setIsModalOpen={setIsModalOpen}
-        onLogin={onLogin}
-      />
+      {
+        isAuthModalOpen
+        && <LoginModal
+          setIsModalOpen={setIsAuthModalOpen}
+          onLogin={onLogin}
+        />
+      }
+      <MyPage currentUser={currentUser} />
       <Switch>
         <Route path={PATHS.PREFERENCES}>
           <PreferencesForm
@@ -60,6 +86,10 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
+    onInitialStatesFetched: (user, preferenceInfo) => {
+      dispatch(setCurrentUser(user));
+      dispatch(setPreferenceInfo(preferenceInfo));
+    },
     onLogin: user => dispatch(setCurrentUser(user)),
     onLogout: () => dispatch(removeCurrentUser()),
     onUserUpdate: user => dispatch(setCurrentUser(user)),

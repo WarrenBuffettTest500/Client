@@ -9,6 +9,7 @@ const PATHS = {
   PREFERENCES: '/preferences',
   STOCK_DETAILS: '/stock_details',
   KEYWORD: '/:keyword',
+  SYMBOLS: '/symbols',
 };
 
 export default PATHS;

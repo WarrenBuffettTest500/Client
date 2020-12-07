@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import SearchBar from '../../molecules/SearchBar';
 import Button from '../../atoms/Button';
-import Modal from '../../molecules/Modal';
+import Modal from '../../atoms/Modal';
 import './index.scss';
 
 const Header = ({

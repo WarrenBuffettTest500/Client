@@ -1,5 +1,5 @@
 import React from 'react';
-import Modal from 'react-modal';
+// import Modal from 'react-modal';
 import { useHistory } from 'react-router-dom';
 import Button from '../../atoms/Button';
 import PATHS from '../../../constants/paths';
@@ -7,6 +7,8 @@ import { authService, provider } from '../../../config/firebase';
 import requestSignIn from '../../../api/requestSignIn';
 import { useToasts } from 'react-toast-notifications';
 import RESPONSES from '../../../constants/responses';
+import Modal from '../../atoms/Modal';
+import ModalOverlay from '../../atoms/ModalOverlay';
 
 const LoginModal = ({
   isModalOpen,
@@ -86,7 +88,19 @@ const LoginModal = ({
   };
 
   return (
-    <Modal isOpen={isModalOpen}>
+    <>
+      <ModalOverlay setIsModalOpen={setIsModalOpen} />
+      <Modal className='authModal'>
+        <Button
+          onClick={googleAuthClickHandler}
+          text='login with google'
+        />
+        <Button
+          onClick={googleAuthClickHandler}
+          text='signup with google'
+        />
+      </Modal>
+      {/* <ModalOverlay isOpen={isModalOpen}>
       <Button
         onClick={googleAuthClickHandler}
         text='login with google'
@@ -95,7 +109,8 @@ const LoginModal = ({
         onClick={googleAuthClickHandler}
         text='signup with google'
       />
-    </Modal>
+    </ModalOverlay> */}
+    </>
   );
 };
 
