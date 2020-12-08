@@ -9,7 +9,6 @@ const StockChart = ({ dataSet }) => {
   const height = 600;
   const margin = { top: 20, right: 30, bottom: 30, left: 40 };
 
-  console.log('HERE', new Date(data[data.length - 1].datetime));
   const x = d3.scaleBand()
     .domain(d3.utcDay
       // .range(data[0].datetime, +data[data.length - 1].datetime + 1)
@@ -96,7 +95,7 @@ const StockChart = ({ dataSet }) => {
   return (
     <div>
       <h1>chart</h1>
-      <svg clssNmae='candle_stock_chart' ref={chart} />
+      <svg ref={chart} />
     </div>
   );
 };

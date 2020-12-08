@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import './index.scss';
 import StockDataInputModal from '../../components/molecules/StockDataInputModal';
-import requestPortfolio from '../../api/requestPortfolio';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import ClearRoundedIcon from '@material-ui/icons/ClearRounded';
 import Button from '../../components/atoms/Button';
 import { Decimal } from 'decimal.js';
 import requestPortfolioItemDelete from '../../api/requestPortfolioItemDelete';
+import concatRealPrice from '../../utils/concatRealPrice';
 
-const MyPage = ({ currentUser }) => {
+const MyPage = ({ currentUser, staticPortfolio }) => {
   const [isInputModalOpen, setIsInputModalOpen] = useState(false);
-  const [portfolioData, setPortfolioData] = useState([]);
+  const [dynamicPortfolio, setDynamicPortfolio] = useState([]);
   const [dashboardData, setDashboardData] = useState({
     total: 0,
     return: 0,
@@ -18,31 +18,11 @@ const MyPage = ({ currentUser }) => {
   });
   const [portfolioItemToEdit, setPortfolioItemToEdit] = useState(null);
 
-  useEffect(async () => {
-    const { portfolio } = await requestPortfolio(currentUser);
-
+  useEffect(() => {
     const setMyPageData = async () => {
-      const portfolioWithRealPrice = await Promise.all(
-        portfolio.map(async originalItem => {
-          const item = JSON.parse(JSON.stringify(originalItem));
+      const portfolioWithRealPrice = await concatRealPrice(staticPortfolio);
 
-          const priceResponse = await fetch(`https://twelve-data1.p.rapidapi.com/price?symbol=${item.symbol}&outputsize=30&format=json`, {
-            'method': 'GET',
-            'headers': {
-              'x-rapidapi-key': process.env.REACT_APP_X_RAPIDAPI_KEY,
-              'x-rapidapi-host': 'twelve-data1.p.rapidapi.com',
-            },
-          });
-
-          const { price } = await priceResponse.json();
-
-          item.price = price;
-
-          return item;
-        }),
-      );
-
-      setPortfolioData(portfolioWithRealPrice);
+      setDynamicPortfolio(portfolioWithRealPrice);
 
       const updatedDashboardData = {
         total: 0,
@@ -50,13 +30,17 @@ const MyPage = ({ currentUser }) => {
         earningsRate: 0,
       };
 
+      let originalCapital = 0;
+
       portfolioWithRealPrice.forEach(portfolioItem => {
         const { price, avgPrice, quantity } = portfolioItem;
         updatedDashboardData.total = new Decimal(price).times(new Decimal(quantity)).plus(new Decimal(updatedDashboardData.total)).toDecimalPlaces(2).toString();
         updatedDashboardData.return = new Decimal(price).minus(new Decimal(avgPrice)).times(new Decimal(quantity)).plus(new Decimal(updatedDashboardData.return)).toDecimalPlaces(2).toString();
+
+        originalCapital = new Decimal(avgPrice).times(new Decimal(quantity)).plus(new Decimal(originalCapital)).toDecimalPlaces(2).toString();
       });
 
-      updatedDashboardData.earningsRate = new Decimal(updatedDashboardData.return).dividedBy(new Decimal(updatedDashboardData.total)).times(100).toDecimalPlaces(2).toString();
+      updatedDashboardData.earningsRate = new Decimal(updatedDashboardData.return).dividedBy(new Decimal(originalCapital)).times(100).toDecimalPlaces(2).toString();
 
       setDashboardData({
         total: updatedDashboardData.total,
@@ -66,7 +50,7 @@ const MyPage = ({ currentUser }) => {
     };
 
     setMyPageData();
-  }, []);
+  }, [staticPortfolio]);
 
   const createClickHandler = () => {
     setIsInputModalOpen(true);
@@ -129,7 +113,7 @@ const MyPage = ({ currentUser }) => {
                 <th>삭제</th>
               </tr>
               {
-                portfolioData.map(item => {
+                dynamicPortfolio.map(item => {
                   const { id, symbol, quantity, avgPrice, price } = item;
 
                   return (

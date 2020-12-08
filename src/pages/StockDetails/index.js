@@ -25,7 +25,7 @@ const StockDetails = () => {
   return (
     <>
       <div>StockDetails</div>
-      <StockChart dataSet={stockDetails}></StockChart>
+      {/* <StockChart dataSet={stockDetails}></StockChart> */}
       <ListWrapper className='companyCardListWrapper'>
         {companyProfileList.map(companyProfile =>
           <Card

@@ -1,0 +1,28 @@
+.mainPageWrapper {
+  width: 960px;
+  border: 1px solid green;
+  margin: 80px auto;
+  padding: 15px;
+}
+
+.graphDashboardWrapper,
+.recommendedPortfoliosWrapper,
+.companyCardsWrapper {
+  margin: 10px auto;
+}
+
+.graphDashboardWrapper {
+  border: 1px solid yellow;
+}
+
+.recommendedPortfoliosWrapper {
+  border: 1px solid orange;
+  display: flex;
+  flex-direction: row;
+  color: white;
+  justify-content: space-evenly;
+}
+
+.companyCardsWrapper {
+  border: 1px solid red;
+}

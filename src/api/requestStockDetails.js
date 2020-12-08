@@ -15,7 +15,7 @@ const requestStockDetails = async keyword => {
 
   const { result, stockDetails: data } = await response.json();
   const stockDetails = JSON.parse(data);
-  
+
   return { result, stockDetails };
 };
 

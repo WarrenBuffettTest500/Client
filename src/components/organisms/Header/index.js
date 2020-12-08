@@ -3,6 +3,7 @@ import { useLocation, useHistory } from 'react-router-dom';
 import SearchBar from '../../molecules/SearchBar';
 import Button from '../../atoms/Button';
 import Modal from '../../atoms/Modal';
+import PATHS from '../../../constants/paths';
 
 const Header = ({
   currentUser,
@@ -24,6 +25,11 @@ const Header = ({
 
   const profileButtonClickHandler = () => {
     setIsUserModalOpen(!isUserModalOpen);
+  };
+
+  const preferencesButtonClickHandler = () => {
+    history.push(PATHS.PREFERENCES);
+    setIsUserModalOpen(false);
   };
 
   return (
@@ -64,6 +70,7 @@ const Header = ({
           <Button
             className='preferencesButton'
             text='투자성향 설정'
+            onClick={preferencesButtonClickHandler}
           />
           <Button
             className='logoutButton'
