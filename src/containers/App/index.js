@@ -40,7 +40,7 @@ const App = ({
         preferenceInfoResponse = await requestPreferenceInfo(user);
       }
 
-      onInitialStatesFetched(user, preferenceInfoResponse.preferenceInfo);
+      onInitialStatesFetched(user, preferenceInfoResponse?.preferenceInfo);
     };
 
     initializeUserState();
