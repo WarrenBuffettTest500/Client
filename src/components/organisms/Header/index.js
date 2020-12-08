@@ -43,6 +43,7 @@ const Header = ({
           ? <Button
             className='profileButton'
             onClick={profileButtonClickHandler}
+            imgSrc={currentUser.photoURL}
           />
           : <Button
             className='loginButton'

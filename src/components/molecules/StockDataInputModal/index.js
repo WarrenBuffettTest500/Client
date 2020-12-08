@@ -2,12 +2,18 @@ import React, { useState } from 'react';
 import Modal from '../../atoms/Modal';
 import ModalOverlay from '../../atoms/ModalOverlay';
 import Button from '../../atoms/Button';
-import requestStockDataUpdate from '../../../api/requestStockDataUpdate';
+import requestPortfolioItemCreate from '../../../api/requestPortfolioItemCreate';
+import requestPortfolioItemUpdate from '../../../api/requestPortfolioItemUpdate';
 
-const StockDataInputModal = ({ currentUser, setIsInputModalOpen }) => {
-  const [symbol, setSymbol] = useState('');
-  const [avgPrice, setAvgPrice] = useState('');
-  const [quantity, setQuantity] = useState('');
+const StockDataInputModal = ({
+  currentUser,
+  portfolioItemToEdit,
+  setIsInputModalOpen,
+  setPortfolioItemToEdit,
+}) => {
+  const [symbol, setSymbol] = useState(portfolioItemToEdit?.symbol || '');
+  const [avgPrice, setAvgPrice] = useState(portfolioItemToEdit?.avgPrice || '');
+  const [quantity, setQuantity] = useState(portfolioItemToEdit?.quantity || '');
 
   const StockDataSumbitHandler = async () => {
     const stockData = {
@@ -16,12 +22,21 @@ const StockDataInputModal = ({ currentUser, setIsInputModalOpen }) => {
       quantity,
     };
 
-    const response = await requestStockDataUpdate(currentUser, stockData);
+    const response
+      = portfolioItemToEdit
+        ? await requestPortfolioItemUpdate(currentUser, stockData, portfolioItemToEdit.portfolioItemId)
+        : await requestPortfolioItemCreate(currentUser, stockData);
+
+    setPortfolioItemToEdit(null);
+    setIsInputModalOpen(false);
   };
 
   return (
     <>
-      <ModalOverlay setIsModalOpen={setIsInputModalOpen} />
+      <ModalOverlay
+        setIsModalOpen={setIsInputModalOpen}
+        onClick={() => setPortfolioItemToEdit(null)}
+      />
       <Modal className='stockDataInputModal'>
         <div>
           <h3>티커</h3>

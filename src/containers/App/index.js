@@ -5,7 +5,7 @@ import { setStockDetails } from '../../store/stock';
 import { setCurrentUser, removeCurrentUser, setPreferenceInfo } from '../../store/user';
 import LoginModal from '../../components/molecules/LoginModal/';
 import PreferencesForm from '../../components/templates/PreferencesForm';
-import StockDetails from '../../pages/StockDetails';
+// import StockDetails from '../../pages/StockDetails';
 import MyPage from '../../pages/MyPage';
 import requestUser from '../../api/requestUser';
 import requestPreferenceInfo from '../../api/requestPreferenceInfo';
@@ -40,7 +40,7 @@ const App = ({
         preferenceInfoResponse = await requestPreferenceInfo(user);
       }
 
-      onInitialStatesFetched(user, preferenceInfoResponse.preferenceInfo);
+      onInitialStatesFetched(user, preferenceInfoResponse?.preferenceInfo);
     };
 
     initializeUserState();
@@ -61,7 +61,10 @@ const App = ({
           onLogin={onLogin}
         />
       }
-      <MyPage currentUser={currentUser} />
+      {
+        currentUser
+        && <MyPage currentUser={currentUser} />
+      }
       <Switch>
         <Route path={PATHS.PREFERENCES}>
           <PreferencesForm
@@ -71,7 +74,7 @@ const App = ({
           />
         </Route>
         <Route path={`${PATHS.STOCK_DETAILS}${PATHS.KEYWORD}`}>
-          <StockDetails />
+          {/* <StockDetails /> */}
         </Route>
       </Switch>
     </>
@@ -88,6 +91,7 @@ const mapDispatchToProps = dispatch => {
   return {
     onInitialStatesFetched: (user, preferenceInfo) => {
       dispatch(setCurrentUser(user));
+      if (!preferenceInfo) return;
       dispatch(setPreferenceInfo(preferenceInfo));
     },
     onLogin: user => dispatch(setCurrentUser(user)),
