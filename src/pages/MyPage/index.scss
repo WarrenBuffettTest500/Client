@@ -6,7 +6,7 @@
 }
 
 .graphsWrapper,
-.dashboardWrapper,
+.dashboard,
 .tableWrapper {
   margin: 10px auto;
 }
@@ -15,8 +15,12 @@
   border: 1px solid yellow;
 }
 
-.dashboardWrapper {
+.dashboard {
   border: 1px solid orange;
+  display: flex;
+  flex-direction: row;
+  color: white;
+  justify-content: space-evenly;
 }
 
 .tableWrapper {
@@ -27,4 +31,13 @@
   border: 1px solid white;
   display: flex;
   flex-direction: row;
+
+  h3 {
+    color: white;
+  }
+}
+
+table {
+  color: white;
+  border-collapse: collapse;
 }
