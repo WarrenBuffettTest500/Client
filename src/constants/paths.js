@@ -10,6 +10,7 @@ const PATHS = {
   STOCK_DETAILS: '/stock_details',
   KEYWORD: '/:keyword',
   SYMBOLS: '/symbols',
+  MY_PAGE: '/my_page',
 };
 
 export default PATHS;
