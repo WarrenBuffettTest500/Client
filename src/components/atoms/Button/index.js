@@ -1,5 +1,4 @@
 import React from 'react';
-import styles from './index.module.scss';
 
 const Button = ({
   className,
@@ -12,14 +11,17 @@ const Button = ({
   return (
     <button
       type='button'
-      className={styles[className]}
+      className={className}
       onClick={onClick}
       name={text}
       {...attributes}
     >
+      <img
+        src={imgSrc}
+        className={className}
+        />
       {text}
       {children}
-      <img src={imgSrc} />
     </button>
   );
 };
