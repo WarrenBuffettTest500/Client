@@ -1,9 +1,11 @@
 import React from 'react';
+import SearchIcon from '@material-ui/icons/Search';
 
 const Input = inputProps => (
-  <div className="inputContainer">
+  <div className='input_container'>
+    <SearchIcon className='icon' />
     <input
-     {...inputProps} />
+      {...inputProps} />
   </div>
 );
 

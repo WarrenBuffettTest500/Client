@@ -1,19 +1,26 @@
-.wrapper {
+.header_items_wrapper {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
   background-color: #1D304A;
   position: fixed;
+  padding: 0;
   width: 100%;
   top: 0;
   left: 0;
-  height: 70px;
+  height: 5rem;
   box-shadow: 0 1px 5px 1px rgba(0, 0, 0, 0.2);
-  align-items: center;
+}
+.header_item {
+  margin: 0 2rem;
 }
 
-.home {
+.logo {
+  position: fixed;
+  margin: 0 auto;
   color: pink;
-  position: absolute;
-  left: 25px;
+  left: 0.3rem;
+  top: 0.3em;
 
   &:hover {
     cursor: pointer;

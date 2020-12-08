@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import './index.scss';
-import SearchIcon from '@material-ui/icons/Search';
 import Autosuggest from 'react-autosuggest';
 import Input from '../../atoms/Input';
 import { useToasts } from 'react-toast-notifications';
@@ -60,12 +58,10 @@ const SearchBar = ({ onSearchBarKeyPress }) => {
     value: searchKeyword,
     onChange,
     onKeyPress: keyPressHandler,
-    className: 'searchBar',
   };
 
   return (
-    <div className='searchBarWrapper'>
-      <SearchIcon className='searchIcon' />
+    <>
       <Autosuggest
         suggestions={suggestions}
         onSuggestionsFetchRequested={onSuggestionsFetchRequested}
@@ -75,7 +71,7 @@ const SearchBar = ({ onSearchBarKeyPress }) => {
         inputProps={inputProps}
         renderInputComponent={Input}
       />
-    </div>
+    </>
   );
 };
 

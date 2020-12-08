@@ -3,7 +3,6 @@ import { useLocation, useHistory } from 'react-router-dom';
 import SearchBar from '../../molecules/SearchBar';
 import Button from '../../atoms/Button';
 import Modal from '../../atoms/Modal';
-import './index.scss';
 
 const Header = ({
   currentUser,
@@ -28,29 +27,35 @@ const Header = ({
   };
 
   return (
-    <header className='wrapper'>
-      <div
-        className='home'
-        onClick={homeButtonClickHandler}
-      >
-        <h2>버핏테스트500</h2>
+    <header className='header_items_wrapper'>
+      <div className='header_item'>
+        <div
+          className='logo'
+          onClick={homeButtonClickHandler}
+        >
+          <h2>버핏테스트500</h2>
+        </div>
       </div>
-      <SearchBar
-        onSearchBarKeyPress={onSearchBarKeyPress}
-      />
-      {
-        currentUser
-          ? <Button
-            className='profileButton'
-            onClick={profileButtonClickHandler}
-            imgSrc={currentUser.photoURL}
-          />
-          : <Button
-            className='loginButton'
-            text='로그인'
-            onClick={onLoginClick}
-          />
-      }
+      <div className='header_item'>
+        <SearchBar
+          onSearchBarKeyPress={onSearchBarKeyPress}
+        />
+      </div>
+      <div className='header_item'>
+        {
+          currentUser
+            ? <Button
+              className='profileButton'
+              onClick={profileButtonClickHandler}
+              imgSrc={currentUser.photoURL}
+            />
+            : <Button
+              className='loginButton'
+              text='로그인'
+              onClick={onLoginClick}
+            />
+        }
+      </div>
       {
         isUserModalOpen
         && <Modal
