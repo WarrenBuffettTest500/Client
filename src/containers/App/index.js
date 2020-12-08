@@ -61,11 +61,13 @@ const App = ({
           onLogin={onLogin}
         />
       }
-      {
-        currentUser
-        && <MyPage currentUser={currentUser} />
-      }
       <Switch>
+        <Route path={PATHS.MY_PAGE}>
+          {
+            currentUser
+            && <MyPage currentUser={currentUser} />
+          }
+        </Route>
         <Route path={PATHS.PREFERENCES}>
           <PreferencesForm
             currentUser={currentUser}
