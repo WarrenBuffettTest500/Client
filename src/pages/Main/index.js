@@ -48,27 +48,27 @@ const Main = ({ currentUser, staticPortfolio }) => {
   ]);
   const [total, setTotal] = useState(10400);
 
-  useEffect(() => {
-    if (!currentUser) return;
+  // useEffect(() => {
+  //   if (!currentUser) return;
 
-    const fetchDynamicData = async () => {
-      const portfolioWithRealPrice = await concatRealPrice(staticPortfolio);
+  //   const fetchDynamicData = async () => {
+  //     const portfolioWithRealPrice = await concatRealPrice(staticPortfolio);
 
-      setDynamicPortfolio(portfolioWithRealPrice);
-    };
+  //     setDynamicPortfolio(portfolioWithRealPrice);
+  //   };
 
-    fetchDynamicData();
-  }, [currentUser, staticPortfolio]);
+  //   fetchDynamicData();
+  // }, [currentUser, staticPortfolio]);
 
-  useEffect(() => {
-    const total = calculateTotal(dynamicPortfolio);
+  // useEffect(() => {
+  //   const total = calculateTotal(dynamicPortfolio);
 
-    const portfolioByProportions
-      = calculateProportions(dynamicPortfolio, total).sort((a, b) => b.y - a.y);
+  //   const portfolioByProportions
+  //     = calculateProportions(dynamicPortfolio, total).sort((a, b) => b.y - a.y);
 
-    setTotal(total);
-    setChartData(portfolioByProportions);
-  }, [dynamicPortfolio]);
+  //   setTotal(total);
+  //   setChartData(portfolioByProportions);
+  // }, [dynamicPortfolio]);
 
   return (
     <>

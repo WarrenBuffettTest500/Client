@@ -53,51 +53,51 @@ const MyPage = ({ currentUser, staticPortfolio }) => {
   });
   const [portfolioItemToEdit, setPortfolioItemToEdit] = useState(null);
   const [chartData, setChartData] = useState([
-    // { name: 'AAPL', y: 38.46 },
-    // { name: 'AMZN', y: 28.85 },
-    // { name: 'TSLA', y: 23.08 },
-    // { name: 'MSFT', y: 9.62 },
+    { name: 'AAPL', y: 38.46 },
+    { name: 'AMZN', y: 28.85 },
+    { name: 'TSLA', y: 23.08 },
+    { name: 'MSFT', y: 9.62 },
   ]);
 
-  useEffect(() => {
-    const setMyPageData = async () => {
-      const portfolioWithRealPrice = await concatRealPrice(staticPortfolio);
+  // useEffect(() => {
+  //   const setMyPageData = async () => {
+  //     const portfolioWithRealPrice = await concatRealPrice(staticPortfolio);
 
-      setDynamicPortfolio(portfolioWithRealPrice);
+  //     setDynamicPortfolio(portfolioWithRealPrice);
 
-      const updatedDashboardData = {
-        total: 0,
-        return: 0,
-        earningsRate: 0,
-      };
+  //     const updatedDashboardData = {
+  //       total: 0,
+  //       return: 0,
+  //       earningsRate: 0,
+  //     };
 
-      let originalCapital = 0;
+  //     let originalCapital = 0;
 
-      portfolioWithRealPrice.forEach(portfolioItem => {
-        const { price, avgPrice, quantity } = portfolioItem;
-        updatedDashboardData.total = new Decimal(price).times(new Decimal(quantity)).plus(new Decimal(updatedDashboardData.total)).toDecimalPlaces(2);
-        updatedDashboardData.return = new Decimal(price).minus(new Decimal(avgPrice)).times(new Decimal(quantity)).plus(new Decimal(updatedDashboardData.return)).toDecimalPlaces(2);
-        originalCapital = new Decimal(avgPrice).times(new Decimal(quantity)).plus(new Decimal(originalCapital)).toDecimalPlaces(2);
-      });
+  //     portfolioWithRealPrice.forEach(portfolioItem => {
+  //       const { price, avgPrice, quantity } = portfolioItem;
+  //       updatedDashboardData.total = new Decimal(price).times(new Decimal(quantity)).plus(new Decimal(updatedDashboardData.total)).toDecimalPlaces(2);
+  //       updatedDashboardData.return = new Decimal(price).minus(new Decimal(avgPrice)).times(new Decimal(quantity)).plus(new Decimal(updatedDashboardData.return)).toDecimalPlaces(2);
+  //       originalCapital = new Decimal(avgPrice).times(new Decimal(quantity)).plus(new Decimal(originalCapital)).toDecimalPlaces(2);
+  //     });
 
-      updatedDashboardData.earningsRate = new Decimal(updatedDashboardData.return).dividedBy(new Decimal(originalCapital)).times(100).toDecimalPlaces(2);
+  //     updatedDashboardData.earningsRate = new Decimal(updatedDashboardData.return).dividedBy(new Decimal(originalCapital)).times(100).toDecimalPlaces(2);
 
-      setDashboardData({
-        total: updatedDashboardData.total,
-        return: updatedDashboardData.return,
-        earningsRate: updatedDashboardData.earningsRate,
-      });
-    };
+  //     setDashboardData({
+  //       total: updatedDashboardData.total,
+  //       return: updatedDashboardData.return,
+  //       earningsRate: updatedDashboardData.earningsRate,
+  //     });
+  //   };
 
-    setMyPageData();
-  }, [staticPortfolio]);
+  //   setMyPageData();
+  // }, [staticPortfolio]);
 
-  useEffect(() => {
-    const portfolioByProportions
-      = calculateProportions(dynamicPortfolio, dashboardData.total).sort((a, b) => b.y - a.y);
+  // useEffect(() => {
+  //   const portfolioByProportions
+  //     = calculateProportions(dynamicPortfolio, dashboardData.total).sort((a, b) => b.y - a.y);
 
-    setChartData(portfolioByProportions);
-  }, [dynamicPortfolio, dashboardData]);
+  //   setChartData(portfolioByProportions);
+  // }, [dynamicPortfolio, dashboardData]);
 
   const createClickHandler = () => {
     setIsInputModalOpen(true);
