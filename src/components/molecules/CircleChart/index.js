@@ -1,7 +1,13 @@
 import React from 'react';
 import { CanvasJSChart } from 'canvasjs-react-charts';
 
-const DonutChart = ({ data, title, centerText }) => {
+const CircleChart = ({
+  data,
+  title,
+  centerText,
+  type,
+  hasLabel = true,
+}) => {
   const options = {
     animationEnabled: true,
     theme: 'dark1',
@@ -9,24 +15,24 @@ const DonutChart = ({ data, title, centerText }) => {
     title: {
       text: title,
     },
-    subtitles: [{
-      text: centerText,
-      verticalAlign: 'center',
-      fontSize: 20,
-      dockInsidePlotArea: true,
-    }],
+    subtitles:
+      type === 'doughnut'
+        ? [{
+          text: centerText,
+          verticalAlign: 'center',
+          fontSize: 20,
+          dockInsidePlotArea: true,
+        }]
+        : null,
     data: [{
-      type: 'doughnut',
+      type: type,
       showInLegend: true,
-      indexLabel: '{name}: {y}',
+      indexLabel: hasLabel ? '{name}: {y}' : null,
       yValueFormatString: '#,###\'%\'',
       startAngle: -90,
       dataPoints: data,
+      explodeOnClick: true,
     }],
-    legend: {
-      horizontalAlign: 'right',
-      verticalAlign: 'center',
-    },
   };
 
   return (
@@ -34,4 +40,4 @@ const DonutChart = ({ data, title, centerText }) => {
   );
 };
 
-export default DonutChart;
+export default CircleChart;

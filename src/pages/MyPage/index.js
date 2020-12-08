@@ -7,16 +7,57 @@ import Button from '../../components/atoms/Button';
 import { Decimal } from 'decimal.js';
 import requestPortfolioItemDelete from '../../api/requestPortfolioItemDelete';
 import concatRealPrice from '../../utils/concatRealPrice';
+import CircleChart from '../../components/molecules/CircleChart';
+import calculateProportions from '../../utils/calculateProportions';
 
 const MyPage = ({ currentUser, staticPortfolio }) => {
   const [isInputModalOpen, setIsInputModalOpen] = useState(false);
-  const [dynamicPortfolio, setDynamicPortfolio] = useState([]);
+  const [dynamicPortfolio, setDynamicPortfolio] = useState([
+    {
+      avgPrice: '100',
+      id: 1,
+      price: '123.27000',
+      quantity: '40',
+      symbol: 'AAPL',
+      userUid: 'cQAHr98ZikhaQzXfvU41Cfs3fCi2',
+    },
+    {
+      avgPrice: '200',
+      id: 2,
+      price: '214.74001',
+      quantity: '5',
+      symbol: 'MSFT',
+      userUid: 'cQAHr98ZikhaQzXfvU41Cfs3fCi2',
+    },
+    {
+      avgPrice: '3000',
+      id: 3,
+      price: '3128.92505',
+      quantity: '1',
+      symbol: 'AMZN',
+      userUid: 'cQAHr98ZikhaQzXfvU41Cfs3fCi2',
+    },
+    {
+      avgPrice: '480',
+      id: 4,
+      price: '626.43378',
+      quantity: '5',
+      symbol: 'TSLA',
+      userUid: 'cQAHr98ZikhaQzXfvU41Cfs3fCi2',
+    },
+  ]);
   const [dashboardData, setDashboardData] = useState({
     total: 0,
     return: 0,
     earningsRate: 0,
   });
   const [portfolioItemToEdit, setPortfolioItemToEdit] = useState(null);
+  const [chartData, setChartData] = useState([
+    // { name: 'AAPL', y: 38.46 },
+    // { name: 'AMZN', y: 28.85 },
+    // { name: 'TSLA', y: 23.08 },
+    // { name: 'MSFT', y: 9.62 },
+  ]);
 
   useEffect(() => {
     const setMyPageData = async () => {
@@ -34,13 +75,12 @@ const MyPage = ({ currentUser, staticPortfolio }) => {
 
       portfolioWithRealPrice.forEach(portfolioItem => {
         const { price, avgPrice, quantity } = portfolioItem;
-        updatedDashboardData.total = new Decimal(price).times(new Decimal(quantity)).plus(new Decimal(updatedDashboardData.total)).toDecimalPlaces(2).toString();
-        updatedDashboardData.return = new Decimal(price).minus(new Decimal(avgPrice)).times(new Decimal(quantity)).plus(new Decimal(updatedDashboardData.return)).toDecimalPlaces(2).toString();
-
-        originalCapital = new Decimal(avgPrice).times(new Decimal(quantity)).plus(new Decimal(originalCapital)).toDecimalPlaces(2).toString();
+        updatedDashboardData.total = new Decimal(price).times(new Decimal(quantity)).plus(new Decimal(updatedDashboardData.total)).toDecimalPlaces(2);
+        updatedDashboardData.return = new Decimal(price).minus(new Decimal(avgPrice)).times(new Decimal(quantity)).plus(new Decimal(updatedDashboardData.return)).toDecimalPlaces(2);
+        originalCapital = new Decimal(avgPrice).times(new Decimal(quantity)).plus(new Decimal(originalCapital)).toDecimalPlaces(2);
       });
 
-      updatedDashboardData.earningsRate = new Decimal(updatedDashboardData.return).dividedBy(new Decimal(originalCapital)).times(100).toDecimalPlaces(2).toString();
+      updatedDashboardData.earningsRate = new Decimal(updatedDashboardData.return).dividedBy(new Decimal(originalCapital)).times(100).toDecimalPlaces(2);
 
       setDashboardData({
         total: updatedDashboardData.total,
@@ -51,6 +91,13 @@ const MyPage = ({ currentUser, staticPortfolio }) => {
 
     setMyPageData();
   }, [staticPortfolio]);
+
+  useEffect(() => {
+    const portfolioByProportions
+      = calculateProportions(dynamicPortfolio, dashboardData.total).sort((a, b) => b.y - a.y);
+
+    setChartData(portfolioByProportions);
+  }, [dynamicPortfolio, dashboardData]);
 
   const createClickHandler = () => {
     setIsInputModalOpen(true);
@@ -81,7 +128,13 @@ const MyPage = ({ currentUser, staticPortfolio }) => {
   return (
     <>
       <div className='myPageWrapper'>
-        <div className='graphsWrapper'></div>
+        <div className='graphsWrapper'>
+          <CircleChart
+            data={chartData}
+            title='내 포트폴리오'
+            type='pie'
+          />
+        </div>
         <div className='dashboard'>
           <div>
             {`총 자산: ${dashboardData.total}`}

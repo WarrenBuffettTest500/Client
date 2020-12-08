@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './index.scss';
 import concatRealPrice from '../../utils/concatRealPrice';
-import DonutChart from '../../components/molecules/DonutChart';
-import { Decimal } from 'decimal.js';
+import CircleChart from '../../components/molecules/CircleChart';
+import calculateProportions from '../../utils/calculateProportions';
+import calculateTotal from '../../utils/calculateTotal';
 
 const Main = ({ currentUser, staticPortfolio }) => {
   const [dynamicPortfolio, setDynamicPortfolio] = useState([
@@ -39,7 +40,7 @@ const Main = ({ currentUser, staticPortfolio }) => {
       userUid: 'cQAHr98ZikhaQzXfvU41Cfs3fCi2',
     },
   ]);
-  const [pieChartData, setPieChartData] = useState([
+  const [chartData, setChartData] = useState([
     { name: 'AAPL', y: 38.46 },
     { name: 'AMZN', y: 28.85 },
     { name: 'TSLA', y: 23.08 },
@@ -47,49 +48,41 @@ const Main = ({ currentUser, staticPortfolio }) => {
   ]);
   const [total, setTotal] = useState(10400);
 
-  // useEffect(() => {
-  //   if (!currentUser) return;
+  useEffect(() => {
+    if (!currentUser) return;
 
-  //   const fetchDynamicData = async () => {
-  //     const portfolioWithRealPrice = await concatRealPrice(staticPortfolio);
+    const fetchDynamicData = async () => {
+      const portfolioWithRealPrice = await concatRealPrice(staticPortfolio);
 
-  //     setDynamicPortfolio(portfolioWithRealPrice);
-  //   };
+      setDynamicPortfolio(portfolioWithRealPrice);
+    };
 
-  //   fetchDynamicData();
-  // }, [currentUser, staticPortfolio]);
+    fetchDynamicData();
+  }, [currentUser, staticPortfolio]);
 
-  // useEffect(() => {
-  //   let total = 0;
-  //   const data = [];
+  useEffect(() => {
+    const total = calculateTotal(dynamicPortfolio);
 
-  //   dynamicPortfolio.forEach(item => {
-  //     total += Number(item.avgPrice) * Number(item.quantity);
-  //   });
+    const portfolioByProportions
+      = calculateProportions(dynamicPortfolio, total).sort((a, b) => b.y - a.y);
 
-  //   setTotal(total);
-
-  //   dynamicPortfolio.forEach(item => {
-  //     data.push({
-  //       name: item.symbol,
-  //       y: Number(new Decimal(Number(item.avgPrice) * Number(item.quantity)).dividedBy(new Decimal(total)).times(100).toDecimalPlaces(2).toString()),
-  //     });
-  //   });
-
-  //   data.sort((a, b) => b.y - a.y);
-
-  //   setPieChartData(data);
-  // }, [dynamicPortfolio]);
+    setTotal(total);
+    setChartData(portfolioByProportions);
+  }, [dynamicPortfolio]);
 
   return (
     <>
       <div className='mainPageWrapper'>
-        <DonutChart
-          data={pieChartData}
+        <CircleChart
+          data={chartData}
           title='내 포트폴리오'
           centerText={`$${total}`}
+          type='doughnut'
         />
-        <div className='recommendedPortfoliosWrapper'></div>
+        <div className='recommendedPortfoliosWrapper'>
+          <CircleChart data={chartData} type='pie' hasLabel={false} />
+          <CircleChart data={chartData} type='pie' />
+        </div>
         <div className='companyCardsWrapper'></div>
       </div>
     </>
