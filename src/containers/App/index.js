@@ -12,6 +12,7 @@ import requestPreferenceInfo from '../../api/requestPreferenceInfo';
 import { Switch, Route } from 'react-router-dom';
 import PATHS from '../../constants/paths';
 import '../../sass/app.scss';
+import Main from '../../pages/Main';
 
 const App = ({
   onInitialStatesFetched,
@@ -66,6 +67,9 @@ const App = ({
         />
       }
       <Switch>
+        <Route path={PATHS.ROOT} exact>
+          <Main currentUser={currentUser} />
+        </Route>
         <Route path={PATHS.MY_PAGE}>
           {
             currentUser

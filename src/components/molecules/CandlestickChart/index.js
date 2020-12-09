@@ -7,7 +7,6 @@ const CandlestickChart = ({ data }) => {
   const width = 1800;
   const height = 600;
   const margin = { top: 20, right: 100, bottom: 30, left: 40 };
-
   const x = d3.scaleBand()
     .domain(d3.utcDay
       .range(data[data.length - 1].date, +data[0].date + 1)
@@ -39,9 +38,7 @@ const CandlestickChart = ({ data }) => {
     .call(g => g.select('.domain').remove());
 
   const formatDate = d3.utcFormat('%B %-d, %Y');
-
   const formatValue = d3.format('.2f');
-
   const formatChange = (y0, y1) => {
     const f = d3.format('+.2%');
     return f((y1 - y0) / y0);

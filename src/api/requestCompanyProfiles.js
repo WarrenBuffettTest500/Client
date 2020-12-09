@@ -11,8 +11,8 @@ const requestCompanyProfiles = async symbolList => {
           'method': METHODS.GET,
           'headers': {
             'x-rapidapi-key': process.env.REACT_APP_X_RAPIDAPI_KEY,
-            'x-rapidapi-host': 'alpha-vantage.p.rapidapi.com'
-          }
+            'x-rapidapi-host': 'alpha-vantage.p.rapidapi.com',
+          },
         });
 
         return await response.json();

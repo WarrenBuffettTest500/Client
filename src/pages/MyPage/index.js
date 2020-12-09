@@ -1,72 +1,103 @@
 import React, { useState, useEffect } from 'react';
 import './index.scss';
 import StockDataInputModal from '../../components/molecules/StockDataInputModal';
-import requestPortfolio from '../../api/requestPortfolio';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import ClearRoundedIcon from '@material-ui/icons/ClearRounded';
 import Button from '../../components/atoms/Button';
 import { Decimal } from 'decimal.js';
 import requestPortfolioItemDelete from '../../api/requestPortfolioItemDelete';
+import concatRealPrice from '../../utils/concatRealPrice';
+import CircleChart from '../../components/molecules/CircleChart';
+import calculateProportions from '../../utils/calculateProportions';
 
-const MyPage = ({ currentUser }) => {
+const MyPage = ({ currentUser, staticPortfolio }) => {
   const [isInputModalOpen, setIsInputModalOpen] = useState(false);
-  const [portfolioData, setPortfolioData] = useState([]);
+  const [dynamicPortfolio, setDynamicPortfolio] = useState([
+    {
+      avgPrice: '100',
+      id: 1,
+      price: '123.27000',
+      quantity: '40',
+      symbol: 'AAPL',
+      userUid: 'cQAHr98ZikhaQzXfvU41Cfs3fCi2',
+    },
+    {
+      avgPrice: '200',
+      id: 2,
+      price: '214.74001',
+      quantity: '5',
+      symbol: 'MSFT',
+      userUid: 'cQAHr98ZikhaQzXfvU41Cfs3fCi2',
+    },
+    {
+      avgPrice: '3000',
+      id: 3,
+      price: '3128.92505',
+      quantity: '1',
+      symbol: 'AMZN',
+      userUid: 'cQAHr98ZikhaQzXfvU41Cfs3fCi2',
+    },
+    {
+      avgPrice: '480',
+      id: 4,
+      price: '626.43378',
+      quantity: '5',
+      symbol: 'TSLA',
+      userUid: 'cQAHr98ZikhaQzXfvU41Cfs3fCi2',
+    },
+  ]);
   const [dashboardData, setDashboardData] = useState({
     total: 0,
     return: 0,
     earningsRate: 0,
   });
   const [portfolioItemToEdit, setPortfolioItemToEdit] = useState(null);
+  const [chartData, setChartData] = useState([
+    { name: 'AAPL', value: 38.46 },
+    { name: 'AMZN', value: 28.85 },
+    { name: 'TSLA', value: 23.08 },
+    { name: 'MSFT', value: 9.62 },
+  ]);
 
-  useEffect(async () => {
-    const { portfolio } = await requestPortfolio(currentUser);
+  // useEffect(() => {
+  //   const setMyPageData = async () => {
+  //     const portfolioWithRealPrice = await concatRealPrice(staticPortfolio);
 
-    const setMyPageData = async () => {
-      const portfolioWithRealPrice = await Promise.all(
-        portfolio.map(async originalItem => {
-          const item = JSON.parse(JSON.stringify(originalItem));
+  //     setDynamicPortfolio(portfolioWithRealPrice);
 
-          const priceResponse = await fetch(`https://twelve-data1.p.rapidapi.com/price?symbol=${item.symbol}&outputsize=30&format=json`, {
-            'method': 'GET',
-            'headers': {
-              'x-rapidapi-key': process.env.REACT_APP_X_RAPIDAPI_KEY,
-              'x-rapidapi-host': 'twelve-data1.p.rapidapi.com',
-            },
-          });
+  //     const updatedDashboardData = {
+  //       total: 0,
+  //       return: 0,
+  //       earningsRate: 0,
+  //     };
 
-          const { price } = await priceResponse.json();
+  //     let originalCapital = 0;
 
-          item.price = price;
+  //     portfolioWithRealPrice.forEach(portfolioItem => {
+  //       const { price, avgPrice, quantity } = portfolioItem;
+  //       updatedDashboardData.total = new Decimal(price).times(new Decimal(quantity)).plus(new Decimal(updatedDashboardData.total)).toDecimalPlaces(2);
+  //       updatedDashboardData.return = new Decimal(price).minus(new Decimal(avgPrice)).times(new Decimal(quantity)).plus(new Decimal(updatedDashboardData.return)).toDecimalPlaces(2);
+  //       originalCapital = new Decimal(avgPrice).times(new Decimal(quantity)).plus(new Decimal(originalCapital)).toDecimalPlaces(2);
+  //     });
 
-          return item;
-        }),
-      );
+  //     updatedDashboardData.earningsRate = new Decimal(updatedDashboardData.return).dividedBy(new Decimal(originalCapital)).times(100).toDecimalPlaces(2);
 
-      setPortfolioData(portfolioWithRealPrice);
+  //     setDashboardData({
+  //       total: updatedDashboardData.total,
+  //       return: updatedDashboardData.return,
+  //       earningsRate: updatedDashboardData.earningsRate,
+  //     });
+  //   };
 
-      const updatedDashboardData = {
-        total: 0,
-        return: 0,
-        earningsRate: 0,
-      };
+  //   setMyPageData();
+  // }, [staticPortfolio]);
 
-      portfolioWithRealPrice.forEach(portfolioItem => {
-        const { price, avgPrice, quantity } = portfolioItem;
-        updatedDashboardData.total = new Decimal(price).times(new Decimal(quantity)).plus(new Decimal(updatedDashboardData.total)).toDecimalPlaces(2).toString();
-        updatedDashboardData.return = new Decimal(price).minus(new Decimal(avgPrice)).times(new Decimal(quantity)).plus(new Decimal(updatedDashboardData.return)).toDecimalPlaces(2).toString();
-      });
+  // useEffect(() => {
+  //   const portfolioByProportions
+  //     = calculateProportions(dynamicPortfolio, dashboardData.total).sort((a, b) => b.y - a.y);
 
-      updatedDashboardData.earningsRate = new Decimal(updatedDashboardData.return).dividedBy(new Decimal(updatedDashboardData.total)).times(100).toDecimalPlaces(2).toString();
-
-      setDashboardData({
-        total: updatedDashboardData.total,
-        return: updatedDashboardData.return,
-        earningsRate: updatedDashboardData.earningsRate,
-      });
-    };
-
-    setMyPageData();
-  }, []);
+  //   setChartData(portfolioByProportions);
+  // }, [dynamicPortfolio, dashboardData]);
 
   const createClickHandler = () => {
     setIsInputModalOpen(true);
@@ -97,7 +128,9 @@ const MyPage = ({ currentUser }) => {
   return (
     <>
       <div className='myPageWrapper'>
-        <div className='graphsWrapper'></div>
+        <div className='graphsWrapper'>
+          <CircleChart data={chartData} type='pie' />
+        </div>
         <div className='dashboard'>
           <div>
             {`총 자산: ${dashboardData.total}`}
@@ -129,7 +162,7 @@ const MyPage = ({ currentUser }) => {
                 <th>삭제</th>
               </tr>
               {
-                portfolioData.map(item => {
+                dynamicPortfolio.map(item => {
                   const { id, symbol, quantity, avgPrice, price } = item;
 
                   return (

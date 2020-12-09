@@ -27,6 +27,14 @@ const StockDataInputModal = ({
         ? await requestPortfolioItemUpdate(currentUser, stockData, portfolioItemToEdit.portfolioItemId)
         : await requestPortfolioItemCreate(currentUser, stockData);
 
+    if (response.result !== 'ok') {
+      alert('실패');
+
+      return;
+    }
+
+    alert('성공');
+
     setPortfolioItemToEdit(null);
     setIsInputModalOpen(false);
   };

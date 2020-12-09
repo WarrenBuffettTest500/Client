@@ -5,6 +5,7 @@ const userSlice = createSlice({
   initialState: {
     user: null,
     preferenceInfo: null,
+    staticPortfolio: [],
   },
   reducers: {
     setCurrentUser: (state, action) => {
@@ -17,9 +18,12 @@ const userSlice = createSlice({
     setPreferenceInfo: (state, action) => {
       state.preferenceInfo = action.payload;
     },
+    setStaticPortfolio: (state, action) => {
+      state.staticPortfolio = action.payload;
+    },
   },
 });
 
 export default userSlice.reducer;
 
-export const { setCurrentUser, removeCurrentUser, setPreferenceInfo } = userSlice.actions;
+export const { setCurrentUser, removeCurrentUser, setPreferenceInfo, setStaticPortfolio } = userSlice.actions;
