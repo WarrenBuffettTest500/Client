@@ -3,5 +3,10 @@ html {
     background-color: $theme-color;
     font-family: $font;
     color: $primary;
+
+    button {
+      background-color: transparent;
+      border-color: transparent;
+    }
   }
 }

@@ -11,6 +11,9 @@ const PATHS = {
   KEYWORD: '/:keyword',
   SYMBOLS: '/symbols',
   MY_PAGE: '/my_page',
+  COMPANY_PROFILES: '/company_profiles',
+  RECOMMENDATION_STOCK_LIST: '/recommendation_stock_list',
+  VIEWS: '/views',
 };
 
 export default PATHS;

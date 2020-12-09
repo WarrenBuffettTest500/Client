@@ -1,22 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
 
-const StockChart = ({ dataSet }) => {
+const CandlestickChart = ({ data }) => {
   const chart = useRef(null);
-  const [data, setData] = useState(dataSet.values);
 
-  const width = 1200;
+  const width = 1800;
   const height = 600;
-  const margin = { top: 20, right: 30, bottom: 30, left: 40 };
+  const margin = { top: 20, right: 100, bottom: 30, left: 40 };
 
-  console.log('HERE', new Date(data[data.length - 1].datetime));
   const x = d3.scaleBand()
     .domain(d3.utcDay
-      // .range(data[0].datetime, +data[data.length - 1].datetime + 1)
-      .range(new Date('2018-01-01'), new Date(data[data.length - 1].datetime))
+      .range(data[data.length - 1].date, +data[0].date + 1)
       .filter(d => d.getUTCDay() !== 0 && d.getUTCDay() !== 6))
     .range([margin.left, width - margin.right])
-    .padding(0.2);
+    .padding(10);
 
   const y = d3.scaleLog()
     .domain([d3.min(data, d => d.low), d3.max(data, d => d.high)])
@@ -27,7 +24,7 @@ const StockChart = ({ dataSet }) => {
     .call(d3.axisBottom(x)
       .tickValues(d3.utcMonday
         .every(width > 720 ? 1 : 2)
-        .range(data[0].datetime, data[data.length - 1].datetime))
+        .range(data[data.length - 1].date, data[0].date))
       .tickFormat(d3.utcFormat('%-m/%-d')))
     .call(g => g.select('.domain').remove());
 
@@ -45,11 +42,10 @@ const StockChart = ({ dataSet }) => {
 
   const formatValue = d3.format('.2f');
 
-  const f = d3.format('+.2%');
-  const formatChange = () => {
-    return (y0, y1) => f((y1 - y0) / y0);
+  const formatChange = (y0, y1) => {
+    const f = d3.format('+.2%');
+    return f((y1 - y0) / y0);
   };
-  const parseDate = d3.utcParse('%Y-%m-%d');
 
   const candlestickChart = () => {
     const svg = d3.select(chart.current)
@@ -67,7 +63,7 @@ const StockChart = ({ dataSet }) => {
       .selectAll('g')
       .data(data)
       .join('g')
-      .attr('transform', d => `translate(${x(new Date(d.datetime))},0)`);
+      .attr('transform', d => `translate(${x(d.date)}, 0)`);
 
     g.append('line')
       .attr('y1', d => y(d.low))
@@ -76,29 +72,29 @@ const StockChart = ({ dataSet }) => {
     g.append('line')
       .attr('y1', d => y(d.open))
       .attr('y2', d => y(d.close))
-      .attr('stroke-width', x.bandwidth())
+      .attr('stroke-width', 12)
       .attr('stroke', d => d.open > d.close ? d3.schemeSet1[0]
         : d.close > d.open ? d3.schemeSet1[2]
           : d3.schemeSet1[8]);
 
     g.append('title')
-      .text(d => `${formatDate(d.datetime)}
-  Open: ${formatValue(d.open)}
-  Close: ${formatValue(d.close)} (${formatChange(d.open, d.close)})
-  Low: ${formatValue(d.low)}
-  High: ${formatValue(d.high)}`);
+      .text(d => `${formatDate(d.date)}
+        Open: ${formatValue(d.open)}
+        Close: ${formatValue(d.close)} (${formatChange(d.open, d.close)})
+        Low: ${formatValue(d.low)}
+        High: ${formatValue(d.high)}`);
   };
 
   useEffect(() => {
+    if (!data) return;
     candlestickChart();
-  }, []);
+  }, [data]);
 
   return (
     <div>
-      <h1>chart</h1>
-      <svg clssNmae='candle_stock_chart' ref={chart} />
+      <svg className="candle_stock_chart" ref={chart} />
     </div>
   );
 };
 
-export default StockChart;
+export default CandlestickChart;

@@ -13,8 +13,6 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: transparent;
-  border-color: transparent;
 }
 
 .loginButton {
@@ -56,4 +54,9 @@
   background: none;
   border: none;
   color: white;
+}
+
+.tabbar_button {
+  @include cursorPointer();
+  color: $primary;
 }

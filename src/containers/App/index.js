@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import Header from '../../components/organisms/Header';
-import { setStockDetails } from '../../store/stock';
+import { setSearchStockDetails } from '../../store/stock';
 import { setCurrentUser, removeCurrentUser, setPreferenceInfo } from '../../store/user';
 import LoginModal from '../../components/molecules/LoginModal/';
 import PreferencesForm from '../../components/templates/PreferencesForm';
@@ -25,6 +25,10 @@ const App = ({
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const loginButtonClickHandler = () => {
     setIsAuthModalOpen(true);
+  };
+
+  const onSearchBarKeyPress = async stockDetails => {
+    setStockDetails(stockDetails);
   };
 
   useEffect(() => {
@@ -52,7 +56,7 @@ const App = ({
         currentUser={currentUser}
         onLoginClick={loginButtonClickHandler}
         onLogoutClick={onLogout}
-        onSearchBarKeyPress={setStockDetails}
+        onSearchBarKeyPress={onSearchBarKeyPress}
       />
       {
         isAuthModalOpen
@@ -100,7 +104,7 @@ const mapDispatchToProps = dispatch => {
     onLogout: () => dispatch(removeCurrentUser()),
     onUserUpdate: user => dispatch(setCurrentUser(user)),
     onPreferenceInfoUpdate: preferenceInfo => dispatch(setPreferenceInfo(preferenceInfo)),
-    setStockDetails: stockDetails => dispatch(setStockDetails(stockDetails)),
+    setStockDetails: stockDetails => dispatch(setSearchStockDetails(stockDetails)),
   };
 };
 
