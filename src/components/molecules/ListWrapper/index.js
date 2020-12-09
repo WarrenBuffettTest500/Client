@@ -2,7 +2,7 @@ import React from 'react';
 
 const ListContainer = ({
   className,
-  children
+  children,
 }) => {
   return (
     <div className={className}>

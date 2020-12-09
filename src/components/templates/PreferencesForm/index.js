@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import './index.scss';
 import requestPreferenceInfoUpdate from '../../../api/requestPreferenceInfoUpdate';
 import requestUserPreferenceIdUpdate from '../../../api/requestUserPreferenceIdUpdate';
+import PATHS from '../../../constants/paths';
 
 const PreferencesForm = ({
   currentUser,
@@ -13,6 +15,7 @@ const PreferencesForm = ({
   const [stockProportion, setStockProportion] = useState('');
   const [preferredStockType, setPreferredStockType] = useState('');
   const [period, setPeriod] = useState('');
+  const history = useHistory();
 
   const submitHandler = async event => {
     event.preventDefault();
@@ -52,6 +55,8 @@ const PreferencesForm = ({
     }
 
     onPreferenceInfoUpdate(preferenceInfoResponse.preferenceInfo);
+
+    history.push(PATHS.ROOT);
   };
 
   const preferenceChangeHandler = event => {
