@@ -53,10 +53,10 @@ const MyPage = ({ currentUser, staticPortfolio }) => {
   });
   const [portfolioItemToEdit, setPortfolioItemToEdit] = useState(null);
   const [chartData, setChartData] = useState([
-    { name: 'AAPL', y: 38.46 },
-    { name: 'AMZN', y: 28.85 },
-    { name: 'TSLA', y: 23.08 },
-    { name: 'MSFT', y: 9.62 },
+    { name: 'AAPL', value: 38.46 },
+    { name: 'AMZN', value: 28.85 },
+    { name: 'TSLA', value: 23.08 },
+    { name: 'MSFT', value: 9.62 },
   ]);
 
   // useEffect(() => {
@@ -129,11 +129,7 @@ const MyPage = ({ currentUser, staticPortfolio }) => {
     <>
       <div className='myPageWrapper'>
         <div className='graphsWrapper'>
-          <CircleChart
-            data={chartData}
-            title='내 포트폴리오'
-            type='pie'
-          />
+          <CircleChart data={chartData} type='pie' />
         </div>
         <div className='dashboard'>
           <div>

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './index.scss';
 import concatRealPrice from '../../utils/concatRealPrice';
-import CircleChart from '../../components/molecules/CircleChart';
 import calculateProportions from '../../utils/calculateProportions';
 import calculateTotal from '../../utils/calculateTotal';
+import CircleChart from '../../components/molecules/CircleChart';
 
 const Main = ({ currentUser, staticPortfolio }) => {
   const [dynamicPortfolio, setDynamicPortfolio] = useState([
@@ -41,10 +41,10 @@ const Main = ({ currentUser, staticPortfolio }) => {
     },
   ]);
   const [chartData, setChartData] = useState([
-    { name: 'AAPL', y: 38.46 },
-    { name: 'AMZN', y: 28.85 },
-    { name: 'TSLA', y: 23.08 },
-    { name: 'MSFT', y: 9.62 },
+    { name: 'AAPL', value: 38.46 },
+    { name: 'AMZN', value: 28.85 },
+    { name: 'TSLA', value: 23.08 },
+    { name: 'MSFT', value: 9.62 },
   ]);
   const [total, setTotal] = useState(10400);
 
@@ -73,16 +73,8 @@ const Main = ({ currentUser, staticPortfolio }) => {
   return (
     <>
       <div className='mainPageWrapper'>
-        <CircleChart
-          data={chartData}
-          title='내 포트폴리오'
-          centerText={`$${total}`}
-          type='doughnut'
-        />
-        <div className='recommendedPortfoliosWrapper'>
-          <CircleChart data={chartData} type='pie' hasLabel={false} />
-          <CircleChart data={chartData} type='pie' />
-        </div>
+        <CircleChart data={chartData} type='donut' />
+        <div className='recommendedPortfoliosWrapper'></div>
         <div className='companyCardsWrapper'></div>
       </div>
     </>
