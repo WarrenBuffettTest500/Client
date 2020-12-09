@@ -6,7 +6,7 @@ const calculateProportions = (portfolio, total) => {
   portfolio.forEach(item => {
     data.push({
       name: item.symbol,
-      y: Number(new Decimal(Number(item.price) * Number(item.quantity)).dividedBy(new Decimal(total)).times(100).toDecimalPlaces(2).toString()),
+      value: Number(new Decimal(Number(item.price) * Number(item.quantity)).dividedBy(new Decimal(total)).times(100).toDecimalPlaces(2).toString()),
     });
   });
 
