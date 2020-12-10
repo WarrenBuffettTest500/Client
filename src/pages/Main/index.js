@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './index.scss';
+import { Link } from 'react-router-dom';
 import concatRealPrice from '../../utils/concatRealPrice';
 import calculateProportions from '../../utils/calculateProportions';
 import calculateTotal from '../../utils/calculateTotal';
@@ -61,19 +62,20 @@ const Main = ({ currentUser, staticPortfolio }) => {
   // }, [currentUser, staticPortfolio]);
 
   // useEffect(() => {
-  //   const total = calculateTotal(dynamicPortfolio);
+  //   setTotal(calculateTotal(dynamicPortfolio));
 
   //   const portfolioByProportions
   //     = calculateProportions(dynamicPortfolio, total).sort((a, b) => b.y - a.y);
 
-  //   setTotal(total);
   //   setChartData(portfolioByProportions);
   // }, [dynamicPortfolio]);
 
   return (
     <>
       <div className='mainPageWrapper'>
-        <CircleChart data={chartData} type='donut' />
+        <Link to='/my_page'>
+          <CircleChart data={chartData} type='donut' />
+        </Link>
         <div className='recommendedPortfoliosWrapper'></div>
         <div className='companyCardsWrapper'></div>
       </div>
