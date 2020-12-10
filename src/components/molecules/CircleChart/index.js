@@ -44,7 +44,7 @@ const CircleChart = ({ data, type }) => {
         .attr('y', '0.7em')
         .attr('fill-opacity', 0.7)
         .text(d => d.data.value.toLocaleString()));
-  }, []);
+  }, [data]);
 
   return (
     <svg ref={svgRef}></svg>

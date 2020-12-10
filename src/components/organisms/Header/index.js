@@ -9,7 +9,6 @@ const Header = ({
   currentUser,
   onLoginClick,
   onLogoutClick,
-  onSearchBarKeyPress,
 }) => {
   const { pathname } = useLocation();
   const history = useHistory();
@@ -43,9 +42,7 @@ const Header = ({
         </div>
       </div>
       <div className='header_item'>
-        <SearchBar
-          onSearchBarKeyPress={onSearchBarKeyPress}
-        />
+        <SearchBar />
       </div>
       <div className='header_item'>
         {

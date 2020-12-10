@@ -31,9 +31,6 @@ const App = ({
     setIsAuthModalOpen(true);
   };
 
-  const onSearchBarKeyPress = async stockDetails => {
-    setStockDetails(stockDetails);
-  };
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -72,7 +69,6 @@ const App = ({
         currentUser={currentUser}
         onLoginClick={loginButtonClickHandler}
         onLogoutClick={onLogout}
-        onSearchBarKeyPress={onSearchBarKeyPress}
       />
       {
         isAuthModalOpen
@@ -121,9 +117,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onInitialStatesFetched: (user, preferenceInfo, portfolio) => {
+    onInitialStatesFetched: (user, preferenceInfo) => {
       dispatch(setCurrentUser(user));
-      dispatch(setStaticPortfolio(portfolio));
       if (!preferenceInfo) return;
       dispatch(setPreferenceInfo(preferenceInfo));
     },
