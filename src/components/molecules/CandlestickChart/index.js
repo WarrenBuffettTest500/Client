@@ -89,7 +89,7 @@ const CandlestickChart = ({ data }) => {
 
   return (
     <div>
-      <svg className="candle_stock_chart" ref={chart} />
+      <svg className='candle_stock_chart' ref={chart} />
     </div>
   );
 };

@@ -1,48 +1,54 @@
+@mixin animationUp() {
+  transform: translateY(30px);
+  opacity: 0.5;
+}
+
+@mixin animationDown() {
+  transform: translateY(-30px);
+  opacity: 1;
+}
+
+@keyframes upDownOdd {
+  100% {
+    @include animationUp();
+  }
+  50% {
+    @include animationDown();
+  }
+  0% {
+    @include animationUp();
+  }
+}
+
+@keyframes upDownEven {
+  100% {
+    @include animationDown();
+  }
+  50% {
+    @include animationUp();
+  }
+  0% {
+    @include animationDown();
+  }
+}
+
 .companyCard {
   display: flex;
-  width: 12em;
-  height: 12em;
+  height: 10em;
+  padding: 0 2.8rem;
   background-color: salmon;
   border-radius: $border-radius;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   margin-left: 1rem;
+  cursor: pointer;
 
-  &:hover {
-    cursor: pointer;
-    opacity: 0.5;
+  &:nth-child(odd) {
+    animation: upDownOdd 5s linear infinite;
+  }
+
+  &:nth-child(even) {
+    animation: upDownEven 5s linear infinite;
   }
 };
-
-.companyCard:nth-child(odd) {
-  animation: upDownOdd 5s linear infinite;
-}
-
-.companyCard:nth-child(even) {
-  animation: upDownEven 5s linear infinite;
-}
-
-@keyframes upDownOdd {
-  100% {
-    transform: translateY(30px);
-  }
-  50% {
-    transform: translateY(-30px);
-  }
-  0% {
-    transform: translateY(30px);
-  }
-}
-
-@keyframes upDownEven {
-  100% {
-    transform: translateY(-30px);
-  }
-  50% {
-    transform: translateY(30px);
-  }
-  0% {
-    transform: translateY(-30px);
-  }
-}
