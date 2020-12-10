@@ -5,7 +5,7 @@ import Button from '../../atoms/Button';
 import requestPortfolioItemCreate from '../../../api/requestPortfolioItemCreate';
 import requestPortfolioItemUpdate from '../../../api/requestPortfolioItemUpdate';
 
-const StockDataInputModal = ({
+const PortfolioItemInputModal = ({
   currentUser,
   portfolioItemToEdit,
   setIsInputModalOpen,
@@ -15,8 +15,8 @@ const StockDataInputModal = ({
   const [avgPrice, setAvgPrice] = useState(portfolioItemToEdit?.avgPrice || '');
   const [quantity, setQuantity] = useState(portfolioItemToEdit?.quantity || '');
 
-  const StockDataSumbitHandler = async () => {
-    const stockData = {
+  const portfolioItemSumbitHandler = async () => {
+    const portfolioItem = {
       symbol,
       avgPrice,
       quantity,
@@ -24,8 +24,8 @@ const StockDataInputModal = ({
 
     const response
       = portfolioItemToEdit
-        ? await requestPortfolioItemUpdate(currentUser, stockData, portfolioItemToEdit.portfolioItemId)
-        : await requestPortfolioItemCreate(currentUser, stockData);
+        ? await requestPortfolioItemUpdate(currentUser, portfolioItem, portfolioItemToEdit.portfolioItemId)
+        : await requestPortfolioItemCreate(currentUser, portfolioItem);
 
     if (response.result !== 'ok') {
       alert('실패');
@@ -45,7 +45,7 @@ const StockDataInputModal = ({
         setIsModalOpen={setIsInputModalOpen}
         onClick={() => setPortfolioItemToEdit(null)}
       />
-      <Modal className='stockDataInputModal'>
+      <Modal className='portfolioItemInputModal'>
         <div>
           <h3>티커</h3>
           <input
@@ -71,8 +71,8 @@ const StockDataInputModal = ({
           />
         </div>
         <Button
-          className='stockDataSumbitButton'
-          onClick={StockDataSumbitHandler}
+          className='portfolioItemSumbitButton'
+          onClick={portfolioItemSumbitHandler}
           text='확인'
         />
       </Modal>
@@ -80,4 +80,4 @@ const StockDataInputModal = ({
   );
 };
 
-export default StockDataInputModal;
+export default PortfolioItemInputModal;
