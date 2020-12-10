@@ -1,4 +1,12 @@
-.company_card_list_container {
+.company_card_list.container {
   display: flex;
-  width: 70%;
+  width: 36rem;
+  padding: 2rem 0;
+  overflow-x: scroll;
+  border-radius: $border-radius;
+  margin: 0 auto;
+  
+  &::-webkit-scrollbar {
+    opacity: 0.1;
+  }
 }

@@ -21,6 +21,9 @@ const stockSlice = createSlice({
     setRecommendationSymbolInfo: (state, action) => {
       state.recommendationSymbolInfo = action.payload;
     },
+    setCompanyProfileList: (state, action) => {
+      state.companyProfileList = action.payload;
+    },
   },
 });
 
@@ -32,4 +35,5 @@ export const {
   setOneMonthStockDetails,
   setRecommendationSymbolList,
   setRecommendationSymbolInfo,
+  setCompanyProfileList,
 } = stockSlice.actions;
