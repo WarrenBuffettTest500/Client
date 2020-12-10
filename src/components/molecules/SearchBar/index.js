@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import Autosuggest from 'react-autosuggest';
 import Input from '../../atoms/Input';
 import { useToasts } from 'react-toast-notifications';
 import { symbols } from '../../../mock_data/symbols';
 import requestStockDetails from '../../../api/requestStockDetails';
+import requestRecommendationSymbolList from '../../../api/requestRecommendationSymbolList';
 import {
   getSuggestions,
   getSuggestionValue,
@@ -12,8 +14,10 @@ import {
 } from '../../../utils/autosuggest';
 import PATHS from '../../../constants/paths';
 import RESPONSES from '../../../constants/responses';
+import { setRecommendationSymbolList, setRecommendationSymbolInfo } from '../../../store/stock';
 
 const SearchBar = ({ onSearchBarKeyPress }) => {
+  const dispatch = useDispatch();
   const [searchKeyword, setSearchKeyword] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const { addToast } = useToasts();
@@ -43,9 +47,22 @@ const SearchBar = ({ onSearchBarKeyPress }) => {
 
       if (result === RESPONSES.OK) {
         onSearchBarKeyPress(stockDetails);
+
+        const { result, recommendationSymbolList, recommendationSymbolInfo } = await requestRecommendationSymbolList(searchKeyword);
+
+        if (result === RESPONSES.OK) {
+          dispatch(setRecommendationSymbolList(recommendationSymbolList));
+          dispatch(setRecommendationSymbolInfo(recommendationSymbolInfo));
+        }
+
+        if (result === RESPONSES.FAILURE) {
+          alert('리스트를 가져오지 못했습니다');
+        }
+
         history.push(`${PATHS.STOCK_DETAILS}/${searchKeyword}`);
         return;
       }
+
       if (result === RESPONSES.FAILURE) {
         history.push(PATHS.FAILURE);
         return;

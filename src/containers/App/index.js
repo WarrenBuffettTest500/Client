@@ -1,16 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import Header from '../../components/organisms/Header';
-import { setStockDetails } from '../../store/stock';
-import {
-  setCurrentUser,
-  removeCurrentUser,
-  setPreferenceInfo,
-  setStaticPortfolio,
-} from '../../store/user';
+import { setSearchStockDetails } from '../../store/stock';
+import { setCurrentUser, removeCurrentUser, setPreferenceInfo } from '../../store/user';
 import LoginModal from '../../components/molecules/LoginModal/';
 import PreferencesForm from '../../components/templates/PreferencesForm';
-import Main from '../../pages/Main';
 import StockDetails from '../../pages/StockDetails';
 import MyPage from '../../pages/MyPage';
 import requestUser from '../../api/requestUser';
@@ -18,7 +12,7 @@ import requestPreferenceInfo from '../../api/requestPreferenceInfo';
 import { Switch, Route } from 'react-router-dom';
 import PATHS from '../../constants/paths';
 import '../../sass/app.scss';
-import requestPortfolio from '../../api/requestPortfolio';
+import Main from '../../pages/Main';
 
 const App = ({
   onInitialStatesFetched,
@@ -28,12 +22,14 @@ const App = ({
   setStockDetails,
   onUserUpdate,
   onPreferenceInfoUpdate,
-  onPortfolioFetched,
-  staticPortfolio,
 }) => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const loginButtonClickHandler = () => {
     setIsAuthModalOpen(true);
+  };
+
+  const onSearchBarKeyPress = async stockDetails => {
+    setStockDetails(stockDetails);
   };
 
   useEffect(() => {
@@ -55,25 +51,13 @@ const App = ({
     initializeUserState();
   }, []);
 
-  useEffect(() => {
-    const fetchPortfolio = async () => {
-      if (!currentUser) return;
-
-      const { portfolio } = await requestPortfolio(currentUser);
-
-      onPortfolioFetched(portfolio);
-    };
-
-    fetchPortfolio();
-  }, [currentUser]);
-
   return (
     <>
       <Header
         currentUser={currentUser}
         onLoginClick={loginButtonClickHandler}
         onLogoutClick={onLogout}
-        onSearchBarKeyPress={setStockDetails}
+        onSearchBarKeyPress={onSearchBarKeyPress}
       />
       {
         isAuthModalOpen
@@ -83,13 +67,13 @@ const App = ({
         />
       }
       <Switch>
-        <Route exact path={PATHS.ROOT}>
-          <Main currentUser={currentUser} staticPortfolio={staticPortfolio} />
+        <Route path={PATHS.ROOT} exact>
+          <Main currentUser={currentUser} />
         </Route>
         <Route path={PATHS.MY_PAGE}>
           {
             currentUser
-            && <MyPage currentUser={currentUser} staticPortfolio={staticPortfolio} />
+            && <MyPage currentUser={currentUser} />
           }
         </Route>
         <Route path={PATHS.PREFERENCES}>
@@ -110,7 +94,6 @@ const App = ({
 const mapStateToProps = state => {
   return {
     currentUser: state.user.user,
-    staticPortfolio: state.user.staticPortfolio,
   };
 };
 
@@ -125,8 +108,7 @@ const mapDispatchToProps = dispatch => {
     onLogout: () => dispatch(removeCurrentUser()),
     onUserUpdate: user => dispatch(setCurrentUser(user)),
     onPreferenceInfoUpdate: preferenceInfo => dispatch(setPreferenceInfo(preferenceInfo)),
-    setStockDetails: stockDetails => dispatch(setStockDetails(stockDetails)),
-    onPortfolioFetched: staticPortfolio => dispatch(setStaticPortfolio(staticPortfolio)),
+    setStockDetails: stockDetails => dispatch(setSearchStockDetails(stockDetails)),
   };
 };
 
