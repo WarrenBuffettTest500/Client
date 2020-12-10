@@ -38,8 +38,20 @@ const PreferencesForm = ({
       return;
     }
 
+    const fillInterestedSectors = () => {
+      const copy = interestedSectors.slice();
+
+      for (let i = 1; i < 3; i++) {
+        if (!copy[i]) {
+          copy[i] = null;
+        }
+      }
+
+      return copy;
+    };
+
     const preferenceInfo = {
-      interestedSectors,
+      interestedSectors: fillInterestedSectors(),
       riskAppetite,
       stockProportion,
       preferredStockType,
@@ -94,27 +106,27 @@ const PreferencesForm = ({
       <form onChange={preferenceChangeHandler}>
         <ul>
           <li>관심 섹터 (최대 3개)</li>
-          <input type='checkbox' name='interested-sector' value='energy' />
+          <input type='checkbox' name='interested-sector' value='Energy' />
           <label> Energy</label><br />
-          <input type='checkbox' name='interested-sector' value='materials' />
-          <label> Materials</label><br />
-          <input type='checkbox' name='interested-sector' value='industrials' />
+          <input type='checkbox' name='interested-sector' value='Basic Materials' />
+          <label> Basic Materials</label><br />
+          <input type='checkbox' name='interested-sector' value='Industrials' />
           <label> Industrials</label><br />
-          <input type='checkbox' name='interested-sector' value='utilities' />
+          <input type='checkbox' name='interested-sector' value='Utilities' />
           <label> Utilities</label><br />
-          <input type='checkbox' name='interested-sector' value='healthcare' />
+          <input type='checkbox' name='interested-sector' value='Healthcare' />
           <label> Healthcare</label><br />
-          <input type='checkbox' name='interested-sector' value='financials' />
-          <label> Financials</label><br />
-          <input type='checkbox' name='interested-sector' value='consumer-discretionary' />
-          <label> Consumer Discretionary</label><br />
-          <input type='checkbox' name='interested-sector' value='consumer-staples' />
-          <label> Consumer Staples</label><br />
-          <input type='checkbox' name='interested-sector' value='information-technology' />
-          <label> Information Technology</label><br />
-          <input type='checkbox' name='interested-sector' value='communication-services' />
+          <input type='checkbox' name='interested-sector' value='Financial Services' />
+          <label> Financial Services</label><br />
+          <input type='checkbox' name='interested-sector' value='Consumer Cyclical' />
+          <label> Consumer Cyclical</label><br />
+          <input type='checkbox' name='interested-sector' value='Consumer Defensive' />
+          <label> Consumer Defensive</label><br />
+          <input type='checkbox' name='interested-sector' value='Technology' />
+          <label> Technology</label><br />
+          <input type='checkbox' name='interested-sector' value='Communication Services' />
           <label> Communication Services</label><br />
-          <input type='checkbox' name='interested-sector' value='real-estate' />
+          <input type='checkbox' name='interested-sector' value='Real Estate' />
           <label> Real Estate</label><br /><br />
           <li>위험 선호도</li>
           <input type='radio' name='risk-appetite' value='high' />
