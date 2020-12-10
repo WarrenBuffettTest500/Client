@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './index.scss';
-import StockDataInputModal from '../../components/molecules/StockDataInputModal';
+import PortfolioItemInputModal from '../../components/molecules/PortfolioItemInputModal';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import ClearRoundedIcon from '@material-ui/icons/ClearRounded';
 import Button from '../../components/atoms/Button';
@@ -182,7 +182,7 @@ const MyPage = ({ currentUser, staticPortfolio }) => {
       </div>
       {
         isInputModalOpen
-        && <StockDataInputModal
+        && <PortfolioItemInputModal
           currentUser={currentUser}
           setIsInputModalOpen={setIsInputModalOpen}
           portfolioItemToEdit={portfolioItemToEdit}
