@@ -12,38 +12,38 @@ import calculateProportions from '../../utils/calculateProportions';
 const MyPage = ({ currentUser, staticPortfolio }) => {
   const [isInputModalOpen, setIsInputModalOpen] = useState(false);
   const [dynamicPortfolio, setDynamicPortfolio] = useState([
-    // {
-    //   avgPrice: '100',
-    //   id: 1,
-    //   price: '123.27000',
-    //   quantity: '40',
-    //   symbol: 'AAPL',
-    //   userUid: 'cQAHr98ZikhaQzXfvU41Cfs3fCi2',
-    // },
-    // {
-    //   avgPrice: '200',
-    //   id: 2,
-    //   price: '214.74001',
-    //   quantity: '5',
-    //   symbol: 'MSFT',
-    //   userUid: 'cQAHr98ZikhaQzXfvU41Cfs3fCi2',
-    // },
-    // {
-    //   avgPrice: '3000',
-    //   id: 3,
-    //   price: '3128.92505',
-    //   quantity: '1',
-    //   symbol: 'AMZN',
-    //   userUid: 'cQAHr98ZikhaQzXfvU41Cfs3fCi2',
-    // },
-    // {
-    //   avgPrice: '480',
-    //   id: 4,
-    //   price: '626.43378',
-    //   quantity: '5',
-    //   symbol: 'TSLA',
-    //   userUid: 'cQAHr98ZikhaQzXfvU41Cfs3fCi2',
-    // },
+    {
+      avgPrice: '100',
+      id: 1,
+      price: '123.27000',
+      quantity: '40',
+      symbol: 'AAPL',
+      userUid: 'cQAHr98ZikhaQzXfvU41Cfs3fCi2',
+    },
+    {
+      avgPrice: '200',
+      id: 2,
+      price: '214.74001',
+      quantity: '5',
+      symbol: 'MSFT',
+      userUid: 'cQAHr98ZikhaQzXfvU41Cfs3fCi2',
+    },
+    {
+      avgPrice: '3000',
+      id: 3,
+      price: '3128.92505',
+      quantity: '1',
+      symbol: 'AMZN',
+      userUid: 'cQAHr98ZikhaQzXfvU41Cfs3fCi2',
+    },
+    {
+      avgPrice: '480',
+      id: 4,
+      price: '626.43378',
+      quantity: '5',
+      symbol: 'TSLA',
+      userUid: 'cQAHr98ZikhaQzXfvU41Cfs3fCi2',
+    },
   ]);
   const [dashboardData, setDashboardData] = useState({
     total: 0,
