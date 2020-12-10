@@ -51,22 +51,17 @@ const Main = ({ currentUser, staticPortfolio }) => {
 
   // useEffect(() => {
   //   if (!currentUser) return;
-
   //   const fetchDynamicData = async () => {
   //     const portfolioWithRealPrice = await concatRealPrice(staticPortfolio);
-
   //     setDynamicPortfolio(portfolioWithRealPrice);
   //   };
-
   //   fetchDynamicData();
   // }, [currentUser, staticPortfolio]);
 
   // useEffect(() => {
   //   setTotal(calculateTotal(dynamicPortfolio));
-
   //   const portfolioByProportions
   //     = calculateProportions(dynamicPortfolio, total).sort((a, b) => b.y - a.y);
-
   //   setChartData(portfolioByProportions);
   // }, [dynamicPortfolio]);
 
