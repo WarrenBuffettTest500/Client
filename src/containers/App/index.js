@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import Header from '../../components/organisms/Header';
 import { setSearchStockDetails } from '../../store/stock';
-import { setCurrentUser, removeCurrentUser, setPreferenceInfo } from '../../store/user';
+import { setCurrentUser, removeCurrentUser, setPreferenceInfo, setStaticPortfolio } from '../../store/user';
 import LoginModal from '../../components/molecules/LoginModal/';
 import PreferencesForm from '../../components/templates/PreferencesForm';
 import StockDetails from '../../pages/StockDetails';
@@ -13,6 +13,7 @@ import { Switch, Route } from 'react-router-dom';
 import PATHS from '../../constants/paths';
 import '../../sass/app.scss';
 import Main from '../../pages/Main';
+import requestPortfolio from '../../api/requestPortfolio';
 
 const App = ({
   onInitialStatesFetched,
@@ -22,6 +23,8 @@ const App = ({
   setStockDetails,
   onUserUpdate,
   onPreferenceInfoUpdate,
+  staticPortfolio,
+  onStaticPortfolioFetched,
 }) => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const loginButtonClickHandler = () => {
@@ -51,6 +54,18 @@ const App = ({
     initializeUserState();
   }, []);
 
+  useEffect(() => {
+    if (!currentUser) return;
+
+    const fetchStaticPortfolio = async () => {
+      const staticPortfolioResponse = await requestPortfolio(currentUser);
+
+      onStaticPortfolioFetched(staticPortfolioResponse.portfolio);
+    };
+
+    fetchStaticPortfolio();
+  }, [currentUser]);
+
   return (
     <>
       <Header
@@ -68,14 +83,20 @@ const App = ({
       }
       <Switch>
         <Route path={PATHS.ROOT} exact>
-          <Main currentUser={currentUser} />
+          <Main
+            currentUser={currentUser}
+            staticPortfolio={staticPortfolio}
+          />
         </Route>
-        <Route path={PATHS.MY_PAGE}>
-          {
-            currentUser
-            && <MyPage currentUser={currentUser} />
-          }
-        </Route>
+        {
+          currentUser
+          && <Route path={PATHS.MY_PAGE}>
+            <MyPage
+              currentUser={currentUser}
+              staticPortfolio={staticPortfolio}
+            />
+          </Route>
+        }
         <Route path={PATHS.PREFERENCES}>
           <PreferencesForm
             currentUser={currentUser}
@@ -94,13 +115,15 @@ const App = ({
 const mapStateToProps = state => {
   return {
     currentUser: state.user.user,
+    staticPortfolio: state.user.staticPortfolio,
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onInitialStatesFetched: (user, preferenceInfo) => {
+    onInitialStatesFetched: (user, preferenceInfo, portfolio) => {
       dispatch(setCurrentUser(user));
+      dispatch(setStaticPortfolio(portfolio));
       if (!preferenceInfo) return;
       dispatch(setPreferenceInfo(preferenceInfo));
     },
@@ -109,6 +132,7 @@ const mapDispatchToProps = dispatch => {
     onUserUpdate: user => dispatch(setCurrentUser(user)),
     onPreferenceInfoUpdate: preferenceInfo => dispatch(setPreferenceInfo(preferenceInfo)),
     setStockDetails: stockDetails => dispatch(setSearchStockDetails(stockDetails)),
+    onStaticPortfolioFetched: portfolio => dispatch(setStaticPortfolio(portfolio)),
   };
 };
 
