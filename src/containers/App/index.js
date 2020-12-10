@@ -20,7 +20,6 @@ const App = ({
   onLogin,
   onLogout,
   currentUser,
-  setStockDetails,
   onUserUpdate,
   onPreferenceInfoUpdate,
   staticPortfolio,
@@ -126,7 +125,6 @@ const mapDispatchToProps = dispatch => {
     onLogout: () => dispatch(removeCurrentUser()),
     onUserUpdate: user => dispatch(setCurrentUser(user)),
     onPreferenceInfoUpdate: preferenceInfo => dispatch(setPreferenceInfo(preferenceInfo)),
-    setStockDetails: stockDetails => dispatch(setSearchStockDetails(stockDetails)),
     onStaticPortfolioFetched: portfolio => dispatch(setStaticPortfolio(portfolio)),
   };
 };

@@ -1,0 +1,156 @@
+[
+  {
+    "Global Quote": {
+      "01. symbol": "A",
+      "02. open": "116.3800",
+      "03. high": "116.9600",
+      "04. low": "114.4800",
+      "05. price": "116.4000",
+      "06. volume": "1717610",
+      "07. latest trading day": "2020-12-09",
+      "08. previous close": "117.0100",
+      "09. change": "-0.6100",
+      "10. change percent": "-0.5213%"
+    }
+  },
+  {
+    "Global Quote": {
+      "01. symbol": "IDXX",
+      "02. open": "458.9100",
+      "03. high": "462.4500",
+      "04. low": "449.1100",
+      "05. price": "449.8800",
+      "06. volume": "436058",
+      "07. latest trading day": "2020-12-09",
+      "08. previous close": "460.6900",
+      "09. change": "-10.8100",
+      "10. change percent": "-2.3465%"
+    }
+  },
+  {
+    "Global Quote": {
+      "01. symbol": "IQV",
+      "02. open": "171.1800",
+      "03. high": "171.5000",
+      "04. low": "168.3900",
+      "05. price": "168.5000",
+      "06. volume": "1086126",
+      "07. latest trading day": "2020-12-09",
+      "08. previous close": "171.2900",
+      "09. change": "-2.7900",
+      "10. change percent": "-1.6288%"
+    }
+  },
+  {
+    "Global Quote": {
+      "01. symbol": "ADBE",
+      "02. open": "496.0300",
+      "03. high": "497.0000",
+      "04. low": "479.2600",
+      "05. price": "483.7400",
+      "06. volume": "3449121",
+      "07. latest trading day": "2020-12-09",
+      "08. previous close": "495.2800",
+      "09. change": "-11.5400",
+      "10. change percent": "-2.3300%"
+    }
+  },
+  {
+    "Global Quote": {
+      "01. symbol": "ORCL",
+      "02. open": "58.8900",
+      "03. high": "59.9100",
+      "04. low": "58.8000",
+      "05. price": "59.7300",
+      "06. volume": "12204062",
+      "07. latest trading day": "2020-12-09",
+      "08. previous close": "59.0300",
+      "09. change": "0.7000",
+      "10. change percent": "1.1858%"
+    }
+  },
+  {
+    "Global Quote": {
+      "01. symbol": "EXPE",
+      "02. open": "128.2400",
+      "03. high": "132.9200",
+      "04. low": "125.7500",
+      "05. price": "128.8400",
+      "06. volume": "3469307",
+      "07. latest trading day": "2020-12-09",
+      "08. previous close": "126.2800",
+      "09. change": "2.5600",
+      "10. change percent": "2.0272%"
+    }
+  },
+  {
+    "Global Quote": {
+      "01. symbol": "RCL",
+      "02. open": "83.9100",
+      "03. high": "84.9700",
+      "04. low": "80.8714",
+      "05. price": "82.3700",
+      "06. volume": "6767523",
+      "07. latest trading day": "2020-12-09",
+      "08. previous close": "82.8300",
+      "09. change": "-0.4600",
+      "10. change percent": "-0.5554%"
+    }
+  },
+  {
+    "Global Quote": {
+      "01. symbol": "MXIM",
+      "02. open": "87.6600",
+      "03. high": "87.7900",
+      "04. low": "84.4600",
+      "05. price": "84.9900",
+      "06. volume": "2341040",
+      "07. latest trading day": "2020-12-09",
+      "08. previous close": "87.6600",
+      "09. change": "-2.6700",
+      "10. change percent": "-3.0459%"
+    }
+  },
+  {
+    "Global Quote": {
+      "01. symbol": "SWKS",
+      "02. open": "155.0000",
+      "03. high": "155.0400",
+      "04. low": "147.4550",
+      "05. price": "148.2900",
+      "06. volume": "2562491",
+      "07. latest trading day": "2020-12-09",
+      "08. previous close": "155.7900",
+      "09. change": "-7.5000",
+      "10. change percent": "-4.8142%"
+    }
+  },
+  {
+    "Global Quote": {
+      "01. symbol": "ADBE",
+      "02. open": "496.0300",
+      "03. high": "497.0000",
+      "04. low": "479.2600",
+      "05. price": "483.7400",
+      "06. volume": "3449121",
+      "07. latest trading day": "2020-12-09",
+      "08. previous close": "495.2800",
+      "09. change": "-11.5400",
+      "10. change percent": "-2.3300%"
+    }
+  },
+  {
+    "Global Quote": {
+      "01. symbol": "MSFT",
+      "02. open": "215.1600",
+      "03. high": "215.2250",
+      "04. low": "211.2140",
+      "05. price": "211.8000",
+      "06. volume": "32440603",
+      "07. latest trading day": "2020-12-09",
+      "08. previous close": "216.0100",
+      "09. change": "-4.2100",
+      "10. change percent": "-1.9490%"
+    }
+  }
+]
