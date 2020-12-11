@@ -5,6 +5,7 @@ import concatRealPrice from '../../utils/concatRealPrice';
 import calculateProportions from '../../utils/calculateProportions';
 import calculateTotal from '../../utils/calculateTotal';
 import CircleChart from '../../components/molecules/CircleChart';
+import requestRecommendations from '../../api/requestRecommendations';
 
 const Main = ({ currentUser, staticPortfolio }) => {
   const [dynamicPortfolio, setDynamicPortfolio] = useState([
@@ -48,6 +49,9 @@ const Main = ({ currentUser, staticPortfolio }) => {
     { name: 'MSFT', value: 9.62 },
   ]);
   const [total, setTotal] = useState(10400);
+  const [recommendationCriterion, setRecommendationCriterion] = useState('preference');
+  const [portfoliosToDisplay, setPortfoliosToDisplay] = useState([]);
+  const [recommendationsChartDatas, setRecommendationsChartDatas] = useState([]);
 
   // useEffect(() => {
   //   if (!currentUser) return;
@@ -65,13 +69,54 @@ const Main = ({ currentUser, staticPortfolio }) => {
   //   setChartData(portfolioByProportions);
   // }, [dynamicPortfolio]);
 
+  useEffect(() => {
+    const fetchRecommendations = async () => {
+      const recommendationsResponse = await requestRecommendations(currentUser, recommendationCriterion);
+
+      setPortfoliosToDisplay(recommendationsResponse.portfolios);
+    };
+
+    fetchRecommendations();
+  }, [currentUser, recommendationCriterion]);
+
+  useEffect(() => {
+    const recommendationsChartDatas = [];
+
+    const formatPortfolios = () => {
+      portfoliosToDisplay.forEach(portfolio => {
+        const total = calculateTotal(portfolio.items);
+
+        recommendationsChartDatas.push({
+          owner: portfolio.owner,
+          items: calculateProportions(portfolio.items, total),
+        });
+      });
+    };
+
+    formatPortfolios();
+
+    setRecommendationsChartDatas(recommendationsChartDatas);
+  }, [portfoliosToDisplay]);
+
   return (
     <>
       <div className='mainPageWrapper'>
         <Link to='/my_page'>
           <CircleChart data={chartData} type='donut' />
         </Link>
-        <div className='recommendedPortfoliosWrapper'></div>
+        <div className='recommendedPortfoliosWrapper'>
+          {
+            recommendationsChartDatas.map(portfolio => {
+              return (
+                <CircleChart
+                  key={portfolio.owner}
+                  data={portfolio.items}
+                  type='pie'
+                />
+              );
+            })
+          }
+        </div>
         <div className='companyCardsWrapper'></div>
       </div>
     </>
