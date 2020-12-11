@@ -38,9 +38,11 @@ const ListContainer = ({
   useEffect(() => {
     if (!recommendationSymbolList.length) return;
 
+    const count = recommendationSymbolList.length < 3 ? recommendationSymbolList.length : 3;
     (async () => {
-      const data = await requestCompanyProfiles(recommendationSymbolList, 3);
-      dispatch(setRecommendationSymbolList(recommendationSymbolList?.slice(3)));
+      const data = await requestCompanyProfiles(recommendationSymbolList, count);
+
+      dispatch(setRecommendationSymbolList(recommendationSymbolList?.slice(count)));
       dispatch(setCompanyProfileList(data));
     })();
   }, []);
@@ -52,7 +54,6 @@ const ListContainer = ({
     threshold: 0.3,
     rootMargin: '10px',
   });
-
   return (
     <div ref={viewport} className={className}>
       {companyProfileList && companyProfileList.map(item =>

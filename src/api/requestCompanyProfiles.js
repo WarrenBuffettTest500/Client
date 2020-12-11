@@ -1,5 +1,6 @@
 import METHODS from '../constants/methods';
 import companyProfiles_mock_data from '../components/molecules/ListContainer/companyProfiles.json';
+
 const requestCompanyProfiles = async (symbolList, count) => {
   const requestSymbolList = symbolList.slice(0, count);
 
