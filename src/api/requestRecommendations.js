@@ -4,7 +4,7 @@ import PATHS from '../constants/paths';
 const requestRecommendations = async (currentUser, recommendationCriterion) => {
   let fetchUrl;
 
-  if (!currentUser) {
+  if (!currentUser || !currentUser.preferenceInfoId) {
     fetchUrl = `${PATHS.HOST}${PATHS.SERVER_PORT}/company_profiles/random`;
   } else if (recommendationCriterion === 'preference') {
     fetchUrl = `${PATHS.HOST}${PATHS.SERVER_PORT}${PATHS.USERS}/${currentUser.uid}/portfolios/recommendations/preference`;

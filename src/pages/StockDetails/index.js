@@ -31,15 +31,15 @@ const StockDetails = () => {
     industry,
     recommendationSymbolList,
   } = useSelector(state =>
-    ({
-      searchKeyWord: state.stock.searchStockDetails?.meta.symbol,
-      searchStockDetails: state.stock.searchStockDetails?.values,
-      oneWeekStockDetails: state.stock.oneWeekStockDetails?.values,
-      oneMonthStockDetails: state.stock.oneMonthStockDetails?.values,
-      sector: state.stock.recommendationSymbolInfo?.sector,
-      industry: state.stock.recommendationSymbolInfo?.industry,
-      recommendationSymbolList: state.stock?.recommendationSymbolList,
-    }));
+  ({
+    searchKeyWord: state.stock.searchStockDetails?.meta.symbol,
+    searchStockDetails: state.stock.searchStockDetails?.values,
+    oneWeekStockDetails: state.stock.oneWeekStockDetails?.values,
+    oneMonthStockDetails: state.stock.oneMonthStockDetails?.values,
+    sector: state.stock.recommendationSymbolInfo?.sector,
+    industry: state.stock.recommendationSymbolInfo?.industry,
+    recommendationSymbolList: state.stock?.recommendationSymbolList,
+  }));
 
   const [currentClickedTab, setCurrentClickedTab] = useState('');
   const [clickedTabList, setClickedTabList] = useState();

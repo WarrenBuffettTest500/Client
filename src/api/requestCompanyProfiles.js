@@ -3,9 +3,8 @@ import companyProfiles_mock_data from '../components/molecules/ListContainer/com
 
 const requestCompanyProfiles = async (symbolList, count) => {
   const requestSymbolList = symbolList.slice(0, count);
-
   const wait = time => {
-    return new Promise(resolve=> {
+    return new Promise(resolve => {
       setTimeout(() => {
         resolve();
       }, time);

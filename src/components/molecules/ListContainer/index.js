@@ -68,7 +68,7 @@ const ListContainer = ({
           </Card>
           <div ref={setTarget} className='last_company_card' />
           <div ref={setTarget} className='last_company_card' />
-        </>
+        </>,
       )}
     </div>
   );
