@@ -1,11 +1,12 @@
 .company_card_list.container {
   display: flex;
   width: 36rem;
+  height: 12rem;
   padding: 2rem 0;
   overflow-x: scroll;
   border-radius: $border-radius;
   margin: 0 auto;
-  
+
   &::-webkit-scrollbar {
     opacity: 0.1;
   }

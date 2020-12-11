@@ -10,7 +10,8 @@ import TabBar from '../../components/molecules/TabBar';
 import {
   setSearchStockDetails,
   setOneWeekStockDetails,
-  setOneMonthStockDetails
+  setOneMonthStockDetails,
+  setInitialState,
 } from '../../store/stock';
 import PATHS from '../../constants/paths';
 import requestStockDetails from '../../api/requestStockDetails';
@@ -40,8 +41,8 @@ const StockDetails = () => {
       recommendationSymbolList: state.stock?.recommendationSymbolList,
     }));
 
-  const [currentClickedTab, setCurrentClickedTab] = useState('1day');
-  const [clickedTabList, setClickedTabList] = useState(['1day']);
+  const [currentClickedTab, setCurrentClickedTab] = useState('');
+  const [clickedTabList, setClickedTabList] = useState();
 
   const tabBarButtonClickHandle = async event => {
     const interval = event.target.dataset.apiParam;
@@ -84,6 +85,12 @@ const StockDetails = () => {
   };
 
   useEffect(() => {
+    dispatch(setInitialState());
+    setCurrentClickedTab('1day');
+    setClickedTabList(['1day']);
+  }, [keyword]);
+
+  useEffect(() => {
     (async () => {
       const { result, stockDetails } = await requestStockDetails(keyword);
 
@@ -115,15 +122,16 @@ const StockDetails = () => {
       await requestCompanyProfileUpdate(keyword);
     })();
   }, [keyword]);
+
   return (
     <>
       <div className='stock_details_wrapper'>
         <div className='stock_details_left'>
           <div className='stock_item chart'>
+            <h1>chart</h1>
+            <TabBar onTabButtonClick={tabBarButtonClickHandle} />
             {searchStockDetails &&
               <>
-                <h1>chart</h1>
-                <TabBar onTabButtonClick={tabBarButtonClickHandle} />
                 {currentClickedTab === '1day' && <CandlestickChart data={dateToObject(searchStockDetails)} />}
                 {currentClickedTab === '1week' && <CandlestickChart data={dateToObject(oneWeekStockDetails)} />}
                 {currentClickedTab === '1month' && <CandlestickChart data={dateToObject(oneMonthStockDetails)} />}
@@ -133,7 +141,9 @@ const StockDetails = () => {
           <div className='stock_item card_list'>
             <h1 cla>card</h1>
             <h3>{`${sector} / ${industry}`}</h3>
-            {recommendationSymbolList && <ListContainer className='company_card_list container' />}
+            <div className='list_container_wrapper'>
+              {recommendationSymbolList && <ListContainer className='company_card_list container' />}
+            </div>
           </div>
         </div>
         <div className='stock_details_right'>
