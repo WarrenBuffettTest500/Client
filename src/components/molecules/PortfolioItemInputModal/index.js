@@ -10,20 +10,35 @@ const PortfolioItemInputModal = ({
   portfolioItemToEdit,
   setIsInputModalOpen,
   setPortfolioItemToEdit,
+  staticPortfolio,
 }) => {
   const [symbol, setSymbol] = useState(portfolioItemToEdit?.symbol || '');
   const [avgPrice, setAvgPrice] = useState(portfolioItemToEdit?.avgPrice || '');
   const [quantity, setQuantity] = useState(portfolioItemToEdit?.quantity || '');
 
   const portfolioItemSumbitHandler = async () => {
+    if (!symbol || !avgPrice || !quantity) {
+      alert('입력칸을 모두 채워주세요');
+
+      return;
+    }
+
+    let hasItemInPortfolio = false;
+
     const portfolioItem = {
       symbol,
       avgPrice,
       quantity,
     };
 
+    if (staticPortfolio.find(item => item.symbol === portfolioItem.symbol)) {
+      alert(`이미 등록한 정보가 있어요. ${symbol}을 찾아서 수정하세요.`);
+
+      return;
+    }
+
     const response
-      = portfolioItemToEdit
+      = portfolioItemToEdit || hasItemInPortfolio
         ? await requestPortfolioItemUpdate(currentUser, portfolioItem, portfolioItemToEdit.portfolioItemId)
         : await requestPortfolioItemCreate(currentUser, portfolioItem);
 
@@ -51,7 +66,7 @@ const PortfolioItemInputModal = ({
           <input
             type='text'
             value={symbol}
-            onChange={event => setSymbol(event.target.value)}
+            onChange={event => setSymbol(event.target.value.toUpperCase())}
           />
         </div>
         <div>
