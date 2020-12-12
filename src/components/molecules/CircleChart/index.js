@@ -10,7 +10,7 @@ const CircleChart = ({ data, type }) => {
     const radius = Math.min(width, height) / 2;
     const pie = d3.pie()
       .padAngle(0.005)
-      .sort(null)
+      .sort((a, b) => b.value - a.value)
       .value(d => d.value);
     const color = d3.scaleOrdinal()
       .domain(data.map(d => d.name))
@@ -22,7 +22,10 @@ const CircleChart = ({ data, type }) => {
     svg.selectAll('path')
       .data(arcs)
       .join('path')
-      .attr('fill', d => color(d.data.name))
+      .attr('fill', d => {
+        if (d.data.value === 100) return '#4288b5';
+        return color(d.data.name);
+      })
       .attr('d', arc)
       .append('title')
       .text(d => `${d.data.name}: ${d.data.value.toLocaleString()}`);
@@ -38,12 +41,18 @@ const CircleChart = ({ data, type }) => {
       .call(text => text.append('tspan')
         .attr('y', '-0.4em')
         .attr('font-weight', 'bold')
-        .text(d => d.data.name))
+        .text(d => {
+          if (Number(d.data.value) < 5) return;
+          return d.data.name;
+        }))
       .call(text => text.filter(d => (d.endAngle - d.startAngle) > 0.25).append('tspan')
         .attr('x', 0)
         .attr('y', '0.7em')
         .attr('fill-opacity', 0.7)
-        .text(d => d.data.value.toLocaleString()));
+        .text(d => {
+          if (Number(d.data.value) < 5) return;
+          return `${d.data.value.toLocaleString()}%`;
+        }));
   }, [data]);
 
   return (

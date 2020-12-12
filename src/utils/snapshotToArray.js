@@ -1,13 +1,13 @@
-const snapshotToArray = (snapshot) => {
-  const returnArr = [];
+const snapshotToArray = snapshot => {
+  const result = [];
 
-  snapshot.forEach((childSnapshot) => {
+  snapshot.forEach(childSnapshot => {
     const item = childSnapshot.val();
     item.key = childSnapshot.key;
-    returnArr.push(item);
+    result.push(item);
   });
 
-  return returnArr;
+  return result;
 };
 
 export default snapshotToArray;
