@@ -2,26 +2,16 @@
   width: 100%;
   display: grid;
   grid-template-columns: 7fr 2fr;
-  flex-direction: row;
   margin-top: 5rem;
   align-items: flex-start;
-  position: relative;
 }
 
 .stock_item.card_list {
-  position: absolute;
-  left: 0.6rem;
-  bottom: 0;
-  padding: 0;
-  margin: 0;
+  margin: 1.5rem auto;
+  width: 100%;
+  text-align: center;
 }
 
 .stock_item {
   margin: 0 auto;
-}
-
-.list_container_wrapper {
-  width: 36rem;
-  height: 12rem;
-  padding: 2rem 0;
 }

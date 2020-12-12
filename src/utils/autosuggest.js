@@ -1,8 +1,6 @@
-import { symbols } from '../mock_data/symbols';
-
 const escapeRegexCharacters = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-export const getSuggestions = value => {
+export const getSuggestions = (value, symbols) => {
   const escapedValue = escapeRegexCharacters(value);
 
   if (escapedValue === '') {

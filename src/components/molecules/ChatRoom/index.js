@@ -69,7 +69,9 @@ const ChatRoom = () => {
         <div className='chatroom_viewport'>
           {chats.map((item, idx) => (
             <div
-              ref={messageBox} key={idx} className='message_box'>
+              ref={messageBox}
+              key={idx}
+              className='message_box'>
               <div className={`${item.nickname === nickname ? 'right_bubble' : 'left_bubble'}`}>
                 {item.nickname === nickname ?
                   <div className='message_name'>Me</div> : <div className='message_name'>{item.nickname}</div>

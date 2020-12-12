@@ -13,9 +13,9 @@ export const useInfinteScroll = ({
       rootMargin,
       threshold,
     });
-    if (!target) {
-      return;
-    }
+
+    if (!target)  return;
+
     observer.observe(target);
     return () => {
       observer.unobserve(target);

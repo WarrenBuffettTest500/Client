@@ -158,13 +158,11 @@ const StockDetails = () => {
             }
           </div>
           <div className='stock_item card_list'>
-            <div className='list_container_wrapper'>
-              {recommendationSymbolList && <ListContainer className='company_card_list container' />}
-            </div>
+            {recommendationSymbolList && <ListContainer className='company_card_list container' />}
           </div>
         </div>
         <div className='stock_details_right'>
-          <ChatRoom/>
+          <ChatRoom />
         </div>
       </div>
     </>
