@@ -49,7 +49,7 @@ const Main = ({ currentUser, staticPortfolio }) => {
     { name: 'MSFT', value: 9.62 },
   ]);
   const [total, setTotal] = useState(10400);
-  const [recommendationCriterion, setRecommendationCriterion] = useState('preference');
+  const [recommendationCriterion, setRecommendationCriterion] = useState('portfolio');
   const [portfoliosToDisplay, setPortfoliosToDisplay] = useState([]);
   const [recommendationsChartDatas, setRecommendationsChartDatas] = useState([]);
 
@@ -70,6 +70,8 @@ const Main = ({ currentUser, staticPortfolio }) => {
   // }, [dynamicPortfolio]);
 
   useEffect(() => {
+    if (!staticPortfolio.length) return;
+
     const fetchRecommendations = async () => {
       const recommendationsResponse = await requestRecommendations(currentUser, recommendationCriterion);
 
@@ -77,7 +79,7 @@ const Main = ({ currentUser, staticPortfolio }) => {
     };
 
     fetchRecommendations();
-  }, [currentUser, recommendationCriterion]);
+  }, [currentUser, recommendationCriterion, staticPortfolio]);
 
   useEffect(() => {
     const recommendationsChartDatas = [];
