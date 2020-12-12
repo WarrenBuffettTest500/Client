@@ -16,10 +16,6 @@ const Button = ({
       name={text}
       {...attributes}
     >
-      <img
-        src={imgSrc}
-        className={className}
-        />
       {text}
       {children}
     </button>

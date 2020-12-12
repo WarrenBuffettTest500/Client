@@ -64,22 +64,22 @@ const ChatRoom = () => {
   useEffect(scrollToBottom, [newchat]);
 
   return (
-    <div
-      className='chatroom_wrapper'>
-      <div
-        className='chatroom_viewport'>
-        {chats.map((item, idx) => (
-          <div
-            ref={messageBox} key={idx} className='message_box'>
-            <div className={`${item.nickname === nickname ? 'right_bubble' : 'left_bubble'}`}>
-              {item.nickname === nickname ?
-                <div className='message_name'>Me</div> : <div className='message_name'>{item.nickname}</div>
-              }
-              <div className='message_data'> {item.date}</div>
-              <p>{item.message}</p>
+    <div className='chatroom_wrapper'>
+      <div className='chatroom_viewport_wrapper'>
+        <div className='chatroom_viewport'>
+          {chats.map((item, idx) => (
+            <div
+              ref={messageBox} key={idx} className='message_box'>
+              <div className={`${item.nickname === nickname ? 'right_bubble' : 'left_bubble'}`}>
+                {item.nickname === nickname ?
+                  <div className='message_name'>Me</div> : <div className='message_name'>{item.nickname}</div>
+                }
+                <div className='message_data'> {item.date}</div>
+                <p>{item.message}</p>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
       <div className='chatroom_input_wrapper'>
         {currentUser ?

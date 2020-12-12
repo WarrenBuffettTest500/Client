@@ -65,4 +65,6 @@
 .message_button {
   @include cursorPointer();
   background-color: $theme_color;
+  margin: 0;
+  padding: 0;
 }
