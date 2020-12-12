@@ -9,58 +9,35 @@ import requestPortfolioItemDelete from '../../api/requestPortfolioItemDelete';
 import concatRealPrice from '../../utils/concatRealPrice';
 import CircleChart from '../../components/molecules/CircleChart';
 import calculateProportions from '../../utils/calculateProportions';
+import requestPortfolio from '../../api/requestPortfolio';
 
-const MyPage = ({ currentUser, staticPortfolio }) => {
+const MyPage = ({
+  currentUser,
+  staticPortfolio,
+  onStaticPortfolioFetched,
+}) => {
   const [isInputModalOpen, setIsInputModalOpen] = useState(false);
-  const [dynamicPortfolio, setDynamicPortfolio] = useState([
-    // {
-    //   avgPrice: '100',
-    //   id: 1,
-    //   price: '123.27000',
-    //   quantity: '40',
-    //   symbol: 'AAPL',
-    //   userUid: 'cQAHr98ZikhaQzXfvU41Cfs3fCi2',
-    // },
-    // {
-    //   avgPrice: '200',
-    //   id: 2,
-    //   price: '214.74001',
-    //   quantity: '5',
-    //   symbol: 'MSFT',
-    //   userUid: 'cQAHr98ZikhaQzXfvU41Cfs3fCi2',
-    // },
-    // {
-    //   avgPrice: '3000',
-    //   id: 3,
-    //   price: '3128.92505',
-    //   quantity: '1',
-    //   symbol: 'AMZN',
-    //   userUid: 'cQAHr98ZikhaQzXfvU41Cfs3fCi2',
-    // },
-    // {
-    //   avgPrice: '480',
-    //   id: 4,
-    //   price: '626.43378',
-    //   quantity: '5',
-    //   symbol: 'TSLA',
-    //   userUid: 'cQAHr98ZikhaQzXfvU41Cfs3fCi2',
-    // },
-  ]);
+  const [dynamicPortfolio, setDynamicPortfolio] = useState([]);
   const [dashboardData, setDashboardData] = useState({
     total: 0,
     return: 0,
     earningsRate: 0,
   });
   const [portfolioItemToEdit, setPortfolioItemToEdit] = useState(null);
-  const [chartData, setChartData] = useState([
-    // { name: 'AAPL', value: 38.46 },
-    // { name: 'AMZN', value: 28.85 },
-    // { name: 'TSLA', value: 23.08 },
-    // { name: 'MSFT', value: 9.62 },
-  ]);
+  const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
-    if (!staticPortfolio.length) return;
+    if (!staticPortfolio.length) {
+      setDynamicPortfolio([]);
+      setDashboardData({
+        total: 0,
+        return: 0,
+        earningsRate: 0,
+      });
+      setChartData([]);
+
+      return;
+    }
 
     const setMyPageData = async () => {
       const portfolioWithRealPrice = await concatRealPrice(staticPortfolio);
@@ -82,7 +59,7 @@ const MyPage = ({ currentUser, staticPortfolio }) => {
         originalCapital = new Decimal(avgPrice).times(new Decimal(quantity)).plus(new Decimal(originalCapital)).toDecimalPlaces(2).toString();
       });
 
-      updatedDashboardData.earningsRate = new Decimal(updatedDashboardData.return).dividedBy(new Decimal(originalCapital)).times(100).toDecimalPlaces(2).toString();
+      updatedDashboardData.earningsRate = `${new Decimal(updatedDashboardData.return).dividedBy(new Decimal(originalCapital)).times(100).toDecimalPlaces(2).toString()}%`;
 
       setDashboardData({
         total: updatedDashboardData.total,
@@ -98,7 +75,7 @@ const MyPage = ({ currentUser, staticPortfolio }) => {
     if (!dynamicPortfolio.length || !dashboardData.total) return;
 
     const portfolioByProportions
-      = calculateProportions(dynamicPortfolio, dashboardData.total).sort((a, b) => b.y - a.y);
+      = calculateProportions(dynamicPortfolio, dashboardData.total);
 
     setChartData(portfolioByProportions);
   }, [dynamicPortfolio, dashboardData]);
@@ -127,7 +104,17 @@ const MyPage = ({ currentUser, staticPortfolio }) => {
 
     if (deleteResponse.result !== 'ok') {
       alert('삭제하지 못했습니다');
+
+      return;
     }
+
+    const fetchStaticPortfolio = async () => {
+      const staticPortfolioResponse = await requestPortfolio(currentUser);
+
+      onStaticPortfolioFetched(staticPortfolioResponse.portfolio);
+    };
+
+    fetchStaticPortfolio();
   };
 
   return (
@@ -211,6 +198,7 @@ const MyPage = ({ currentUser, staticPortfolio }) => {
           portfolioItemToEdit={portfolioItemToEdit}
           setPortfolioItemToEdit={setPortfolioItemToEdit}
           staticPortfolio={staticPortfolio}
+          onStaticPortfolioFetched={onStaticPortfolioFetched}
         />
       }
     </>

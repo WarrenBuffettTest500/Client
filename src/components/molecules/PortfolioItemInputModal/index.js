@@ -4,6 +4,7 @@ import ModalOverlay from '../../atoms/ModalOverlay';
 import Button from '../../atoms/Button';
 import requestPortfolioItemCreate from '../../../api/requestPortfolioItemCreate';
 import requestPortfolioItemUpdate from '../../../api/requestPortfolioItemUpdate';
+import requestPortfolio from '../../../api/requestPortfolio';
 
 const PortfolioItemInputModal = ({
   currentUser,
@@ -11,6 +12,7 @@ const PortfolioItemInputModal = ({
   setIsInputModalOpen,
   setPortfolioItemToEdit,
   staticPortfolio,
+  onStaticPortfolioFetched,
 }) => {
   const [symbol, setSymbol] = useState(portfolioItemToEdit?.symbol || '');
   const [avgPrice, setAvgPrice] = useState(portfolioItemToEdit?.avgPrice || '');
@@ -49,6 +51,14 @@ const PortfolioItemInputModal = ({
     }
 
     alert('성공');
+
+    const fetchStaticPortfolio = async () => {
+      const staticPortfolioResponse = await requestPortfolio(currentUser);
+
+      onStaticPortfolioFetched(staticPortfolioResponse.portfolio);
+    };
+
+    fetchStaticPortfolio();
 
     setPortfolioItemToEdit(null);
     setIsInputModalOpen(false);

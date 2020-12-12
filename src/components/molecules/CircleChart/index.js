@@ -10,6 +10,7 @@ const CircleChart = ({ data, type }) => {
     const radius = Math.min(width, height) / 2;
     const pie = d3.pie()
       .padAngle(0.005)
+      .sort((a, b) => b.value - a.value)
       .value(d => d.value);
     const color = d3.scaleOrdinal()
       .domain(data.map(d => d.name))

@@ -88,6 +88,7 @@ const App = ({
             <MyPage
               currentUser={currentUser}
               staticPortfolio={staticPortfolio}
+              onStaticPortfolioFetched={onStaticPortfolioFetched}
             />
           </Route>
         }
