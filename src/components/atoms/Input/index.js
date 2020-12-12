@@ -1,12 +1,15 @@
 import React from 'react';
-import SearchIcon from '@material-ui/icons/Search';
 
-const Input = inputProps => (
-  <div className='input_container'>
-    <SearchIcon className='icon' />
-    <input
-      {...inputProps} />
-  </div>
-);
+const Input = ({
+  className,
+  ...attributes
+}) => {
+  return (
+    <input className={className}
+      {...attributes}
+    >
+    </input>
+  );
+};
 
 export default Input;

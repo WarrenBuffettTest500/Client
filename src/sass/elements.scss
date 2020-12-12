@@ -3,10 +3,14 @@ html {
     background-color: $theme-color;
     font-family: $font;
     color: $primary;
-
+    box-sizing: border-box;
+    margin: 0;
     button {
       background-color: transparent;
       border-color: transparent;
+      outline: none;
+      border: none;
     }
+    a { color: inherit; }
   }
 }

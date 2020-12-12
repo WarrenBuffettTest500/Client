@@ -3,17 +3,17 @@ import { createSlice } from '@reduxjs/toolkit';
 const userSlice = createSlice({
   name: 'userReducer',
   initialState: {
-    user: null,
+    currentUser: null,
     preferenceInfo: null,
     staticPortfolio: [],
   },
   reducers: {
     setCurrentUser: (state, action) => {
-      state.user = action.payload;
+      state.currentUser = action.payload;
     },
     removeCurrentUser: (state, action) => {
       localStorage.removeItem('token');
-      state.user = null;
+      state.currentUser = null;
     },
     setPreferenceInfo: (state, action) => {
       state.preferenceInfo = action.payload;

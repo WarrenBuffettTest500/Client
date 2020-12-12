@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Autosuggest from 'react-autosuggest';
-import Input from '../../atoms/Input';
+import SearchInput from '../../atoms/SearchInput';
 import { useToasts } from 'react-toast-notifications';
 import { symbols } from '../../../mock_data/symbols';
 
@@ -59,7 +59,7 @@ const SearchBar = () => {
         getSuggestionValue={getSuggestionValue}
         renderSuggestion={renderSuggestion}
         inputProps={inputProps}
-        renderInputComponent={Input}
+        renderInputComponent={SearchInput}
       />
     </>
   );

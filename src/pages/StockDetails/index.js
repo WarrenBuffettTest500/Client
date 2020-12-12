@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import ListContainer from '../../components/molecules/ListContainer';
-import requestCompanyProfiles from '../../api/requestCompanyProfiles';
 import requestCompanyProfileUpdate from '../../api/requestCompanyProfileUpdate';
 import CandlestickChart from '../../components/molecules/CandlestickChart';
 import dateToObject from '../../utils/dateToObject';
+import Card from '../../components/molecules/Card';
 import TabBar from '../../components/molecules/TabBar';
 import {
   setSearchStockDetails,
@@ -18,6 +18,7 @@ import requestStockDetails from '../../api/requestStockDetails';
 import requestRecommendationSymbolList from '../../api/requestRecommendationSymbolList';
 import RESPONSES from '../../constants/responses';
 import { setRecommendationSymbolList, setRecommendationSymbolInfo } from '../../store/stock';
+import ChatRoom from '../../components/molecules/ChatRoom';
 
 const StockDetails = () => {
   const { keyword } = useParams();
@@ -29,17 +30,19 @@ const StockDetails = () => {
     oneMonthStockDetails,
     sector,
     industry,
+    website,
     recommendationSymbolList,
   } = useSelector(state =>
-  ({
-    searchKeyWord: state.stock.searchStockDetails?.meta.symbol,
-    searchStockDetails: state.stock.searchStockDetails?.values,
-    oneWeekStockDetails: state.stock.oneWeekStockDetails?.values,
-    oneMonthStockDetails: state.stock.oneMonthStockDetails?.values,
-    sector: state.stock.recommendationSymbolInfo?.sector,
-    industry: state.stock.recommendationSymbolInfo?.industry,
-    recommendationSymbolList: state.stock?.recommendationSymbolList,
-  }));
+    ({
+      searchKeyWord: state.stock.searchStockDetails?.meta.symbol,
+      searchStockDetails: state.stock.searchStockDetails?.values,
+      oneWeekStockDetails: state.stock.oneWeekStockDetails?.values,
+      oneMonthStockDetails: state.stock.oneMonthStockDetails?.values,
+      sector: state.stock.recommendationSymbolInfo?.sector,
+      industry: state.stock.recommendationSymbolInfo?.industry,
+      website: state.stock.recommendationSymbolInfo?.website,
+      recommendationSymbolList: state.stock?.recommendationSymbolList,
+    }));
 
   const [currentClickedTab, setCurrentClickedTab] = useState('');
   const [clickedTabList, setClickedTabList] = useState();
@@ -128,26 +131,40 @@ const StockDetails = () => {
       <div className='stock_details_wrapper'>
         <div className='stock_details_left'>
           <div className='stock_item chart'>
-            <h1>chart</h1>
-            <TabBar onTabButtonClick={tabBarButtonClickHandle} />
             {searchStockDetails &&
               <>
-                {currentClickedTab === '1day' && <CandlestickChart data={dateToObject(searchStockDetails)} />}
-                {currentClickedTab === '1week' && <CandlestickChart data={dateToObject(oneWeekStockDetails)} />}
-                {currentClickedTab === '1month' && <CandlestickChart data={dateToObject(oneMonthStockDetails)} />}
+                <div className='stock_item dashbord'>
+                  <Card
+                    key={keyword}
+                    className='dashbord_card'>
+                    <div className='dashbord_card_left'>
+                      <div className='dashbord_card_info'>📂{sector}</div>
+                      <div className='dashbord_card_info'>📉{industry}</div>
+                      <a className='dashbord_card_info' href={website}>🌐{website}</a>
+                    </div>
+                    <div className='dashbord_card_right'>
+                      <div className='dashbord_card_name'>{keyword}</div>
+                      <div className='dashbord_card_price'>{`$${searchStockDetails[0].close}`}</div>
+                    </div>
+                  </Card>
+                </div>
+                <div className='stock_item chart'>
+                  <TabBar onTabButtonClick={tabBarButtonClickHandle} />
+                  {currentClickedTab === '1day' && <CandlestickChart data={dateToObject(searchStockDetails)} />}
+                  {currentClickedTab === '1week' && <CandlestickChart data={dateToObject(oneWeekStockDetails)} />}
+                  {currentClickedTab === '1month' && <CandlestickChart data={dateToObject(oneMonthStockDetails)} />}
+                </div>
               </>
             }
           </div>
           <div className='stock_item card_list'>
-            <h1 cla>card</h1>
-            <h3>{`${sector} / ${industry}`}</h3>
             <div className='list_container_wrapper'>
               {recommendationSymbolList && <ListContainer className='company_card_list container' />}
             </div>
           </div>
         </div>
         <div className='stock_details_right'>
-          <h1>chat</h1>
+          <ChatRoom/>
         </div>
       </div>
     </>

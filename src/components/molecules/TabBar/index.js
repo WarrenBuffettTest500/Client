@@ -3,7 +3,7 @@ import Button from '../../atoms/Button';
 
 const TabBar = ({ onTabButtonClick }) => {
   return (
-    <div>
+    <div className='tabbar'>
       <Button
         name='day'
         onClick={onTabButtonClick}

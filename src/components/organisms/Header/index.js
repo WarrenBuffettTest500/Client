@@ -49,9 +49,11 @@ const Header = ({
           currentUser
             ? <Button
               className='profileButton'
-              onClick={profileButtonClickHandler}
-              imgSrc={currentUser.photoURL}
-            />
+              onClick={profileButtonClickHandler}>
+              <img
+                className='profile_img'
+                src={currentUser.photoURL} />
+            </Button>
             : <Button
               className='loginButton'
               text='로그인'
