@@ -59,4 +59,10 @@
 .tabbar_button {
   @include cursorPointer();
   color: $primary;
+  font-size: 1.2rem;
+}
+
+.message_button {
+  @include cursorPointer();
+  background-color: $theme_color;
 }

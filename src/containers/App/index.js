@@ -30,7 +30,6 @@ const App = ({
     setIsAuthModalOpen(true);
   };
 
-
   useEffect(() => {
     const token = localStorage.getItem('token');
 
@@ -109,7 +108,7 @@ const App = ({
 
 const mapStateToProps = state => {
   return {
-    currentUser: state.user.user,
+    currentUser: state.user.currentUser,
     staticPortfolio: state.user.staticPortfolio,
   };
 };

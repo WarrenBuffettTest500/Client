@@ -13,6 +13,7 @@ const ListContainer = ({
   const viewport = useRef(null);
   const history = useHistory();
   const dispatch = useDispatch();
+  const [target, setTarget] = useState(null);
   const {
     recommendationSymbolList,
     companyProfileList,
@@ -20,7 +21,6 @@ const ListContainer = ({
     recommendationSymbolList: state.stock?.recommendationSymbolList,
     companyProfileList: state.stock?.companyProfileList,
   }));
-  const [target, setTarget] = useState(null);
 
   const onCardClick = path => {
     history.push(path);
@@ -54,6 +54,7 @@ const ListContainer = ({
     threshold: 0.3,
     rootMargin: '10px',
   });
+
   return (
     <div ref={viewport} className={className}>
       {companyProfileList && companyProfileList.map(item =>
@@ -61,7 +62,7 @@ const ListContainer = ({
           <Card
             key={item['Global Quote']['01. symbol']}
             onClick={() => onCardClick(`${PATHS.STOCK_DETAILS}/${item['Global Quote']['01. symbol']}`)}
-            className='companyCard'>
+            className='company_card'>
             <h3>{item['Global Quote']['01. symbol']}</h3>
             <p>{`$${item['Global Quote']['05. price']}`}</p>
             <p>{item['Global Quote']['10. change percent']}</p>

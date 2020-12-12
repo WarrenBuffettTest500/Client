@@ -21,8 +21,6 @@ export const symbols = [
   'ALLE',
   'LNT',
   'ALL',
-  'GOOGL',
-  'GOOG',
   'MO',
   'AMZN',
   'AMCR',

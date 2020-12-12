@@ -1,5 +1,6 @@
-import firebase from 'firebase/app';
+import fb from 'firebase/app';
 import 'firebase/auth';
+import 'firebase/database';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -9,9 +10,11 @@ const firebaseConfig = {
   messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
   appId: process.env.REACT_APP_APP_ID,
   measurementId: process.env.REACT_APP_MEASUREMENT_ID,
+  databaseURL: process.env.DB_URL,
 };
 
-firebase.initializeApp(firebaseConfig);
+fb.initializeApp(firebaseConfig);
 
-export const authService = firebase.auth();
-export const provider = new firebase.auth.GoogleAuthProvider();
+export const authService = fb.auth();
+export const firebaseDB = fb.database();
+export const provider = new fb.auth.GoogleAuthProvider();
