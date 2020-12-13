@@ -11,12 +11,56 @@ const Main = ({ currentUser, staticPortfolio }) => {
   const [dynamicPortfolio, setDynamicPortfolio] = useState([]);
   const [chartData, setChartData] = useState([]);
   const [total, setTotal] = useState(0);
-  const [recommendationCriterion, setRecommendationCriterion] = useState('portfolio');
-  const [portfoliosToDisplay, setPortfoliosToDisplay] = useState([]);
-  const [recommendationsChartDatas, setRecommendationsChartDatas] = useState([]);
+  const [recommendationCriterion, setRecommendationCriterion] = useState('randomCompanies');
+  const [recommendedChartDatas, setRecommendedChartDatas] = useState([]);
+
+  useEffect(() => {
+    if (!currentUser) {
+      setRecommendationCriterion('randomCompanies');
+
+      return;
+    }
+
+    setRecommendationCriterion('portfolio');
+  }, [currentUser]);
+
+  useEffect(() => {
+    const fetchRecommendations = async () => {
+      const recommendationsResponse = await requestRecommendations(recommendationCriterion, currentUser, staticPortfolio);
+
+      if (recommendationCriterion === 'randomCompanies') {
+        console.log(recommendationsResponse.companies);
+      } else {
+        const recommendedChartDatas = [];
+
+        const formatPortfolios = () => {
+          recommendationsResponse.portfolios.forEach(portfolio => {
+            const total = calculateTotal(portfolio.items);
+
+            recommendedChartDatas.push({
+              owner: portfolio.owner,
+              items: calculateProportions(portfolio.items, total),
+            });
+          });
+        };
+
+        formatPortfolios();
+
+        setRecommendedChartDatas(recommendedChartDatas);
+      }
+    };
+
+    fetchRecommendations();
+  }, [currentUser, recommendationCriterion, staticPortfolio]);
 
   useEffect(() => {
     if (!currentUser) return;
+
+    if (!staticPortfolio.length) {
+      setRecommendationCriterion('randomCompanies');
+
+      return;
+    }
 
     const fetchDynamicData = async () => {
       const portfolioWithRealPrice = await concatRealPrice(staticPortfolio);
@@ -41,56 +85,38 @@ const Main = ({ currentUser, staticPortfolio }) => {
     setChartData(portfolioByProportions);
   }, [total]);
 
-  useEffect(() => {
-    const fetchRecommendations = async () => {
-      const recommendationsResponse = await requestRecommendations(currentUser, staticPortfolio, recommendationCriterion);
-
-      setPortfoliosToDisplay(recommendationsResponse.portfolios);
-    };
-
-    fetchRecommendations();
-  }, [currentUser, recommendationCriterion, staticPortfolio]);
-
-  useEffect(() => {
-    const recommendationsChartDatas = [];
-
-    const formatPortfolios = () => {
-      portfoliosToDisplay.forEach(portfolio => {
-        const total = calculateTotal(portfolio.items);
-
-        recommendationsChartDatas.push({
-          owner: portfolio.owner,
-          items: calculateProportions(portfolio.items, total),
-        });
-      });
-    };
-
-    formatPortfolios();
-
-    setRecommendationsChartDatas(recommendationsChartDatas);
-  }, [portfoliosToDisplay]);
-
   const recommendationToggleHandler = () => {
-    if (recommendationCriterion === 'portfolio') setRecommendationCriterion('preference');
-    else setRecommendationCriterion('portfolio');
+    if (recommendationCriterion === 'portfolio') {
+      setRecommendationCriterion('preference');
+    } else {
+      setRecommendationCriterion('portfolio');
+    }
   };
 
   return (
     <>
       <div className='mainPageWrapper'>
-        <Link to='/my_page'>
-          <CircleChart data={chartData} type='donut' />
-        </Link>
-        <button onClick={recommendationToggleHandler}>토글</button>
+        {
+          (currentUser && staticPortfolio.length)
+            ? <Link to={`/users/${currentUser?.uid}/portfolios/${currentUser?.uid}`}>
+              <CircleChart data={chartData} type='donut' />
+            </Link>
+            : '포트폴리오를 등록하세요'
+        }
+        {
+          (recommendationCriterion === 'portfolio' || recommendationCriterion === 'preference')
+          && <button onClick={recommendationToggleHandler}>토글</button>
+        }
         <div className='recommendedPortfoliosWrapper'>
           {
-            recommendationsChartDatas.map(portfolio => {
+            recommendedChartDatas.map(portfolio => {
               return (
-                <CircleChart
-                  key={portfolio.owner}
-                  data={portfolio.items}
-                  type='pie'
-                />
+                <Link to={`/users/${currentUser?.uid}/portfolios/${portfolio.owner}`} key={portfolio.owner}>
+                  <CircleChart
+                    data={portfolio.items}
+                    type='pie'
+                  />
+                </Link>
               );
             })
           }

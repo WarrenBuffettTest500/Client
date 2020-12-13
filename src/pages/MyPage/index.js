@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './index.scss';
+import { useParams } from 'react-router-dom';
 import PortfolioItemInputModal from '../../components/molecules/PortfolioItemInputModal';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import ClearRoundedIcon from '@material-ui/icons/ClearRounded';
@@ -13,10 +14,12 @@ import requestPortfolio from '../../api/requestPortfolio';
 
 const MyPage = ({
   currentUser,
-  staticPortfolio,
+  currentUserStaticPortfolio,
   onStaticPortfolioFetched,
 }) => {
+  const { portfolio_owner_uid: portfolioOwnerUid } = useParams();
   const [isInputModalOpen, setIsInputModalOpen] = useState(false);
+  const [localStaticPortfolio, setLocalStaticPortfolio] = useState([]);
   const [dynamicPortfolio, setDynamicPortfolio] = useState([]);
   const [dashboardData, setDashboardData] = useState({
     total: 0,
@@ -27,7 +30,17 @@ const MyPage = ({
   const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
-    if (!staticPortfolio.length) {
+    const fetchStaticPortfolio = async () => {
+      const staticPortfolioResponse = await requestPortfolio(portfolioOwnerUid);
+
+      setLocalStaticPortfolio(staticPortfolioResponse.portfolio);
+    };
+
+    fetchStaticPortfolio();
+  }, [currentUserStaticPortfolio]);
+
+  useEffect(() => {
+    if (!localStaticPortfolio.length) {
       setDynamicPortfolio([]);
       setDashboardData({
         total: 0,
@@ -40,7 +53,7 @@ const MyPage = ({
     }
 
     const setMyPageData = async () => {
-      const portfolioWithRealPrice = await concatRealPrice(staticPortfolio);
+      const portfolioWithRealPrice = await concatRealPrice(localStaticPortfolio);
 
       setDynamicPortfolio(portfolioWithRealPrice);
 
@@ -69,7 +82,7 @@ const MyPage = ({
     };
 
     setMyPageData();
-  }, [staticPortfolio]);
+  }, [localStaticPortfolio]);
 
   useEffect(() => {
     if (!dynamicPortfolio.length || !dashboardData.total) return;
@@ -100,7 +113,7 @@ const MyPage = ({
 
     if (!confirm) return;
 
-    const deleteResponse = await requestPortfolioItemDelete(currentUser, portfolioItemId);
+    const deleteResponse = await requestPortfolioItemDelete(currentUser.uid, portfolioItemId);
 
     if (deleteResponse.result !== 'ok') {
       alert('삭제하지 못했습니다');
@@ -109,7 +122,7 @@ const MyPage = ({
     }
 
     const fetchStaticPortfolio = async () => {
-      const staticPortfolioResponse = await requestPortfolio(currentUser);
+      const staticPortfolioResponse = await requestPortfolio(currentUser.uid);
 
       onStaticPortfolioFetched(staticPortfolioResponse.portfolio);
     };
@@ -123,35 +136,51 @@ const MyPage = ({
         <div className='graphsWrapper'>
           <CircleChart data={chartData} type='pie' />
         </div>
-        <div className='dashboard'>
-          <div>
-            {`총 자산: ${dashboardData.total}`}
+        {
+          currentUser.uid === portfolioOwnerUid
+          && <div className='dashboard'>
+            <div>
+              {`총 자산: ${dashboardData.total}`}
+            </div>
+            <div>
+              {`수익: ${dashboardData.return}`}
+            </div>
+            <div>
+              {`수익률: ${dashboardData.earningsRate}`}
+            </div>
           </div>
-          <div>
-            {`수익: ${dashboardData.return}`}
-          </div>
-          <div>
-            {`수익률: ${dashboardData.earningsRate}`}
-          </div>
-        </div>
+        }
         <div className='tableWrapper'>
           <div className='tableTitle'>
-            <h3>내 주식 목록</h3>
-            <button onClick={createClickHandler}>더하기</button>
+            <h3>주식 목록</h3>
+            {
+              currentUser.uid === portfolioOwnerUid
+              && <button onClick={createClickHandler}>더하기</button>
+            }
           </div>
           <table className='table'>
             <tbody>
               <tr>
                 <th>기업</th>
-                <th>보유량</th>
-                <th>평균단가</th>
+                {
+                  currentUser.uid === portfolioOwnerUid
+                  && <>
+                    <th>보유량</th>
+                    <th>평균단가</th>
+                  </>
+                }
                 <th>현재가격</th>
-                <th>손익</th>
-                <th>수익률</th>
-                <th>평가금액</th>
-                <th>매입금액</th>
-                <th>수정</th>
-                <th>삭제</th>
+                {
+                  currentUser.uid === portfolioOwnerUid
+                  && <>
+                    <th>손익</th>
+                    <th>수익률</th>
+                    <th>평가금액</th>
+                    <th>매입금액</th>
+                    <th>수정</th>
+                    <th>삭제</th>
+                  </>
+                }
               </tr>
               {
                 dynamicPortfolio.map(item => {
@@ -159,29 +188,39 @@ const MyPage = ({
                   return (
                     <tr key={id}>
                       <td>{symbol}</td>
-                      <td>{quantity}</td>
-                      <td>{avgPrice}</td>
+                      {
+                        currentUser.uid === portfolioOwnerUid
+                        && <>
+                          <td>{quantity}</td>
+                          <td>{avgPrice}</td>
+                        </>
+                      }
                       <td>{new Decimal(price).toDecimalPlaces(2).toString()}</td>
-                      <td>{new Decimal(price).minus(new Decimal(avgPrice)).times(new Decimal(quantity)).toDecimalPlaces(2).toString()}</td>
-                      <td>{(new Decimal(price).dividedBy(new Decimal(avgPrice))).minus(1).times(100).toDecimalPlaces(2).toString()}</td>
-                      <td>{new Decimal(price).times(new Decimal(quantity)).toDecimalPlaces(2).toString()}</td>
-                      <td>{new Decimal(avgPrice).times(new Decimal(quantity)).toDecimalPlaces(2).toString()}</td>
-                      <td>
-                        <Button
-                          className='editButton'
-                          onClick={editClickHandler.bind(null, id, symbol, quantity, avgPrice)}
-                        >
-                          <EditOutlinedIcon />
-                        </Button>
-                      </td>
-                      <td>
-                        <Button
-                          className='deleteButton'
-                          onClick={deleteClickHandler.bind(null, id)}
-                        >
-                          <ClearRoundedIcon />
-                        </Button>
-                      </td>
+                      {
+                        currentUser.uid === portfolioOwnerUid
+                        && <>
+                          <td>{new Decimal(price).minus(new Decimal(avgPrice)).times(new Decimal(quantity)).toDecimalPlaces(2).toString()}</td>
+                          <td>{(new Decimal(price).dividedBy(new Decimal(avgPrice))).minus(1).times(100).toDecimalPlaces(2).toString()}</td>
+                          <td>{new Decimal(price).times(new Decimal(quantity)).toDecimalPlaces(2).toString()}</td>
+                          <td>{new Decimal(avgPrice).times(new Decimal(quantity)).toDecimalPlaces(2).toString()}</td>
+                          <td>
+                            <Button
+                              className='editButton'
+                              onClick={editClickHandler.bind(null, id, symbol, quantity, avgPrice)}
+                            >
+                              <EditOutlinedIcon />
+                            </Button>
+                          </td>
+                          <td>
+                            <Button
+                              className='deleteButton'
+                              onClick={deleteClickHandler.bind(null, id)}
+                            >
+                              <ClearRoundedIcon />
+                            </Button>
+                          </td>
+                        </>
+                      }
                     </tr>
                   );
                 })
@@ -197,7 +236,7 @@ const MyPage = ({
           setIsInputModalOpen={setIsInputModalOpen}
           portfolioItemToEdit={portfolioItemToEdit}
           setPortfolioItemToEdit={setPortfolioItemToEdit}
-          staticPortfolio={staticPortfolio}
+          staticPortfolio={currentUserStaticPortfolio}
           onStaticPortfolioFetched={onStaticPortfolioFetched}
         />
       }
