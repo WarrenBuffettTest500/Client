@@ -6,7 +6,7 @@ import { setCurrentUser, removeCurrentUser, setPreferenceInfo, setStaticPortfoli
 import LoginModal from '../../components/molecules/LoginModal/';
 import PreferencesForm from '../../components/templates/PreferencesForm';
 import StockDetails from '../../pages/StockDetails';
-import MyPage from '../../pages/MyPage';
+import PortfolioPage from '../../pages/PortfolioPage';
 import requestUser from '../../api/requestUser';
 import requestPreferenceInfo from '../../api/requestPreferenceInfo';
 import { Switch, Route } from 'react-router-dom';
@@ -83,7 +83,7 @@ const App = ({
         {
           currentUser
           && <Route path='/users/:user_uid/portfolios/:portfolio_owner_uid'>
-            <MyPage
+            <PortfolioPage
               currentUser={currentUser}
               currentUserStaticPortfolio={staticPortfolio}
               onStaticPortfolioFetched={onStaticPortfolioFetched}
