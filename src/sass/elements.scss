@@ -12,6 +12,9 @@ html {
       border: none;
       cursor: pointer;
     }
-    a { color: inherit; }
+    a { color: inherit };
+    input {
+      font-family: $font;
+    }
   }
 }

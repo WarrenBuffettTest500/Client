@@ -1,38 +1,23 @@
 import METHODS from '../constants/methods';
-import companyProfiles_mock_data from '../components/molecules/ListContainer/companyProfiles.json';
 
-const requestCompanyProfiles = async (symbolList, count) => {
-  const requestSymbolList = symbolList.slice(0, count);
-  const wait = time => {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve();
-      }, time);
+const requestCompanyProfiles = async (symbolList) => {
+  const { symbol } = symbolList[0];
+
+  try {
+    const response = await fetch(`https://twelve-data1.p.rapidapi.com/quote?symbol=${symbol}&interval=1day&format=json&outputsize=30`, {
+      "method": METHODS.GET,
+      "headers": {
+        "x-rapidapi-key": process.env.REACT_APP_X_RAPIDAPI_KEY,
+        "x-rapidapi-host": "twelve-data1.p.rapidapi.com"
+      }
     });
-  };
 
-  await wait(3000);
+    const { change, close, name, percent_change } = await response.json();
 
-  return companyProfiles_mock_data.slice(0, count);
-  // try {
-  //   const companyProfiles = await Promise.all(
-  //     requestSymbolList.map(async item => {
-  //       const response = await fetch(`https://alpha-vantage.p.rapidapi.com/query?function=GLOBAL_QUOTE&symbol=${item.symbol}`, {
-  //         'method': METHODS.GET,
-  //         'headers': {
-  //           'x-rapidapi-key': process.env.REACT_APP_X_RAPIDAPI_KEY,
-  //           'x-rapidapi-host': 'alpha-vantage.p.rapidapi.com',
-  //         },
-  //       });
-
-  //       return await response.json();
-  //     }),
-  //   );
-
-  //   return companyProfiles;
-  // } catch (error) {
-  //   console.error(error);
-  // }
+    return { change, close, name, percent_change, symbol };
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 export default requestCompanyProfiles;

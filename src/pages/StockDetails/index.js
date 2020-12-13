@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import ListContainer from '../../components/molecules/ListContainer';
 import requestCompanyProfileUpdate from '../../api/requestCompanyProfileUpdate';
 import CandlestickChart from '../../components/molecules/CandlestickChart';
@@ -33,16 +33,16 @@ const StockDetails = () => {
     website,
     recommendationSymbolList,
   } = useSelector(state =>
-    ({
-      searchKeyWord: state.stock.searchStockDetails?.meta.symbol,
-      searchStockDetails: state.stock.searchStockDetails?.values,
-      oneWeekStockDetails: state.stock.oneWeekStockDetails?.values,
-      oneMonthStockDetails: state.stock.oneMonthStockDetails?.values,
-      sector: state.stock.recommendationSymbolInfo?.sector,
-      industry: state.stock.recommendationSymbolInfo?.industry,
-      website: state.stock.recommendationSymbolInfo?.website,
-      recommendationSymbolList: state.stock?.recommendationSymbolList,
-    }));
+  ({
+    searchKeyWord: state.stock.searchStockDetails?.meta.symbol,
+    searchStockDetails: state.stock.searchStockDetails?.values,
+    oneWeekStockDetails: state.stock.oneWeekStockDetails?.values,
+    oneMonthStockDetails: state.stock.oneMonthStockDetails?.values,
+    sector: state.stock.recommendationSymbolInfo?.sector,
+    industry: state.stock.recommendationSymbolInfo?.industry,
+    website: state.stock.recommendationSymbolInfo?.website,
+    recommendationSymbolList: state.stock?.recommendationSymbolList,
+  }));
 
   const [currentClickedTab, setCurrentClickedTab] = useState('');
   const [clickedTabList, setClickedTabList] = useState();
@@ -151,14 +151,17 @@ const StockDetails = () => {
                 <div className='stock_item chart'>
                   <TabBar onTabButtonClick={tabBarButtonClickHandle} />
                   {currentClickedTab === '1day' && <CandlestickChart data={dateToObject(searchStockDetails)} interval='day' />}
-                  {currentClickedTab === '1week' && <CandlestickChart data={dateToObject(oneWeekStockDetails)} interval='week'/>}
-                  {currentClickedTab === '1month' && <CandlestickChart data={dateToObject(oneMonthStockDetails)} interval='month'/>}
+                  {currentClickedTab === '1week' && <CandlestickChart data={dateToObject(oneWeekStockDetails)} interval='week' />}
+                  {currentClickedTab === '1month' && <CandlestickChart data={dateToObject(oneMonthStockDetails)} interval='month' />}
                 </div>
               </>
             }
           </div>
           <div className='stock_item card_list'>
             {recommendationSymbolList && <ListContainer className='company_card_list container' />}
+          </div>
+          <div className='card_description_wrapper'>
+            <div className='card_description'>비슷한 유형의 종목</div>
           </div>
         </div>
         <div className='stock_details_right'>

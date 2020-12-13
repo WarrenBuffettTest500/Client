@@ -3,6 +3,10 @@ svg.candle_stock_chart {
   padding: 0 0.6rem
 }
 
+line {
+  cursor: pointer;
+}
+
 .month {
   .tick.x {
     &:nth-child(odd) {
@@ -11,11 +15,13 @@ svg.candle_stock_chart {
   }
 }
 
-// div.tooltip {
-//   position: absolute;
-//   text-align: center;
-//   background-color: #313639;
-//   color: #f9f9f9;
-//   border: 0px;
-//   border-radius: 8px;
-// }
+div.tooltip {
+  position: absolute;
+  text-align: left;
+  background-color: #313639;
+  color: #f9f9f9;
+  border: 0px;
+  border-radius: 8px;
+  padding: 0.3rem;
+  cursor: pointer;
+}
