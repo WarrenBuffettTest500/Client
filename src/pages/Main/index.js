@@ -92,7 +92,7 @@ const Main = ({ currentUser, staticPortfolio }) => {
       setRecommendationCriterion('portfolio');
     }
   };
-
+  console.log(recommendationCriterion);
   return (
     <>
       <div className='mainPageWrapper'>

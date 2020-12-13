@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './index.scss';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import PortfolioItemInputModal from '../../components/molecules/PortfolioItemInputModal';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import ClearRoundedIcon from '@material-ui/icons/ClearRounded';
@@ -12,7 +12,7 @@ import CircleChart from '../../components/molecules/CircleChart';
 import calculateProportions from '../../utils/calculateProportions';
 import requestPortfolio from '../../api/requestPortfolio';
 
-const MyPage = ({
+const PortfolioPage = ({
   currentUser,
   currentUserStaticPortfolio,
   onStaticPortfolioFetched,
@@ -52,7 +52,7 @@ const MyPage = ({
       return;
     }
 
-    const setMyPageData = async () => {
+    const setPortfolioPageData = async () => {
       const portfolioWithRealPrice = await concatRealPrice(localStaticPortfolio);
 
       setDynamicPortfolio(portfolioWithRealPrice);
@@ -81,7 +81,7 @@ const MyPage = ({
       });
     };
 
-    setMyPageData();
+    setPortfolioPageData();
   }, [localStaticPortfolio]);
 
   useEffect(() => {
@@ -132,7 +132,7 @@ const MyPage = ({
 
   return (
     <>
-      <div className='myPageWrapper'>
+      <div className='portfolioPageWrapper'>
         <div className='graphsWrapper'>
           <CircleChart data={chartData} type='pie' />
         </div>
@@ -187,7 +187,11 @@ const MyPage = ({
                   const { id, symbol, quantity, avgPrice, price } = item;
                   return (
                     <tr key={id}>
-                      <td>{symbol}</td>
+                      <td>{
+                        <Link to={`/stock_details/${symbol}`}>
+                          {symbol}
+                        </Link>
+                      }</td>
                       {
                         currentUser.uid === portfolioOwnerUid
                         && <>
@@ -243,4 +247,4 @@ const MyPage = ({
     </>
   );
 };
-export default MyPage;
+export default PortfolioPage;
