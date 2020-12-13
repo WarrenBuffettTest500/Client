@@ -42,7 +42,6 @@ const App = ({
       if (user.preferenceInfoId) {
         preferenceInfoResponse = await requestPreferenceInfo(user);
       }
-
       onInitialStatesFetched(user, preferenceInfoResponse?.preferenceInfo);
     };
 
@@ -53,8 +52,7 @@ const App = ({
     if (!currentUser) return;
 
     const fetchStaticPortfolio = async () => {
-      const staticPortfolioResponse = await requestPortfolio(currentUser);
-
+      const staticPortfolioResponse = await requestPortfolio(currentUser.uid);
       onStaticPortfolioFetched(staticPortfolioResponse.portfolio);
     };
 
@@ -84,10 +82,10 @@ const App = ({
         </Route>
         {
           currentUser
-          && <Route path={PATHS.MY_PAGE}>
+          && <Route path='/users/:user_uid/portfolios/:portfolio_owner_uid'>
             <MyPage
               currentUser={currentUser}
-              staticPortfolio={staticPortfolio}
+              currentUserStaticPortfolio={staticPortfolio}
               onStaticPortfolioFetched={onStaticPortfolioFetched}
             />
           </Route>

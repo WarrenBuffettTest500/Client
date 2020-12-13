@@ -1,10 +1,10 @@
 import METHODS from '../constants/methods';
 import PATHS from '../constants/paths';
 
-const requestRecommendations = async (currentUser, staticPortfolio, recommendationCriterion) => {
+const requestRecommendations = async (recommendationCriterion, currentUser, staticPortfolio) => {
   let fetchUrl;
 
-  if (!currentUser || !currentUser.preferenceInfoId || !staticPortfolio.length) {
+  if (recommendationCriterion === 'randomCompanies') {
     fetchUrl = `${PATHS.HOST}${PATHS.SERVER_PORT}/company_profiles/random`;
   } else if (recommendationCriterion === 'preference') {
     fetchUrl = `${PATHS.HOST}${PATHS.SERVER_PORT}${PATHS.USERS}/${currentUser.uid}/portfolios/recommendations/preference`;
