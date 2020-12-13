@@ -157,11 +157,11 @@ const StockDetails = () => {
               </>
             }
           </div>
-          <div className='stock_item card_list'>
-            {recommendationSymbolList && <ListContainer className='company_card_list container' />}
-          </div>
           <div className='card_description_wrapper'>
             <div className='card_description'>비슷한 유형의 종목</div>
+          </div>
+          <div className='stock_item card_list'>
+            {recommendationSymbolList && <ListContainer className='company_card_list container' />}
           </div>
         </div>
         <div className='stock_details_right'>

@@ -6,7 +6,7 @@ import calculateProportions from '../../utils/calculateProportions';
 import calculateTotal from '../../utils/calculateTotal';
 import CircleChart from '../../components/molecules/CircleChart';
 import requestRecommendations from '../../api/requestRecommendations';
-
+import Card from '../../components/molecules/Card';
 const Main = ({ currentUser, staticPortfolio }) => {
   const [dynamicPortfolio, setDynamicPortfolio] = useState([]);
   const [chartData, setChartData] = useState([]);
@@ -92,30 +92,39 @@ const Main = ({ currentUser, staticPortfolio }) => {
       setRecommendationCriterion('portfolio');
     }
   };
-  console.log(recommendationCriterion);
+
   return (
     <>
-      <div className='mainPageWrapper'>
-        {
-          (currentUser && staticPortfolio.length)
-            ? <Link to={`/users/${currentUser?.uid}/portfolios/${currentUser?.uid}`}>
-              <CircleChart data={chartData} type='donut' />
-            </Link>
-            : '포트폴리오를 등록하세요'
-        }
-        {
-          (recommendationCriterion === 'portfolio' || recommendationCriterion === 'preference')
-          && <button onClick={recommendationToggleHandler}>토글</button>
-        }
-        <div className='recommendedPortfoliosWrapper'>
+      <div className='mainpage_wrapper'>
+        <div>
+          {
+            (currentUser && staticPortfolio.length)
+              ? <Link to={`/users/${currentUser?.uid}/portfolios/${currentUser?.uid}`}>
+                <CircleChart data={chartData} type='donut' />
+              </Link>
+              : '포트폴리오를 등록하세요'
+          }
+        </div>
+        <div>
+          {
+            (recommendationCriterion === 'portfolio' || recommendationCriterion === 'preference')
+            && <button onClick={recommendationToggleHandler}>토글</button>
+          }
+        </div>
+        <div className='recommended_portfolios_wrapper'>
           {
             recommendedChartDatas.map(portfolio => {
               return (
                 <Link to={`/users/${currentUser?.uid}/portfolios/${portfolio.owner}`} key={portfolio.owner}>
-                  <CircleChart
-                    data={portfolio.items}
-                    type='pie'
-                  />
+                  <Card>
+                    <div className='portfolios_wrapper'></div>
+                    <div className='circle_chart_wrapper'>
+                    <CircleChart
+                      data={portfolio.items}
+                      type='pie'
+                    />
+                    </div>
+                  </Card>
                 </Link>
               );
             })
