@@ -1,17 +1,42 @@
 .stock_details_wrapper {
+  position: fixed;
   width: 100%;
   display: grid;
-  grid-template-columns: 7fr 2fr;
+  grid-template-columns: 4fr 1fr;
   margin-top: 5rem;
   align-items: flex-start;
+  height: 70%;
 }
 
+.stock_details_left {
+  display: grid;
+  grid-template-rows: 8fr 3fr 2fr;
+}
 .stock_item.card_list {
-  margin: 1.5rem auto;
-  width: 100%;
-  text-align: center;
+  display: flex;
+  width: 95%;
+  height: 4rem;
+  justify-content: flex-end;
+}
+
+.card_description_wrapper {
+  width: 95%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.card_description {
+  margin-top: 1rem;
+  font-size: 2rem;
 }
 
 .stock_item {
-  margin: 0 auto;
+  margin: 0;
+}
+
+.chart_stick {
+  &:hover {
+    opacity: 0.2;
+  }
 }

@@ -1,3 +1,10 @@
+@mixin messageBox () {
+  border-radius: 0.3rem;
+  width: 14rem;
+  height: 3.8rem;
+  color: $primary;
+}
+
 .chatroom_wrapper {
   position: sticky;
   bottom: 0;
@@ -11,14 +18,39 @@
   background-color: #35373a;
 }
 
-.message_box {
-  position: relative;
-  bottom: 0;
+.chatroom_viewport {
+  height: 100%;
+  padding: 0 0.5rem 2rem 0.5rem;
+  overflow-y: scroll;
 }
 
-.chatroom_viewport {
-  height: 66rem;
-  overflow-y: scroll;
+.message_box {
+  margin-bottom: 0.3rem;
+  margin: 0.2;
+
+  .right_bubble {
+    @include messageBox();
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-left: 17rem;
+  }
+
+  .left_bubble {
+    @include messageBox();
+    background-color: #262627;
+  }
+
+  p {
+    font-size: 1.3rem;
+    line-height: 0.1rem;
+  }
+
+  .message_data,
+  .message_name {
+    font-size: 0.2rem;
+    color: grey;
+  }
 }
 
 .chatroom_input_wrapper {
@@ -36,37 +68,4 @@
 .arrowup_icon {
   padding: 0 0.8rem;
   color: $primary;
-}
-
-.right_bubble {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  margin: 0 0 0 6.8rem;
-  border-radius: 0.3rem;
-  width: 14rem;
-  height: 3.8rem ;
-  margin-bottom: 0.3rem;
-  color: $primary;
-}
-
-.left_bubble {
-  background-color: #262627;
-  margin: 0 0 0 0.2rem;
-  border-radius: 0.3rem;
-  width: 14rem;
-  height: 3.8rem;
-  margin-bottom: 0.3rem;
-  color: $primary;
-}
-
-p {
-  font-size: 1.3rem;
-  line-height: 0.1rem;
-}
-
-.message_data,
-.message_name {
-  font-size: 0.2rem;
-  color: grey;
 }

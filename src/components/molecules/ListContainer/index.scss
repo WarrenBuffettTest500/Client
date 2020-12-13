@@ -1,13 +1,23 @@
 .company_card_list.container {
   display: flex;
-  width: 100%;
-  margin: 0 auto;
-  height: 12rem;
-  padding: 2rem 0;
-  overflow-x: scroll;
-  border-radius: $border-radius;
-  justify-content: center;
-  &::-webkit-scrollbar {
-    opacity: 0.1;
-  }
+  width: 43rem;
+  height: 16.2rem;
+  margin-top: 1rem;
+  overflow-x: auto;
+  border-radius: 0.3rem;
+  justify-content: flex-start;
+  flex-direction: row-reverse;
+  align-items: center;
+}
+
+.container::-webkit-scrollbar {
+  width: 0.2rem;
+}
+.container::-webkit-scrollbar-thumb {
+  background-color: $theme_color;
+  border-radius: 0.3rem;
+}
+.container::-webkit-scrollbar-track {
+  border-radius: 10px;
+  box-shadow: inset 0px 0px 5px white;
 }

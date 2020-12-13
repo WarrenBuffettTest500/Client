@@ -37,13 +37,13 @@
 .company_card {
   display: flex;
   height: 10em;
-  padding: 0 2.8rem;
-  border-radius: $border-radius;
+  border-radius: 0.3rem;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   margin-left: 1rem;
   color: $theme_color;
+  box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
   cursor: pointer;
 
   &:nth-child(odd) {
@@ -55,10 +55,13 @@
   }
 };
 
+.card_item_wrapper {
+  padding: 0 2.8rem;
+}
 .dashbord_card {
   display: flex;
   width: 93%;
-  height: 12rem;
+  height: 10rem;
   margin: 0;
   padding: 0 1.2rem;
   justify-content: space-between;
@@ -72,10 +75,9 @@
   margin: 0;
 
   .dashbord_card_name {
-    font-size: 7rem;
+    font-size: 6rem;
     font-weight: 700;
   }
-
   .dashbord_card_price {
     font-size: 4rem;
     font-weight: 400;

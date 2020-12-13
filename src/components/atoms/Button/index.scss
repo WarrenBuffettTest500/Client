@@ -46,16 +46,18 @@
 .tabbar_button {
   color: $primary;
   font-size: 1.2rem;
+  border-radius: 0.3rem;
+  transition: all ease .25s;
+
+  &:focus,
+  &:hover {
+    background-color: #fff;
+    color: $theme_color
+  }
 }
 
 .message_button {
   background-color: $theme_color;
   margin: 0;
   padding: 0;
-}
-
-.carousel_button {
- color: $primary;
- border-radius: 50%;
- margin: 0 0.2rem;
 }

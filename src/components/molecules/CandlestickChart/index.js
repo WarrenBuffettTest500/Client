@@ -1,16 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 
-const CandlestickChart = ({ data }) => {
+const CandlestickChart = ({ data, interval }) => {
   const chart = useRef(null);
-
+  const tooltip = useRef(null);
   const width = 1800;
-  const height = 600;
+  const height = 550;
   const margin = { top: 20, right: 100, bottom: 30, left: 40 };
   const x = d3.scaleBand()
     .domain(d3.utcDay
-      .range(data[data.length - 1].date, +data[0].date + 1)
-      .filter(d => d.getUTCDay() !== 0 && d.getUTCDay() !== 6))
+      .range(data[data.length - 1].date, +data[0].date + 1))
     .range([margin.left, width - margin.right])
     .padding(10);
 
@@ -25,7 +24,9 @@ const CandlestickChart = ({ data }) => {
         .every(width > 720 ? 1 : 2)
         .range(data[data.length - 1].date, data[0].date))
       .tickFormat(d3.utcFormat('%-m/%-d')))
-    .call(g => g.select('.domain').remove());
+    .call(g => g.select('.domain').remove())
+    .call(g => g.selectAll('.tick')
+      .attr('class', 'tick x'));
 
   const yAxis = g => g
     .attr('transform', `translate(${margin.left},0)`)
@@ -45,12 +46,14 @@ const CandlestickChart = ({ data }) => {
   };
 
   const candlestickChart = () => {
+    const div = d3.select(tooltip.current)
+      .style('opacity', 0);
+
     const svg = d3.select(chart.current)
       .attr('viewBox', [0, 0, width, height]);
 
     svg.append('g')
       .call(xAxis);
-
     svg.append('g')
       .call(yAxis);
 
@@ -67,19 +70,27 @@ const CandlestickChart = ({ data }) => {
       .attr('y2', d => y(d.high));
 
     g.append('line')
+      .attr('class', 'chart_stick')
       .attr('y1', d => y(d.open))
       .attr('y2', d => y(d.close))
-      .attr('stroke-width', 12)
+      .attr('stroke-width', 20)
       .attr('stroke', d => d.open > d.close ? d3.schemeSet1[0]
         : d.close > d.open ? d3.schemeSet1[2]
           : d3.schemeSet1[8]);
 
-    g.append('title')
-      .text(d => `${formatDate(d.date)}
-        Open: ${formatValue(d.open)}
-        Close: ${formatValue(d.close)} (${formatChange(d.open, d.close)})
-        Low: ${formatValue(d.low)}
-        High: ${formatValue(d.high)}`);
+    g.on('mouseover', (event, data) => {
+      div.transition()
+        .duration(100)
+        .style('opacity', 0.9);
+      div.html(
+          `${formatDate(data.date)} <br/>
+           Open: ${formatValue(data.open)} <br/>
+           Close: ${formatValue(data.close)} (${formatChange(data.open, data.close)}) <br/>
+           Low: ${formatValue(data.low)} <br/>
+           High: ${formatValue(data.high)}`)
+        .style('left', event.clientX + 'px')
+        .style('top', event.clientY + 'px');
+    });
   };
 
   useEffect(() => {
@@ -88,7 +99,10 @@ const CandlestickChart = ({ data }) => {
   }, [data]);
 
   return (
-      <svg className='candle_stock_chart' ref={chart} />
+    <>
+      <div className='tooltip' ref={tooltip}></div>
+      <svg className={`candle_stock_chart ${interval}`} ref={chart} />
+    </>
   );
 };
 
