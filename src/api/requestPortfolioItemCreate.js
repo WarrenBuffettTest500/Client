@@ -1,9 +1,9 @@
 import METHODS from '../constants/methods';
 import PATHS from '../constants/paths';
 
-const requestPortfolioItemCreate = async (user, data) => {
+const requestPortfolioItemCreate = async (userUid, data) => {
   const response = await fetch(
-    `${PATHS.HOST}${PATHS.SERVER_PORT}${PATHS.USERS}/${user.uid}/portfolio_items`,
+    `${PATHS.HOST}${PATHS.SERVER_PORT}${PATHS.USERS}/${userUid}/portfolio_items`,
     {
       method: METHODS.POST,
       headers: {

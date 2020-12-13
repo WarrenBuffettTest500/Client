@@ -41,8 +41,8 @@ const PortfolioItemInputModal = ({
 
     const response
       = portfolioItemToEdit || hasItemInPortfolio
-        ? await requestPortfolioItemUpdate(currentUser, portfolioItem, portfolioItemToEdit.portfolioItemId)
-        : await requestPortfolioItemCreate(currentUser, portfolioItem);
+        ? await requestPortfolioItemUpdate(currentUser.uid, portfolioItem, portfolioItemToEdit.portfolioItemId)
+        : await requestPortfolioItemCreate(currentUser.uid, portfolioItem);
 
     if (response.result !== 'ok') {
       alert('실패');
@@ -53,7 +53,7 @@ const PortfolioItemInputModal = ({
     alert('성공');
 
     const fetchStaticPortfolio = async () => {
-      const staticPortfolioResponse = await requestPortfolio(currentUser);
+      const staticPortfolioResponse = await requestPortfolio(currentUser.uid);
 
       onStaticPortfolioFetched(staticPortfolioResponse.portfolio);
     };

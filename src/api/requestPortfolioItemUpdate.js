@@ -1,9 +1,9 @@
 import METHODS from '../constants/methods';
 import PATHS from '../constants/paths';
 
-const requestPortfolioItemUpdate = async (user, data, portfolioItemId) => {
+const requestPortfolioItemUpdate = async (userUid, data, portfolioItemId) => {
   const response = await fetch(
-    `${PATHS.HOST}${PATHS.SERVER_PORT}${PATHS.USERS}/${user.uid}/portfolio_items/${portfolioItemId}`,
+    `${PATHS.HOST}${PATHS.SERVER_PORT}${PATHS.USERS}/${userUid}/portfolio_items/${portfolioItemId}`,
     {
       method: METHODS.PUT,
       headers: {
