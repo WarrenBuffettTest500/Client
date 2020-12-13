@@ -5,7 +5,7 @@ const CircleChart = ({ data, type }) => {
   const svgRef = useRef();
 
   useEffect(() => {
-    const width = 500;
+    const width = 250;
     const height = 180;
     const radius = Math.min(width, height) / 2;
     const pie = d3.pie()
@@ -56,7 +56,9 @@ const CircleChart = ({ data, type }) => {
   }, [data]);
 
   return (
-    <svg ref={svgRef}></svg>
+    <div className='circle_chart_wrapper'>
+      <svg className='circle_chart' ref={svgRef}></svg>
+    </div>
   );
 };
 

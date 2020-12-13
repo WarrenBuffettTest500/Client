@@ -9,11 +9,12 @@ const PATHS = {
   PREFERENCES: '/preferences',
   STOCK_DETAILS: '/stock_details',
   KEYWORD: '/:keyword',
-  SYMBOLS: '/symbols',
+  SYMBOL: '/symbol',
   MY_PAGE: '/my_page',
   COMPANY_PROFILES: '/company_profiles',
   RECOMMENDATION_STOCK_LIST: '/recommendation_stock_list',
   VIEWS: '/views',
+
 };
 
 export default PATHS;

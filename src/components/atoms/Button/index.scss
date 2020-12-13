@@ -1,15 +1,9 @@
-@mixin cursorPointer() {
-  cursor: pointer;
-}
-
 @mixin rightAlignedButton() {
-  @include cursorPointer;
   position: absolute;
   right: 25px;
 }
 
 .profileButton {
-  @include cursorPointer();
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -27,7 +21,6 @@
 
 .preferencesButton,
 .logoutButton {
-  @include cursorPointer;
   padding: 10px 15px;
   border: none;
   border-radius: 10px;
@@ -38,33 +31,31 @@
 }
 
 .closeModal {
-  @include cursorPointer;
   font-size: 16px;
   font-weight: bold;
   border: none;
 }
 
-.portfolioItemSumbitButton {
-  @include cursorPointer;
-}
-
 .editButton,
 .deleteButton {
-  @include cursorPointer;
   background: none;
   border: none;
   color: white;
 }
 
 .tabbar_button {
-  @include cursorPointer();
   color: $primary;
   font-size: 1.2rem;
 }
 
 .message_button {
-  @include cursorPointer();
   background-color: $theme_color;
   margin: 0;
   padding: 0;
+}
+
+.carousel_button {
+ color: $primary;
+ border-radius: 50%;
+ margin: 0 0.2rem;
 }

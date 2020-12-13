@@ -1,8 +1,7 @@
 .mainPageWrapper {
-  width: 960px;
+  width: 100%;
   border: 1px solid green;
   margin: 80px auto;
-  padding: 15px;
 }
 
 .graphDashboardWrapper,
@@ -12,10 +11,13 @@
 }
 
 .graphDashboardWrapper {
+  width: 100%;
   border: 1px solid yellow;
 }
 
 .recommendedPortfoliosWrapper {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   border: 1px solid orange;
   color: white;
 }

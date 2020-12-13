@@ -1,11 +1,13 @@
 @mixin animationUp() {
   transform: translateY(30px);
   opacity: 0.5;
+  background-color: lavender;
 }
 
 @mixin animationDown() {
   transform: translateY(-30px);
   opacity: 1;
+  background-color: beige;
 }
 
 @keyframes upDownOdd {
@@ -36,12 +38,12 @@
   display: flex;
   height: 10em;
   padding: 0 2.8rem;
-  background-color: salmon;
   border-radius: $border-radius;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   margin-left: 1rem;
+  color: $theme_color;
   cursor: pointer;
 
   &:nth-child(odd) {
@@ -55,7 +57,7 @@
 
 .dashbord_card {
   display: flex;
-  width: 72.6rem;
+  width: 93%;
   height: 12rem;
   margin: 0;
   padding: 0 1.2rem;
