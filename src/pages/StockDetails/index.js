@@ -150,9 +150,9 @@ const StockDetails = () => {
                 </div>
                 <div className='stock_item chart'>
                   <TabBar onTabButtonClick={tabBarButtonClickHandle} />
-                  {currentClickedTab === '1day' && <CandlestickChart data={dateToObject(searchStockDetails)} />}
-                  {currentClickedTab === '1week' && <CandlestickChart data={dateToObject(oneWeekStockDetails)} />}
-                  {currentClickedTab === '1month' && <CandlestickChart data={dateToObject(oneMonthStockDetails)} />}
+                  {currentClickedTab === '1day' && <CandlestickChart data={dateToObject(searchStockDetails)} interval='day' />}
+                  {currentClickedTab === '1week' && <CandlestickChart data={dateToObject(oneWeekStockDetails)} interval='week'/>}
+                  {currentClickedTab === '1month' && <CandlestickChart data={dateToObject(oneMonthStockDetails)} interval='month'/>}
                 </div>
               </>
             }

@@ -1,7 +1,7 @@
 .stock_details_wrapper {
   width: 100%;
   display: grid;
-  grid-template-columns: 7fr 2fr;
+  grid-template-columns: 4fr 1fr;
   margin-top: 5rem;
   align-items: flex-start;
 }
@@ -14,4 +14,10 @@
 
 .stock_item {
   margin: 0 auto;
+}
+
+.chart_stick {
+  &:hover {
+    opacity: 0.2;
+  }
 }
