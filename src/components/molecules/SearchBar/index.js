@@ -26,6 +26,7 @@ const SearchBar = () => {
 
       if (result === RESPONSES.OK) {
         setSymbols(symbolList);
+
         return;
       }
       if (result === RESPONSES.FAILURE) {
@@ -33,14 +34,17 @@ const SearchBar = () => {
           appearance: 'error',
           autoDismiss: true,
         });
+
         return;
       }
     }
+
     setSearchKeyword(newValue);
   };
 
   const onSuggestionsFetchRequested = ({ value }) => {
     if (!symbols) return;
+
     setSuggestions(getSuggestions(value, symbols));
   };
 
