@@ -3,12 +3,22 @@
   margin-top: 5rem;
 }
 
-.recommended_portfolios_wrapper,
-.company_cards_wrapper {
-  margin: 10px auto;
+.myportfolio_card_wrapper {
+  display: flex;
+  width: 100%;
+  margin: 0 auto;
+  justify-content: center;
+}
+
+.toggle_button_wrapper {
+  padding: 0 3.9rem;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .recommended_portfolios_wrapper {
+  padding: 0 auto;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  justify-items: center;
 }

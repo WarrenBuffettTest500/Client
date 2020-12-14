@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import Header from '../../components/organisms/Header';
-import { setSearchStockDetails } from '../../store/stock';
 import { setCurrentUser, removeCurrentUser, setPreferenceInfo, setStaticPortfolio } from '../../store/user';
 import LoginModal from '../../components/molecules/LoginModal/';
 import PreferencesForm from '../../components/templates/PreferencesForm';
