@@ -6,13 +6,17 @@
   margin-top: 5rem;
   align-items: flex-start;
   height: 70%;
-}
 
 .stock_details_left {
   display: grid;
   grid-template-rows: 8fr 0.5fr 2fr;
 }
 
+.stock_details_left {
+  display: grid;
+  grid-template-rows: 8fr 3fr 2fr;
+}
+ 
 .stock_item.card_list {
   display: flex;
   width: 95%;
