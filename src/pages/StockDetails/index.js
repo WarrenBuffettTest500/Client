@@ -34,8 +34,7 @@ const StockDetails = () => {
     website,
     recommendationSymbolList,
     currentUser,
-  } = useSelector(state =>
-  ({
+  } = useSelector(state => ({
     searchKeyWord: state.stock.searchStockDetails?.meta.symbol,
     searchStockDetails: state.stock.searchStockDetails?.values,
     oneWeekStockDetails: state.stock.oneWeekStockDetails?.values,
@@ -127,12 +126,6 @@ const StockDetails = () => {
     })();
   }, [symbol]);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     await requestCompanyProfileUpdate(symbol);
-  //   })();
-  // }, [symbol]);
-
   return (
     <>
       <div className='stock_details_wrapper'>
@@ -164,11 +157,11 @@ const StockDetails = () => {
               </>
             }
           </div>
-          <div className='stock_item card_list'>
-            {recommendationSymbolList && <ListContainer className='company_card_list container' />}
-          </div>
           <div className='card_description_wrapper'>
             <div className='card_description'>비슷한 유형의 종목</div>
+          </div>
+          <div className='stock_item card_list'>
+            {recommendationSymbolList && <ListContainer className='company_card_list container' />}
           </div>
         </div>
         <div className='stock_details_right'>

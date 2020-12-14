@@ -56,9 +56,7 @@ const CircleChart = ({ data, type }) => {
   }, [data]);
 
   return (
-    <div className='circle_chart_wrapper'>
-      <svg className='circle_chart' ref={svgRef}></svg>
-    </div>
+    <svg className='circle_chart' ref={svgRef}></svg>
   );
 };
 
