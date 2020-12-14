@@ -6,6 +6,7 @@ import calculateProportions from '../../utils/calculateProportions';
 import calculateTotal from '../../utils/calculateTotal';
 import CircleChart from '../../components/molecules/CircleChart';
 import requestRecommendations from '../../api/requestRecommendations';
+import requestTrendingStocks from '../../api/requestTrendingStocks';
 
 const Main = ({ currentUser, staticPortfolio }) => {
   const [dynamicPortfolio, setDynamicPortfolio] = useState([]);
@@ -13,6 +14,17 @@ const Main = ({ currentUser, staticPortfolio }) => {
   const [total, setTotal] = useState(0);
   const [recommendationCriterion, setRecommendationCriterion] = useState('randomCompanies');
   const [recommendedChartDatas, setRecommendedChartDatas] = useState([]);
+  const [trendingStocks, setTrendingStocks] = useState([]);
+
+  useEffect(() => {
+    const fetchTrendingStocks = async () => {
+      const trendingStocksResponse = await requestTrendingStocks();
+
+      setTrendingStocks(trendingStocksResponse.topTen);
+    };
+
+    fetchTrendingStocks();
+  }, []);
 
   useEffect(() => {
     if (!currentUser) {
@@ -29,7 +41,7 @@ const Main = ({ currentUser, staticPortfolio }) => {
       const recommendationsResponse = await requestRecommendations(recommendationCriterion, currentUser, staticPortfolio);
 
       if (recommendationCriterion === 'randomCompanies') {
-        console.log(recommendationsResponse.companies);
+        return;
       } else {
         const recommendedChartDatas = [];
 
@@ -92,7 +104,7 @@ const Main = ({ currentUser, staticPortfolio }) => {
       setRecommendationCriterion('portfolio');
     }
   };
-  console.log(recommendationCriterion);
+
   return (
     <>
       <div className='mainPageWrapper'>

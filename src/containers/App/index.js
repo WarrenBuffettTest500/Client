@@ -14,6 +14,9 @@ import PATHS from '../../constants/paths';
 import '../../sass/app.scss';
 import Main from '../../pages/Main';
 import requestPortfolio from '../../api/requestPortfolio';
+import setCookie from '../../utils/setCookie';
+import getCookie from '../../utils/getCookie';
+import uuid from 'uuid-random';
 
 const App = ({
   onInitialStatesFetched,
@@ -47,6 +50,12 @@ const App = ({
 
     initializeUserState();
   }, []);
+
+  useEffect(() => {
+    if (!currentUser && getCookie('buffetTest500')) return;
+
+    setCookie('buffetTest500', currentUser?.uid || uuid(), 7);
+  }, [currentUser]);
 
   useEffect(() => {
     if (!currentUser) return;
@@ -98,7 +107,7 @@ const App = ({
           />
         </Route>
         <Route path={`${PATHS.STOCK_DETAILS}${PATHS.KEYWORD}`}>
-          <StockDetails />
+          <StockDetails currentUser={currentUser} />
         </Route>
       </Switch>
     </>

@@ -19,9 +19,10 @@ import requestRecommendationSymbolList from '../../api/requestRecommendationSymb
 import RESPONSES from '../../constants/responses';
 import { setRecommendationSymbolList, setRecommendationSymbolInfo } from '../../store/stock';
 import ChatRoom from '../../components/molecules/ChatRoom';
+import requestHitUpdate from '../../api/requestHitUpdate';
 
 const StockDetails = () => {
-  const { keyword } = useParams();
+  const { keyword: symbol } = useParams();
   const dispatch = useDispatch();
   const {
     searchKeyWord,
@@ -32,6 +33,7 @@ const StockDetails = () => {
     industry,
     website,
     recommendationSymbolList,
+    currentUser,
   } = useSelector(state =>
   ({
     searchKeyWord: state.stock.searchStockDetails?.meta.symbol,
@@ -42,6 +44,7 @@ const StockDetails = () => {
     industry: state.stock.recommendationSymbolInfo?.industry,
     website: state.stock.recommendationSymbolInfo?.website,
     recommendationSymbolList: state.stock?.recommendationSymbolList,
+    currentUser: state.user.currentUser,
   }));
 
   const [currentClickedTab, setCurrentClickedTab] = useState('');
@@ -88,18 +91,22 @@ const StockDetails = () => {
   };
 
   useEffect(() => {
+    requestHitUpdate(symbol);
+  }, [currentUser, symbol]);
+
+  useEffect(() => {
     dispatch(setInitialState());
     setCurrentClickedTab('1day');
     setClickedTabList(['1day']);
-  }, [keyword]);
+  }, [symbol]);
 
   useEffect(() => {
     (async () => {
-      const { result, stockDetails } = await requestStockDetails(keyword);
+      const { result, stockDetails } = await requestStockDetails(symbol);
 
       if (result === RESPONSES.OK) {
         dispatch(setSearchStockDetails(stockDetails));
-        const { result, recommendationSymbolList, recommendationSymbolInfo } = await requestRecommendationSymbolList(keyword);
+        const { result, recommendationSymbolList, recommendationSymbolInfo } = await requestRecommendationSymbolList(symbol);
 
         if (result === RESPONSES.OK) {
           dispatch(setRecommendationSymbolList(recommendationSymbolList));
@@ -118,13 +125,13 @@ const StockDetails = () => {
       }
 
     })();
-  }, [keyword]);
+  }, [symbol]);
 
-  useEffect(() => {
-    (async () => {
-      await requestCompanyProfileUpdate(keyword);
-    })();
-  }, [keyword]);
+  // useEffect(() => {
+  //   (async () => {
+  //     await requestCompanyProfileUpdate(symbol);
+  //   })();
+  // }, [symbol]);
 
   return (
     <>
@@ -135,7 +142,7 @@ const StockDetails = () => {
               <>
                 <div className='stock_item dashbord'>
                   <Card
-                    key={keyword}
+                    key={symbol}
                     className='dashbord_card'>
                     <div className='dashbord_card_left'>
                       <div className='dashbord_card_info'>📂{sector}</div>
@@ -143,7 +150,7 @@ const StockDetails = () => {
                       <a className='dashbord_card_info' href={website}>🌐{website}</a>
                     </div>
                     <div className='dashbord_card_right'>
-                      <div className='dashbord_card_name'>{keyword}</div>
+                      <div className='dashbord_card_name'>{symbol}</div>
                       <div className='dashbord_card_price'>{`$${searchStockDetails[0].close}`}</div>
                     </div>
                   </Card>
