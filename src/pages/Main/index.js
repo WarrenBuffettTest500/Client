@@ -24,9 +24,9 @@ const Main = ({ currentUser, staticPortfolio }) => {
       setTrendingStocks(trendingStocksResponse.topTen);
     };
 
-    const trendingSetterInterval = setInterval(fetchTrendingStocks, 60 * 1000);
+    const setFetchInterval = setInterval(fetchTrendingStocks, 60 * 1000);
 
-    return clearInterval(trendingSetterInterval);
+    return () => clearInterval(setFetchInterval);
   }, []);
 
   useEffect(() => {
