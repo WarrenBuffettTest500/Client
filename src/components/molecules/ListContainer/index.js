@@ -59,6 +59,7 @@ const ListContainer = ({
 
   const scrollIntoView = () => {
     if (!card.current) return;
+
     card.current.scrollIntoView({ behavior: 'smooth' });
   };
 

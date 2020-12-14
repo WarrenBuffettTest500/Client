@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import ListContainer from '../../components/molecules/ListContainer';
-import requestCompanyProfileUpdate from '../../api/requestCompanyProfileUpdate';
 import CandlestickChart from '../../components/molecules/CandlestickChart';
 import dateToObject from '../../utils/dateToObject';
 import Card from '../../components/molecules/Card';
@@ -22,7 +21,7 @@ import ChatRoom from '../../components/molecules/ChatRoom';
 import requestHitUpdate from '../../api/requestHitUpdate';
 
 const StockDetails = () => {
-  const { keyword: symbol } = useParams();
+  const { keyword } = useParams();
   const dispatch = useDispatch();
   const {
     searchKeyWord,
@@ -90,22 +89,22 @@ const StockDetails = () => {
   };
 
   useEffect(() => {
-    requestHitUpdate(symbol);
-  }, [currentUser, symbol]);
+    requestHitUpdate(keyword);
+  }, [currentUser, keyword]);
 
   useEffect(() => {
     dispatch(setInitialState());
     setCurrentClickedTab('1day');
     setClickedTabList(['1day']);
-  }, [symbol]);
+  }, [keyword]);
 
   useEffect(() => {
     (async () => {
-      const { result, stockDetails } = await requestStockDetails(symbol);
+      const { result, stockDetails } = await requestStockDetails(keyword);
 
       if (result === RESPONSES.OK) {
         dispatch(setSearchStockDetails(stockDetails));
-        const { result, recommendationSymbolList, recommendationSymbolInfo } = await requestRecommendationSymbolList(symbol);
+        const { result, recommendationSymbolList, recommendationSymbolInfo } = await requestRecommendationSymbolList(keyword);
 
         if (result === RESPONSES.OK) {
           dispatch(setRecommendationSymbolList(recommendationSymbolList));
@@ -124,7 +123,7 @@ const StockDetails = () => {
       }
 
     })();
-  }, [symbol]);
+  }, [keyword]);
 
   return (
     <>
@@ -135,7 +134,7 @@ const StockDetails = () => {
               <>
                 <div className='stock_item dashbord'>
                   <Card
-                    key={symbol}
+                    key={keyword}
                     className='dashbord_card'>
                     <div className='dashbord_card_left'>
                       <div className='dashbord_card_info'>📂{sector}</div>
@@ -143,7 +142,7 @@ const StockDetails = () => {
                       <a className='dashbord_card_info' href={website}>🌐{website}</a>
                     </div>
                     <div className='dashbord_card_right'>
-                      <div className='dashbord_card_name'>{symbol}</div>
+                      <div className='dashbord_card_name'>{keyword}</div>
                       <div className='dashbord_card_price'>{`$${searchStockDetails[0].close}`}</div>
                     </div>
                   </Card>

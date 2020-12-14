@@ -1,9 +1,9 @@
 import METHODS from '../constants/methods';
 import PATHS from '../constants/paths';
 
-const requestHitUpdate = async symbol => {
+const requestHitUpdate = async keyword => {
   const res = await fetch(
-    `${PATHS.HOST}${PATHS.SERVER_PORT}/hits/${symbol}`,
+    `${PATHS.HOST}${PATHS.SERVER_PORT}/hits/${keyword}`,
     {
       method: METHODS.POST,
       credentials: 'include',

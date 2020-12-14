@@ -56,8 +56,12 @@ const CircleChart = ({ data, type }) => {
   }, [data]);
 
   return (
-    <svg className='circle_chart' ref={svgRef}></svg>
+      <svg
+        className='circle_chart'
+        ref={svgRef}>
+      </svg>
   );
 };
+
 
 export default CircleChart;

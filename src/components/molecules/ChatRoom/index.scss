@@ -12,15 +12,15 @@
 
 .chatroom_viewport_wrapper {
   height: 64rem;
-  width: 100%;
   top: 0;
   right: 0;
   background-color: #35373a;
+  overflow: hidden;
 }
 
 .chatroom_viewport {
-  height: 100%;
-  padding: 0 0.5rem 2rem 0.5rem;
+  height: 80%;
+  padding: 0 0.5rem 3rem 0.5rem;
   overflow-y: scroll;
 }
 
@@ -33,7 +33,7 @@
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    margin-left: 17rem;
+    margin-left: 7.5rem;
   }
 
   .left_bubble {
