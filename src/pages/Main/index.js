@@ -6,13 +6,28 @@ import calculateProportions from '../../utils/calculateProportions';
 import calculateTotal from '../../utils/calculateTotal';
 import CircleChart from '../../components/molecules/CircleChart';
 import requestRecommendations from '../../api/requestRecommendations';
+import requestTrendingStocks from '../../api/requestTrendingStocks';
 import Card from '../../components/molecules/Card';
+
 const Main = ({ currentUser, staticPortfolio }) => {
   const [dynamicPortfolio, setDynamicPortfolio] = useState([]);
   const [chartData, setChartData] = useState([]);
   const [total, setTotal] = useState(0);
   const [recommendationCriterion, setRecommendationCriterion] = useState('randomCompanies');
   const [recommendedChartDatas, setRecommendedChartDatas] = useState([]);
+  const [trendingStocks, setTrendingStocks] = useState([]);
+
+  useEffect(() => {
+    const fetchTrendingStocks = async () => {
+      const trendingStocksResponse = await requestTrendingStocks();
+
+      setTrendingStocks(trendingStocksResponse.topTen);
+    };
+
+    const setFetchInterval = setInterval(fetchTrendingStocks, 60 * 1000);
+
+    return () => clearInterval(setFetchInterval);
+  }, []);
 
   useEffect(() => {
     if (!currentUser) {
@@ -29,7 +44,7 @@ const Main = ({ currentUser, staticPortfolio }) => {
       const recommendationsResponse = await requestRecommendations(recommendationCriterion, currentUser, staticPortfolio);
 
       if (recommendationCriterion === 'randomCompanies') {
-        console.log(recommendationsResponse.companies);
+        return;
       } else {
         const recommendedChartDatas = [];
 
@@ -119,10 +134,10 @@ const Main = ({ currentUser, staticPortfolio }) => {
                   <Card>
                     <div className='portfolios_wrapper'></div>
                     <div className='circle_chart_wrapper'>
-                    <CircleChart
-                      data={portfolio.items}
-                      type='pie'
-                    />
+                      <CircleChart
+                        data={portfolio.items}
+                        type='pie'
+                      />
                     </div>
                   </Card>
                 </Link>
