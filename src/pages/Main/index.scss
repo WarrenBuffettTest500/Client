@@ -1,27 +1,14 @@
-.mainPageWrapper {
+.mainpage_wrapper {
   width: 100%;
-  border: 1px solid green;
-  margin: 80px auto;
+  margin-top: 5rem;
 }
 
-.graphDashboardWrapper,
-.recommendedPortfoliosWrapper,
-.companyCardsWrapper {
+.recommended_portfolios_wrapper,
+.company_cards_wrapper {
   margin: 10px auto;
 }
 
-.graphDashboardWrapper {
-  width: 100%;
-  border: 1px solid yellow;
-}
-
-.recommendedPortfoliosWrapper {
+.recommended_portfolios_wrapper {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  border: 1px solid orange;
-  color: white;
-}
-
-.companyCardsWrapper {
-  border: 1px solid red;
+  grid-template-columns: repeat(3, 1fr);
 }

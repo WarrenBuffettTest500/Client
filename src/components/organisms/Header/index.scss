@@ -2,7 +2,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #1D304A;
+  background-color: #142649;
   position: fixed;
   padding: 0;
   width: 100%;
@@ -19,7 +19,7 @@
 .logo {
   position: fixed;
   margin: 0 auto;
-  color: pink;
+  color: $primary;
   left: 0.3rem;
   top: 0.3em;
 
