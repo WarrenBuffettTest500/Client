@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import ListContainer from '../../components/molecules/ListContainer';
-import requestCompanyProfileUpdate from '../../api/requestCompanyProfileUpdate';
 import CandlestickChart from '../../components/molecules/CandlestickChart';
 import dateToObject from '../../utils/dateToObject';
 import Card from '../../components/molecules/Card';
@@ -11,7 +10,7 @@ import {
   setSearchStockDetails,
   setOneWeekStockDetails,
   setOneMonthStockDetails,
-  setInitialState,
+  initializeStockStates,
 } from '../../store/stock';
 import PATHS from '../../constants/paths';
 import requestStockDetails from '../../api/requestStockDetails';
@@ -80,8 +79,10 @@ const StockDetails = () => {
 
         return;
       }
+
       if (result === RESPONSES.FAILURE) {
         history.push(PATHS.FAILURE);
+
         return;
       }
     } catch (error) {
@@ -94,7 +95,7 @@ const StockDetails = () => {
   }, [currentUser, symbol]);
 
   useEffect(() => {
-    dispatch(setInitialState());
+    dispatch(initializeStockStates());
     setCurrentClickedTab('1day');
     setClickedTabList(['1day']);
   }, [symbol]);
@@ -115,11 +116,13 @@ const StockDetails = () => {
         if (result === RESPONSES.FAILURE) {
           alert('리스트를 가져오지 못했습니다');
         }
+
         return;
       }
 
       if (result === RESPONSES.FAILURE) {
         history.push(PATHS.FAILURE);
+
         return;
       }
 

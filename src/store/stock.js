@@ -29,7 +29,7 @@ const stockSlice = createSlice({
     setCompanyProfileList: (state, action) => {
       state.companyProfileList = action.payload;
     },
-    setInitialState: () => initialState,
+    initializeStockStates: () => initialState,
   },
 });
 
@@ -42,5 +42,5 @@ export const {
   setRecommendationSymbolList,
   setRecommendationSymbolInfo,
   setCompanyProfileList,
-  setInitialState,
+  initializeStockStates,
 } = stockSlice.actions;

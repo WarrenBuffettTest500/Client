@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import './index.scss';
 import { Link } from 'react-router-dom';
 import concatRealPrice from '../../utils/concatRealPrice';
@@ -8,19 +9,29 @@ import CircleChart from '../../components/molecules/CircleChart';
 import requestRecommendations from '../../api/requestRecommendations';
 import requestTrendingStocks from '../../api/requestTrendingStocks';
 import Card from '../../components/molecules/Card';
+import { setRecommendationCriterion } from '../../store/user';
 
-const Main = ({ currentUser, staticPortfolio }) => {
+const Main = () => {
+  const dispatch = useDispatch();
+  const {
+    currentUser,
+    staticPortfolio,
+    recommendationCriterion,
+  } = useSelector(state => ({
+    currentUser: state.user.currentUser,
+    staticPortfolio: state.user.staticPortfolio,
+    recommendationCriterion: state.user.recommendationCriterion,
+  }));
   const [dynamicPortfolio, setDynamicPortfolio] = useState([]);
   const [chartData, setChartData] = useState([]);
   const [total, setTotal] = useState(0);
-  const [recommendationCriterion, setRecommendationCriterion] = useState('randomCompanies');
   const [recommendedChartDatas, setRecommendedChartDatas] = useState([]);
   const [trendingStocks, setTrendingStocks] = useState([]);
 
   useEffect(() => {
     const fetchTrendingStocks = async () => {
       const trendingStocksResponse = await requestTrendingStocks();
-
+      console.log(trendingStocksResponse.topTen);
       setTrendingStocks(trendingStocksResponse.topTen);
     };
 
@@ -30,39 +41,28 @@ const Main = ({ currentUser, staticPortfolio }) => {
   }, []);
 
   useEffect(() => {
-    if (!currentUser) {
-      setRecommendationCriterion('randomCompanies');
+    if (!currentUser && recommendationCriterion !== 'random') return;
 
-      return;
-    }
-
-    setRecommendationCriterion('portfolio');
-  }, [currentUser]);
-
-  useEffect(() => {
     const fetchRecommendations = async () => {
-      const recommendationsResponse = await requestRecommendations(recommendationCriterion, currentUser, staticPortfolio);
+      const recommendationsResponse = await requestRecommendations(recommendationCriterion, currentUser);
 
-      if (recommendationCriterion === 'randomCompanies') {
-        return;
-      } else {
-        const recommendedChartDatas = [];
+      const recommendedChartDatas = [];
 
-        const formatPortfolios = () => {
-          recommendationsResponse.portfolios.forEach(portfolio => {
-            const total = calculateTotal(portfolio.items);
+      const formatPortfolios = () => {
+        recommendationsResponse.portfolios.forEach(portfolio => {
+          const total = calculateTotal(portfolio.items);
 
-            recommendedChartDatas.push({
-              owner: portfolio.owner,
-              items: calculateProportions(portfolio.items, total),
-            });
+          recommendedChartDatas.push({
+            owner: portfolio.owner,
+            items: calculateProportions(portfolio.items, total),
           });
-        };
+        });
+      };
 
-        formatPortfolios();
+      formatPortfolios();
 
-        setRecommendedChartDatas(recommendedChartDatas);
-      }
+      setRecommendedChartDatas(recommendedChartDatas);
+
     };
 
     fetchRecommendations();
@@ -70,12 +70,6 @@ const Main = ({ currentUser, staticPortfolio }) => {
 
   useEffect(() => {
     if (!currentUser) return;
-
-    if (!staticPortfolio.length) {
-      setRecommendationCriterion('randomCompanies');
-
-      return;
-    }
 
     const fetchDynamicData = async () => {
       const portfolioWithRealPrice = await concatRealPrice(staticPortfolio);
@@ -102,9 +96,9 @@ const Main = ({ currentUser, staticPortfolio }) => {
 
   const recommendationToggleHandler = () => {
     if (recommendationCriterion === 'portfolio') {
-      setRecommendationCriterion('preference');
+      dispatch(setRecommendationCriterion('preference'));
     } else {
-      setRecommendationCriterion('portfolio');
+      dispatch(setRecommendationCriterion('portfolio'));
     }
   };
 
