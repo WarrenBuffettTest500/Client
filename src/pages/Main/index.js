@@ -5,6 +5,7 @@ import calculateProportions from '../../utils/calculateProportions';
 import calculateTotal from '../../utils/calculateTotal';
 import CircleChart from '../../components/molecules/CircleChart';
 import requestRecommendations from '../../api/requestRecommendations';
+import requestTrendingStocks from '../../api/requestTrendingStocks';
 import Card from '../../components/molecules/Card';
 import Button from '../../components/atoms/Button';
 
@@ -16,6 +17,20 @@ const Main = ({ currentUser, staticPortfolio }) => {
   const [recommendedChartDatas, setRecommendedChartDatas] = useState([]);
   const history = useHistory();
   const cardRefs = useRef({});
+
+  const [trendingStocks, setTrendingStocks] = useState([]);
+
+  useEffect(() => {
+    const fetchTrendingStocks = async () => {
+      const trendingStocksResponse = await requestTrendingStocks();
+
+      setTrendingStocks(trendingStocksResponse.topTen);
+    };
+
+    const setFetchInterval = setInterval(fetchTrendingStocks, 60 * 1000);
+
+    return () => clearInterval(setFetchInterval);
+  }, []);
 
   useEffect(() => {
     if (!currentUser) {
@@ -32,7 +47,7 @@ const Main = ({ currentUser, staticPortfolio }) => {
       const recommendationsResponse = await requestRecommendations(recommendationCriterion, currentUser, staticPortfolio);
 
       if (recommendationCriterion === 'randomCompanies') {
-        console.log(recommendationsResponse.companies);
+        return;
       } else {
         const recommendedChartDatas = [];
 
@@ -123,7 +138,7 @@ const Main = ({ currentUser, staticPortfolio }) => {
                 className='portfolio_button'
                 name='myportfoliio'
                 onClick={e => recommendationToggleHandler(e)}>
-                  MY PORTFOLIO
+                MY PORTFOLIO
               </Button>
             </>
             : '포트폴리오를 등록하세요'
@@ -141,42 +156,40 @@ const Main = ({ currentUser, staticPortfolio }) => {
         }
       </div>
       <div className='recommended_portfolios_wrapper'>
-        {
-          recommendedChartDatas.map((portfolio, i) => {
-            return (
-              <Card
-                key={portfolio.owner}
-                className='portfolio_card'>
-                <div
-                  ref={element => cardRefs.current[i] = element}
-                  className='portfolio_wrapper'>
-                  <div className='portfolio_front'>
-                    <div className='circle_chart_wrapper'>
-                      <CircleChart
-                        data={portfolio.items}
-                        type='pie'
-                      />
-                      <h3>This Is Title Article</h3>
-                    </div>
-                  </div>
-                  <div
-                    className='portfolio_back'
-                  >
-                    <div className='portfolio_back_item'>
-                      <h3 onMouseOver={() => scrollIntoView(i)}>This Is Title Article</h3>
-                      <p>
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-	   			              </p>
-                      <Button
-                        className='portfolio_button'
-                        onClick={e => onPortFolioButtonClick(e, portfolio)}>show</Button>
-                    </div>
+        {recommendedChartDatas.map((portfolio, i) => {
+          return (
+            <Card
+              key={portfolio.owner}
+              className='portfolio_card'>
+              <div
+                ref={element => cardRefs.current[i] = element}
+                className='portfolio_wrapper'>
+                <div className='portfolio_front'>
+                  <div className='circle_chart_wrapper'>
+                    <CircleChart
+                      data={portfolio.items}
+                      type='pie'
+                    />
+                    <h3>This Is Title Article</h3>
                   </div>
                 </div>
-              </Card>
-            );
-          })
-        }
+                <div
+                  className='portfolio_back'
+                >
+                  <div className='portfolio_back_item'>
+                    <h3 onMouseOver={() => scrollIntoView(i)}>This Is Title Article</h3>
+                    <p>
+                      Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+	   			              </p>
+                    <Button
+                      className='portfolio_button'
+                      onClick={e => onPortFolioButtonClick(e, portfolio)}>show</Button>
+                  </div>
+                </div>
+              </div>
+            </Card>
+          );
+        })}
       </div>
     </div>
   );

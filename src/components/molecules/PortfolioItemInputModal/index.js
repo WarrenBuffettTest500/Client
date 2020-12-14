@@ -25,6 +25,12 @@ const PortfolioItemInputModal = ({
       return;
     }
 
+    if (isNaN(avgPrice) || isNaN(quantity)) {
+      alert('평균단가와 보유수량을 숫자로 입력하세요');
+
+      return;
+    }
+
     let hasItemInPortfolio = false;
 
     const portfolioItem = {

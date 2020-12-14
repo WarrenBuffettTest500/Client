@@ -13,7 +13,7 @@ export const createRoom = roomname => {
 };
 
 export const fetchChats = async (setChats, roomname) => {
-  await firebaseDB.ref('chats/').orderByChild('roomname').equalTo(roomname).on('value', resp => {
+  await firebaseDB.ref('chats/').orderByChild('roomname').equalTo(roomname).limitToLast(100).on('value', resp => {
     setChats([]);
     setChats(snapshotToArray(resp));
   });

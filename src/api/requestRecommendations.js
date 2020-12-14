@@ -5,7 +5,8 @@ const requestRecommendations = async (recommendationCriterion, currentUser, stat
   let fetchUrl;
 
   if (recommendationCriterion === 'randomCompanies') {
-    fetchUrl = `${PATHS.HOST}${PATHS.SERVER_PORT}/company_profiles/random`;
+    // fetchUrl = `${PATHS.HOST}${PATHS.SERVER_PORT}/company_profiles/random`;
+    return;
   } else if (recommendationCriterion === 'preference') {
     fetchUrl = `${PATHS.HOST}${PATHS.SERVER_PORT}${PATHS.USERS}/${currentUser.uid}/portfolios/recommendations/preference`;
   } else if (recommendationCriterion === 'portfolio') {

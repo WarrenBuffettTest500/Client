@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import ListContainer from '../../components/molecules/ListContainer';
-import requestCompanyProfileUpdate from '../../api/requestCompanyProfileUpdate';
 import CandlestickChart from '../../components/molecules/CandlestickChart';
 import dateToObject from '../../utils/dateToObject';
 import Card from '../../components/molecules/Card';
@@ -19,6 +18,7 @@ import requestRecommendationSymbolList from '../../api/requestRecommendationSymb
 import RESPONSES from '../../constants/responses';
 import { setRecommendationSymbolList, setRecommendationSymbolInfo } from '../../store/stock';
 import ChatRoom from '../../components/molecules/ChatRoom';
+import requestHitUpdate from '../../api/requestHitUpdate';
 
 const StockDetails = () => {
   const { keyword } = useParams();
@@ -32,8 +32,8 @@ const StockDetails = () => {
     industry,
     website,
     recommendationSymbolList,
-  } = useSelector(state =>
-  ({
+    currentUser,
+  } = useSelector(state => ({
     searchKeyWord: state.stock.searchStockDetails?.meta.symbol,
     searchStockDetails: state.stock.searchStockDetails?.values,
     oneWeekStockDetails: state.stock.oneWeekStockDetails?.values,
@@ -42,6 +42,7 @@ const StockDetails = () => {
     industry: state.stock.recommendationSymbolInfo?.industry,
     website: state.stock.recommendationSymbolInfo?.website,
     recommendationSymbolList: state.stock?.recommendationSymbolList,
+    currentUser: state.user.currentUser,
   }));
 
   const [currentClickedTab, setCurrentClickedTab] = useState('');
@@ -88,6 +89,10 @@ const StockDetails = () => {
   };
 
   useEffect(() => {
+    requestHitUpdate(keyword);
+  }, [currentUser, keyword]);
+
+  useEffect(() => {
     dispatch(setInitialState());
     setCurrentClickedTab('1day');
     setClickedTabList(['1day']);
@@ -117,12 +122,6 @@ const StockDetails = () => {
         return;
       }
 
-    })();
-  }, [keyword]);
-
-  useEffect(() => {
-    (async () => {
-      await requestCompanyProfileUpdate(keyword);
     })();
   }, [keyword]);
 
