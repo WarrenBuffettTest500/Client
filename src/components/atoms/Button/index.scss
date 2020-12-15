@@ -3,7 +3,6 @@
   right: 25px;
 }
 
-
 @mixin transitionButton() {
   color: $primary;
   font-size: 1.2rem;
@@ -68,22 +67,38 @@
 }
 
 .portfolio_toggle_button {
-  @include transitionButton();
-  padding: 1.2rem;
+  position: absolute;
+  width: 16%;
+  bottom: 0;
+  right: 10%;
+  background-color: rgb(255, 204, 0);
+  color: $theme_color;
+  border-radius: 1rem 1rem 0 0;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.my_portfolio_button {
+  color: $primary;
+
+  &:hover {
+    background-color: $theme_color;
+    color: $primary;
+  }
 }
 
 .portfolio_button {
   color:#fff;
   text-decoration:none;
   display:inline-block;
-  margin-top:20px;
-  width:120px;
-  height:45px;
+  margin-top: 20px;
+  width: 120px;
+  height: 45px;
   background-color: $primary;
   color:#222;
-  line-height:45px;
-  box-shadow:0px 0px 10px rgba(0,0,0,.5);
-  transition:.5s;
+  line-height: 45px;
+  box-shadow: 0px 0px 10px rgba(0,0,0,.5);
+  transition: .5s;
   font-weight:bold;
 
   &:hover {

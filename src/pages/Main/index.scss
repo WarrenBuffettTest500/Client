@@ -8,17 +8,24 @@
   width: 100%;
   margin: 0 auto;
   justify-content: center;
+  background-color: #0d1a35;
 }
 
 .toggle_button_wrapper {
-  padding: 0 3.9rem;
-  display: flex;
-  justify-content: flex-end;
+  width: 100%;
+  position: relative;
 }
 
 .recommended_portfolios_wrapper {
-  padding: 0 auto;
+  margin: 0 8rem;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   justify-items: center;
+  background-color: #142649;
+}
+
+.recommended_portfolios_title {
+  margin: 2rem 8rem;
+  text-align: left;
+  font-size: 3rem;
 }
