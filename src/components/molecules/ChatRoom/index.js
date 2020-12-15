@@ -22,7 +22,7 @@ const ChatRoom = () => {
     nickname: '',
     message: '',
     date: '',
-    type: ''
+    type: '',
   });
 
   const scrollToBottom = () => {

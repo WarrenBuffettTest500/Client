@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import './index.scss';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import concatRealPrice from '../../utils/concatRealPrice';
 import calculateProportions from '../../utils/calculateProportions';
 import calculateTotal from '../../utils/calculateTotal';
@@ -9,7 +9,10 @@ import CircleChart from '../../components/molecules/CircleChart';
 import requestRecommendations from '../../api/requestRecommendations';
 import requestTrendingStocks from '../../api/requestTrendingStocks';
 import Card from '../../components/molecules/Card';
+import Button from '../../components/atoms/Button';
 import { setRecommendationCriterion } from '../../store/user';
+import TrendingList from '../../components/molecules/TrendingList';
+import formatPortfoliosToChartData from '../../utils/formatPortfoliosToChartData';
 
 const Main = () => {
   const dispatch = useDispatch();
@@ -25,17 +28,38 @@ const Main = () => {
   const [dynamicPortfolio, setDynamicPortfolio] = useState([]);
   const [chartData, setChartData] = useState([]);
   const [total, setTotal] = useState(0);
-  const [recommendedChartDatas, setRecommendedChartDatas] = useState([]);
   const [trendingStocks, setTrendingStocks] = useState([]);
+  const [recommendedChartDatas, setRecommendedChartDatas] = useState([]);
+  const [isLoadingRecommendations, setIsLoadingRecommendations] = useState(true);
+  const [hasMoreRecommendations, setHasMoreRecommendations] = useState(true);
+  const [offset, setOffset] = useState(0);
+  const history = useHistory();
+  const cardRefs = useRef({});
+  const observer = useRef();
+  const lastRecommendationRef = useCallback(recommendation => {
+    if (isLoadingRecommendations || !hasMoreRecommendations) return;
+    if (observer.current) observer.current.disconnect();
+    if (recommendationCriterion === 'random') return;
+
+    observer.current = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting) {
+        setOffset(previous => previous + 12);
+      }
+    });
+
+    if (recommendation) observer.current.observe(recommendation);
+  });
 
   useEffect(() => {
     const fetchTrendingStocks = async () => {
       const trendingStocksResponse = await requestTrendingStocks();
-      console.log(trendingStocksResponse.topTen);
+
       setTrendingStocks(trendingStocksResponse.topTen);
     };
 
-    const setFetchInterval = setInterval(fetchTrendingStocks, 60 * 1000);
+    fetchTrendingStocks();
+
+    const setFetchInterval = setInterval(fetchTrendingStocks, 3 * 60 * 1000);
 
     return () => clearInterval(setFetchInterval);
   }, []);
@@ -43,30 +67,36 @@ const Main = () => {
   useEffect(() => {
     if (!currentUser && recommendationCriterion !== 'random') return;
 
+    setIsLoadingRecommendations(true);
+
     const fetchRecommendations = async () => {
-      const recommendationsResponse = await requestRecommendations(recommendationCriterion, currentUser);
+      const { portfolios, hasMore } = await requestRecommendations(recommendationCriterion, currentUser, offset);
 
-      const recommendedChartDatas = [];
-
-      const formatPortfolios = () => {
-        recommendationsResponse.portfolios.forEach(portfolio => {
-          const total = calculateTotal(portfolio.items);
-
-          recommendedChartDatas.push({
-            owner: portfolio.owner,
-            items: calculateProportions(portfolio.items, total),
-          });
-        });
-      };
-
-      formatPortfolios();
-
-      setRecommendedChartDatas(recommendedChartDatas);
-
+      setRecommendedChartDatas(formatPortfoliosToChartData(portfolios));
+      setIsLoadingRecommendations(false);
+      if (hasMore === false) setHasMoreRecommendations(false);
     };
 
     fetchRecommendations();
   }, [currentUser, recommendationCriterion, staticPortfolio]);
+
+  useEffect(() => {
+    if (!offset || !hasMoreRecommendations || isLoadingRecommendations) return;
+
+    setIsLoadingRecommendations(true);
+
+    const concatRecommendations = async () => {
+      const { portfolios, hasMore } = await requestRecommendations(recommendationCriterion, currentUser, offset);
+
+      setRecommendedChartDatas(previous => {
+        return [...previous, ...formatPortfoliosToChartData(portfolios)];
+      });
+      setIsLoadingRecommendations(false);
+      if (hasMore === false) setHasMoreRecommendations(false);
+    };
+
+    concatRecommendations();
+  }, [offset]);
 
   useEffect(() => {
     if (!currentUser) return;
@@ -100,47 +130,145 @@ const Main = () => {
     } else {
       dispatch(setRecommendationCriterion('portfolio'));
     }
+
+    setOffset(0);
+    setHasMoreRecommendations(true);
+  };
+
+  const portfolioClickHandler = (event, portfolio) => {
+    const { className } = event.target;
+
+    if (className === 'portfolio_button') {
+      history.push(`/users/${currentUser?.uid}/portfolios/${portfolio.owner}`);
+
+      return;
+    }
+
+    history.push(`/users/${currentUser?.uid}/portfolios/${currentUser?.uid}`);
+  };
+
+  const scrollIntoView = i => {
+    cardRefs.current[i - 3]?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
-    <>
-      <div className='mainpage_wrapper'>
-        <div>
-          {
-            (currentUser && staticPortfolio.length)
-              ? <Link to={`/users/${currentUser?.uid}/portfolios/${currentUser?.uid}`}>
-                <CircleChart data={chartData} type='donut' />
-              </Link>
-              : '포트폴리오를 등록하세요'
-          }
-        </div>
-        <div>
-          {
-            (recommendationCriterion === 'portfolio' || recommendationCriterion === 'preference')
-            && <button onClick={recommendationToggleHandler}>토글</button>
-          }
-        </div>
-        <div className='recommended_portfolios_wrapper'>
-          {
-            recommendedChartDatas.map(portfolio => {
+    <div className='mainpage_wrapper'>
+      <div className='my_portfolio_card_wrapper'>
+        {currentUser
+          ?
+          <Card className='my_portfolio_card'>
+            {staticPortfolio.length
+              ? <>
+                <div className='circle_chart_wrapper mychart'>
+                  <CircleChart data={chartData} type='donut' />
+                </div>
+                <Button
+                  className='my_portfolio_button'
+                  onClick={event => portfolioClickHandler(event)}
+                >
+                  <p>SHOW YOUR PORTFOLIO</p>
+                </Button>
+              </>
+              :
+              <>
+                <p>go to my portfolio</p>
+                <div
+                  onClick={event => portfolioClickHandler(event)}
+                  className='card_message'
+                >
+                  포트폴리오를 등록해주세요👀
+                </div>
+              </>
+            }
+          </Card>
+          :
+          <Card className='my_portfolio_card'>
+            <p>go to my portfolio</p>
+            <div className='card_message'>로그인후이용가능합니다</div>
+          </Card>}
+      </div>
+      <div className='recommended_portfolios_title'><p>Recommendation Portfolios</p></div>
+      <div className='toggle_button_wrapper'>
+        {(recommendationCriterion === 'portfolio' || recommendationCriterion === 'preference') &&
+          <Button
+            className='portfolio_toggle_button'
+            onClick={recommendationToggleHandler}>
+            {recommendationCriterion === 'portfolio' ? '투자 성향 기준으로 보기' : '보유 주식 기준으로 보기'}
+          </Button>
+        }
+      </div>
+      <div className='recommended_portfolios_wrapper'>
+        {
+          recommendedChartDatas.map((portfolio, index) => {
+            if (index >= recommendedChartDatas.length - 3) {
               return (
-                <Link to={`/users/${currentUser?.uid}/portfolios/${portfolio.owner}`} key={portfolio.owner}>
+                <div ref={lastRecommendationRef} className='portfolio_card'>
                   <Card>
-                    <div className='portfolios_wrapper'></div>
-                    <div className='circle_chart_wrapper'>
-                      <CircleChart
-                        data={portfolio.items}
-                        type='pie'
-                      />
+                    <div
+                      ref={element => cardRefs.current[index] = element}
+                      className='portfolio_wrapper'
+                    >
+                      <div className='portfolio_front'>
+                        <div className='circle_chart_wrapper'>
+                          <CircleChart
+                            data={portfolio.items}
+                            type='pie'
+                          />
+                          <h3>This Is Title Article</h3>
+                        </div>
+                      </div>
+                      <div className='portfolio_back'>
+                        <div className='portfolio_back_item'>
+                          <h3 onMouseOver={() => scrollIntoView(index)}>This Is Title Article</h3>
+                          <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                          <Button
+                            className='portfolio_button'
+                            onClick={event => portfolioClickHandler(event, portfolio)}
+                          >
+                            show
+                        </Button>
+                        </div>
+                      </div>
                     </div>
                   </Card>
-                </Link>
+                </div>
               );
-            })
-          }
-        </div>
+            } else {
+              return (
+                <Card className='portfolio_card'>
+                  <div
+                    ref={element => cardRefs.current[index] = element}
+                    className='portfolio_wrapper'
+                  >
+                    <div className='portfolio_front'>
+                      <div className='circle_chart_wrapper'>
+                        <CircleChart
+                          data={portfolio.items}
+                          type='pie'
+                        />
+                        <h3>This Is Title Article</h3>
+                      </div>
+                    </div>
+                    <div className='portfolio_back'>
+                      <div className='portfolio_back_item'>
+                        <h3 onMouseOver={() => scrollIntoView(index)}>This Is Title Article</h3>
+                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                        <Button
+                          className='portfolio_button'
+                          onClick={event => portfolioClickHandler(event, portfolio)}
+                        >
+                          show
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+              );
+            }
+          })
+        }
       </div>
-    </>
+    </div>
   );
 };
 

@@ -21,7 +21,7 @@ import ChatRoom from '../../components/molecules/ChatRoom';
 import requestHitUpdate from '../../api/requestHitUpdate';
 
 const StockDetails = () => {
-  const { keyword: symbol } = useParams();
+  const { keyword } = useParams();
   const dispatch = useDispatch();
   const {
     searchKeyWord,
@@ -91,22 +91,22 @@ const StockDetails = () => {
   };
 
   useEffect(() => {
-    requestHitUpdate(symbol);
-  }, [currentUser, symbol]);
+    requestHitUpdate(keyword);
+  }, [currentUser, keyword]);
 
   useEffect(() => {
     dispatch(initializeStockStates());
     setCurrentClickedTab('1day');
     setClickedTabList(['1day']);
-  }, [symbol]);
+  }, [keyword]);
 
   useEffect(() => {
     (async () => {
-      const { result, stockDetails } = await requestStockDetails(symbol);
+      const { result, stockDetails } = await requestStockDetails(keyword);
 
       if (result === RESPONSES.OK) {
         dispatch(setSearchStockDetails(stockDetails));
-        const { result, recommendationSymbolList, recommendationSymbolInfo } = await requestRecommendationSymbolList(symbol);
+        const { result, recommendationSymbolList, recommendationSymbolInfo } = await requestRecommendationSymbolList(keyword);
 
         if (result === RESPONSES.OK) {
           dispatch(setRecommendationSymbolList(recommendationSymbolList));
@@ -127,7 +127,7 @@ const StockDetails = () => {
       }
 
     })();
-  }, [symbol]);
+  }, [keyword]);
 
   return (
     <>
@@ -138,7 +138,7 @@ const StockDetails = () => {
               <>
                 <div className='stock_item dashbord'>
                   <Card
-                    key={symbol}
+                    key={keyword}
                     className='dashbord_card'>
                     <div className='dashbord_card_left'>
                       <div className='dashbord_card_info'>📂{sector}</div>
@@ -146,7 +146,7 @@ const StockDetails = () => {
                       <a className='dashbord_card_info' href={website}>🌐{website}</a>
                     </div>
                     <div className='dashbord_card_right'>
-                      <div className='dashbord_card_name'>{symbol}</div>
+                      <div className='dashbord_card_name'>{keyword}</div>
                       <div className='dashbord_card_price'>{`$${searchStockDetails[0].close}`}</div>
                     </div>
                   </Card>
@@ -160,8 +160,8 @@ const StockDetails = () => {
               </>
             }
           </div>
-          <div className='card_description_wrapper'>
-            <div className='card_description'>비슷한 유형의 종목</div>
+          <div className='card_list_title'>
+            <p>Similar Company Stock</p>
           </div>
           <div className='stock_item card_list'>
             {recommendationSymbolList && <ListContainer className='company_card_list container' />}

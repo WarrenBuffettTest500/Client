@@ -59,10 +59,12 @@ const ListContainer = ({
 
   const scrollIntoView = () => {
     if (!card.current) return;
+
     card.current.scrollIntoView({ behavior: 'smooth' });
   };
 
   useEffect(scrollIntoView, [target]);
+
   return (
     <div ref={viewport} className={className}>
       {companyProfileList && companyProfileList.map(item =>

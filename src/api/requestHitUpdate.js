@@ -1,9 +1,9 @@
 import METHODS from '../constants/methods';
 import PATHS from '../constants/paths';
 
-const requestHitUpdate = async symbol => {
-  const res = await fetch(
-    `${PATHS.HOST}${PATHS.SERVER_PORT}/hits/${symbol}`,
+const requestHitUpdate = async keyword => {
+  const response = await fetch(
+    `${PATHS.HOST}${PATHS.SERVER_PORT}/hits/${keyword}`,
     {
       method: METHODS.POST,
       credentials: 'include',
@@ -13,8 +13,7 @@ const requestHitUpdate = async symbol => {
     },
   );
 
-  const response = await res.json();
-  console.log(response);
+  return await response.json();
 };
 
 export default requestHitUpdate;

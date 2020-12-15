@@ -10,12 +10,7 @@
 
 .stock_details_left {
   display: grid;
-  grid-template-rows: 8fr 0.5fr 2fr;
-}
-
-.stock_details_left {
-  display: grid;
-  grid-template-rows: 8fr 3fr 2fr;
+  grid-template-rows: 4fr 0.5fr 0.5fr;
 }
 
 .stock_item.card_list {
@@ -25,16 +20,15 @@
   justify-content: flex-end;
 }
 
-.card_description_wrapper {
+.card_list_title {
   width: 95%;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-}
-
-.card_description {
-  line-height: 1.5rem;
-  font-size: 1.5rem;
+  text-align: right;
+  line-height: 0.3rem;
+  font-size: 3rem;
+  height: 2rem;
+  p {
+    padding: 0;
+  }
 }
 
 .stock_item {

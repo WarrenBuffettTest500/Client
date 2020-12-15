@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import Header from '../../components/organisms/Header';
 import {
   setCurrentUser,
-  removeCurrentUser,
   setPreferenceInfo,
   setStaticPortfolio,
   setRecommendationCriterion,
@@ -69,9 +68,9 @@ const App = ({
   }, []);
 
   useEffect(() => {
-    if (!currentUser && getCookie('buffetTest500')) return;
+    if (!currentUser && getCookie('buffettTest500')) return;
 
-    setCookie('buffetTest500', currentUser?.uid || uuid(), 7);
+    setCookie('buffettTest500', currentUser?.uid || uuid(), 7);
   }, [currentUser]);
 
   useEffect(() => {
