@@ -13,6 +13,7 @@ import Button from '../../components/atoms/Button';
 import { setRecommendationCriterion } from '../../store/user';
 import TrendingList from '../../components/molecules/TrendingList';
 import formatPortfoliosToChartData from '../../utils/formatPortfoliosToChartData';
+import NUMBERS from '../../constants/numbers';
 
 const Main = () => {
   const dispatch = useDispatch();
@@ -32,7 +33,7 @@ const Main = () => {
   const [recommendedChartDatas, setRecommendedChartDatas] = useState([]);
   const [isLoadingRecommendations, setIsLoadingRecommendations] = useState(true);
   const [hasMoreRecommendations, setHasMoreRecommendations] = useState(true);
-  const [offset, setOffset] = useState(0);
+  const [page, setPage] = useState(0);
   const history = useHistory();
   const cardRefs = useRef({});
   const observer = useRef();
@@ -43,7 +44,7 @@ const Main = () => {
 
     observer.current = new IntersectionObserver(entries => {
       if (entries[0].isIntersecting) {
-        setOffset(previous => previous + 12);
+        setPage(previous => previous + NUMBERS.ONE);
       }
     });
 
@@ -59,7 +60,7 @@ const Main = () => {
 
     fetchTrendingStocks();
 
-    const setFetchInterval = setInterval(fetchTrendingStocks, 3 * 60 * 1000);
+    const setFetchInterval = setInterval(fetchTrendingStocks, NUMBERS.ONE_MINUTE);
 
     return () => clearInterval(setFetchInterval);
   }, []);
@@ -70,7 +71,7 @@ const Main = () => {
     setIsLoadingRecommendations(true);
 
     const fetchRecommendations = async () => {
-      const { portfolios, hasMore } = await requestRecommendations(recommendationCriterion, currentUser, offset);
+      const { portfolios, hasMore } = await requestRecommendations(recommendationCriterion, currentUser, page);
 
       setRecommendedChartDatas(formatPortfoliosToChartData(portfolios));
       setIsLoadingRecommendations(false);
@@ -81,12 +82,12 @@ const Main = () => {
   }, [currentUser, recommendationCriterion, staticPortfolio]);
 
   useEffect(() => {
-    if (!offset || !hasMoreRecommendations || isLoadingRecommendations) return;
+    if (!page || !hasMoreRecommendations || isLoadingRecommendations) return;
 
     setIsLoadingRecommendations(true);
 
     const concatRecommendations = async () => {
-      const { portfolios, hasMore } = await requestRecommendations(recommendationCriterion, currentUser, offset);
+      const { portfolios, hasMore } = await requestRecommendations(recommendationCriterion, currentUser, page);
 
       setRecommendedChartDatas(previous => {
         return [...previous, ...formatPortfoliosToChartData(portfolios)];
@@ -96,7 +97,7 @@ const Main = () => {
     };
 
     concatRecommendations();
-  }, [offset]);
+  }, [page]);
 
   useEffect(() => {
     if (!currentUser) return;
@@ -131,7 +132,7 @@ const Main = () => {
       dispatch(setRecommendationCriterion('portfolio'));
     }
 
-    setOffset(0);
+    setPage(0);
     setHasMoreRecommendations(true);
   };
 
@@ -153,39 +154,39 @@ const Main = () => {
 
   return (
     <div className='mainpage_wrapper'>
-      <div className='my_portfolio_card_wrapper'>
-        {currentUser
-          ?
-          <Card className='my_portfolio_card'>
-            {staticPortfolio.length
-              ? <>
-                <div className='circle_chart_wrapper mychart'>
-                  <CircleChart data={chartData} type='donut' />
-                </div>
-                <Button
-                  className='my_portfolio_button'
-                  onClick={event => portfolioClickHandler(event)}
-                >
-                  <p>SHOW YOUR PORTFOLIO</p>
-                </Button>
-              </>
-              :
-              <>
-                <p>go to my portfolio</p>
-                <div
-                  onClick={event => portfolioClickHandler(event)}
-                  className='card_message'
-                >
-                  포트폴리오를 등록해주세요👀
-                </div>
-              </>
-            }
-          </Card>
-          :
-          <Card className='my_portfolio_card'>
-            <p>go to my portfolio</p>
-            <div className='card_message'>로그인후이용가능합니다</div>
-          </Card>}
+      <div className='main_page_dashboard_wrapper'>
+        {
+          currentUser
+            ? <Card className='my_portfolio_card'>
+              {staticPortfolio.length
+                ? <>
+                  <div className='circle_chart_wrapper mychart'>
+                    <CircleChart data={chartData} type='donut' />
+                  </div>
+                  <Button
+                    className='my_portfolio_button'
+                    onClick={event => portfolioClickHandler(event)}
+                  >
+                    <p>SHOW YOUR PORTFOLIO</p>
+                  </Button>
+                </>
+                : <>
+                  <p>go to my portfolio</p>
+                  <div
+                    onClick={event => portfolioClickHandler(event)}
+                    className='card_message'
+                  >
+                    포트폴리오를 등록해주세요👀
+                  </div>
+                </>
+              }
+            </Card>
+            : <Card className='my_portfolio_card'>
+              <p>go to my portfolio</p>
+              <div className='card_message'>로그인하고 포트폴리오를 관리하세요</div>
+            </Card>
+        }
+        <TrendingList symbols={trendingStocks} />
       </div>
       <div className='recommended_portfolios_title'><p>Recommendation Portfolios</p></div>
       <div className='toggle_button_wrapper'>
@@ -202,7 +203,7 @@ const Main = () => {
           recommendedChartDatas.map((portfolio, index) => {
             if (index >= recommendedChartDatas.length - 3) {
               return (
-                <div ref={lastRecommendationRef} className='portfolio_card'>
+                <div key={portfolio.owner} ref={lastRecommendationRef} className='portfolio_card'>
                   <Card>
                     <div
                       ref={element => cardRefs.current[index] = element}
@@ -235,7 +236,7 @@ const Main = () => {
               );
             } else {
               return (
-                <Card className='portfolio_card'>
+                <Card key={portfolio.owner} className='portfolio_card'>
                   <div
                     ref={element => cardRefs.current[index] = element}
                     className='portfolio_wrapper'

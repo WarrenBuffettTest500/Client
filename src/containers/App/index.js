@@ -58,7 +58,7 @@ const App = ({
       const { user } = await requestUser();
       let preferenceInfoResponse;
 
-      if (user.preferenceInfoId) {
+      if (user?.preferenceInfoId) {
         preferenceInfoResponse = await requestPreferenceInfo(user);
       }
       onInitialStatesFetched(user, preferenceInfoResponse?.preferenceInfo);

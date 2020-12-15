@@ -7,7 +7,7 @@ const List = ({
   childrenWrapperClassName,
 }) => {
   return (
-    <>
+    <div>
       {
         title
         && <div className={titleWrapperClassName}>
@@ -17,7 +17,7 @@ const List = ({
       <div className={childrenWrapperClassName}>
         {children}
       </div>
-    </>
+    </div>
   );
 };
 
