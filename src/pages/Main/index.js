@@ -112,13 +112,13 @@ const Main = ({ currentUser, staticPortfolio }) => {
   };
 
   const onPortFolioButtonClick = (e, portfolio) => {
-    const { name } = e.target;
+    const { className } = e.target;
 
-    if (name === 'myportfoliio') {
-      history.push(`/users/${currentUser?.uid}/portfolios/${currentUser?.uid}`);
+    if (className === 'portfolio_button') {
+      history.push(`/users/${currentUser?.uid}/portfolios/${portfolio.owner}`);
       return;
     }
-    history.push(`/users/${currentUser?.uid}/portfolios/${portfolio.owner}`);
+    history.push(`/users/${currentUser?.uid}/portfolios/${currentUser?.uid}`);
   };
 
   const scrollIntoView = i => {
@@ -128,42 +128,59 @@ const Main = ({ currentUser, staticPortfolio }) => {
   return (
     <div className='mainpage_wrapper'>
       <div className='myportfolio_card_wrapper'>
-        <Card className='portfolio_card'>
-          {currentUser && staticPortfolio.length ?
-            <>
-              <div className='circle_chart_wrapper mychart'>
-                <CircleChart data={chartData} type='donut' />
-              </div>
-              <Button
-                className='portfolio_button'
-                name='myportfoliio'
-                onClick={e => recommendationToggleHandler(e)}>
-                MY PORTFOLIO
-              </Button>
-            </>
-            : '포트폴리오를 등록하세요'
-          }
-        </Card>
+        {currentUser
+          ?
+          <Card className='myportfolio_card'>
+            {staticPortfolio.length
+              ? <>
+                <div className='circle_chart_wrapper mychart'>
+                  <CircleChart data={chartData} type='donut' />
+                </div>
+                <Button
+                  className='my_portfolio_button'
+                  onClick={e => onPortFolioButtonClick(e)}
+                >
+                  <p>SHOW YOUR PORTFOLIO</p>
+                 </Button>
+                </>
+              :
+              <>
+                <p>go to my portfolio</p>
+                <div
+                  onClick={e => onPortFolioButtonClick(e)}
+                  className='card_message'
+                >
+                  포트폴리오를 등록해주세요👀
+                </div>
+              </>
+            }
+          </Card>
+          :
+          <Card className='myportfolio_card'>
+            <p>go to my portfolio</p>
+            <div className='card_message'>로그인후이용가능합니다</div>
+          </Card>}
       </div>
+      <div className='recommended_portfolios_title'><p>Recommendation Portfolios</p></div>
       <div className='toggle_button_wrapper'>
-        {
-          (recommendationCriterion === 'portfolio' || recommendationCriterion === 'preference') &&
+        {(recommendationCriterion === 'portfolio' || recommendationCriterion === 'preference') &&
           <Button
             className='portfolio_toggle_button'
             onClick={recommendationToggleHandler}>
             {recommendationCriterion === 'portfolio' ? '투자 성향 기준으로 보기' : '보유 주식 기준으로 보기'}
-          </Button>
-        }
+          </Button>}
       </div>
       <div className='recommended_portfolios_wrapper'>
         {recommendedChartDatas.map((portfolio, i) => {
           return (
             <Card
               key={portfolio.owner}
-              className='portfolio_card'>
+              className='portfolio_card'
+            >
               <div
                 ref={element => cardRefs.current[i] = element}
-                className='portfolio_wrapper'>
+                className='portfolio_wrapper'
+              >
                 <div className='portfolio_front'>
                   <div className='circle_chart_wrapper'>
                     <CircleChart
@@ -173,17 +190,16 @@ const Main = ({ currentUser, staticPortfolio }) => {
                     <h3>This Is Title Article</h3>
                   </div>
                 </div>
-                <div
-                  className='portfolio_back'
-                >
+                <div className='portfolio_back'>
                   <div className='portfolio_back_item'>
                     <h3 onMouseOver={() => scrollIntoView(i)}>This Is Title Article</h3>
-                    <p>
-                      Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-	   			              </p>
+                    <p> Lorem Ipsum is simply dummy text of the printing and typesetting industry. </p>
                     <Button
                       className='portfolio_button'
-                      onClick={e => onPortFolioButtonClick(e, portfolio)}>show</Button>
+                      onClick={e => onPortFolioButtonClick(e, portfolio)}
+                    >
+                      show
+                    </Button>
                   </div>
                 </div>
               </div>

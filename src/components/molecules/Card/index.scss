@@ -91,38 +91,86 @@
 }
 
 .portfolio_card {
-  position:relative;
-	width: 33rem;
+  position: relative;
+	width: 90%;
 	min-height:350px;
-	transform-style:preserve-3d;
+	transform-style: preserve-3d;
 	perspective:800px;
 	transition:1s;
   margin:1.2rem;
 }
 
+.myportfolio_card {
+  display: flex;
+  align-items: center;
+  width: 38rem;
+  height: 20rem;
+  margin: 1.2rem;
+  background-color: $theme_color;
+  position: relative;
+  border-radius: 0.3rem;
+  box-shadow:0 0 10px 2px rgba(0,0,0,.3);
+
+  p {
+    font-size: 3rem;
+    margin: 0 auto;
+  }
+  p::after {
+    content: '';
+    border-bottom: #dadce0 1px solid;
+    position: absolute;
+    width: 11rem;
+    right: 2px;
+  }
+
+  &:hover .card_message {
+    opacity: 0.8;
+  }
+  &:hover p {
+    opacity: 0.2;
+  }
+}
+
+.card_message {
+  position: absolute;
+  text-align: center;
+  line-height: 20rem;
+  background-color: black;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  color: $primary;
+  margin: 0 auto;
+  transition: all 2s linear;
+  cursor: pointer;
+}
+
 .portfolio_wrapper {
-  position:absolute;
-	top:0px;
-	left:0px;
-	width:100%;
-	height: 100%;
-	transition:1s;
-	transform-style:preserve-3d;
-	box-shadow:0px 0px 10px 2px rgba(0,0,0,.3);
+  position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+  height: 100%;
+  margin: 0 auto;
+	transition: 1s;
+	transform-style: preserve-3d;
+	box-shadow: 0 0 0.6rem 0.2rem rgba(0,0,0,.3);
 }
 
 .circle_chart_wrapper {
   display: flex;
+  margin: 0.3rem auto;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  background-color: $primary;
-  border-radius: 0.6rem;
+  width: 70%;
+  border-radius: 0.3rem;
 
   &.mychart {
-    background-color: $gray;
+    width: 60%;
+    margin: 0;
   }
 
   h3 {
@@ -132,13 +180,15 @@
 
 .portfolio_back,
 .portfolio_front {
-  position:absolute;
-	top:0px;
-	left:0px;
-	width:100%;
-	height:100%;
-	cursor:pointer;
-	transition:.5s;
+  position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+  height: 100%;
+  border-radius: 0.3rem;
+	cursor: pointer;
+  transition: 0.5s;
+  background-color: lavender;
 	backface-visibility:hidden;
 }
 
