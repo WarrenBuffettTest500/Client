@@ -5,6 +5,7 @@ import Button from '../../atoms/Button';
 import requestPortfolioItemCreate from '../../../api/requestPortfolioItemCreate';
 import requestPortfolioItemUpdate from '../../../api/requestPortfolioItemUpdate';
 import requestPortfolio from '../../../api/requestPortfolio';
+import { useToasts } from 'react-toast-notifications';
 
 const PortfolioItemInputModal = ({
   currentUser,
@@ -16,19 +17,26 @@ const PortfolioItemInputModal = ({
   submitType,
   setSubmitType,
 }) => {
+  const { addToast } = useToasts();
   const [symbol, setSymbol] = useState(portfolioItemToEdit?.symbol || '');
   const [avgPrice, setAvgPrice] = useState(portfolioItemToEdit?.avgPrice || '');
   const [quantity, setQuantity] = useState(portfolioItemToEdit?.quantity || '');
 
   const portfolioItemSumbitHandler = async () => {
     if (!symbol || !avgPrice || !quantity) {
-      alert('입력칸을 모두 채워주세요');
+      addToast('정보를 모두 입력해 주세요', {
+        appearance: 'warning',
+        autoDismiss: true,
+      });
 
       return;
     }
 
     if (isNaN(avgPrice) || isNaN(quantity)) {
-      alert('평균단가와 보유수량을 숫자로 입력하세요');
+      addToast('평균단가와 보유수량은 모두 숫자로 입력해야 합니다', {
+        appearance: 'warning',
+        autoDismiss: true,
+      });
 
       return;
     }
@@ -45,7 +53,10 @@ const PortfolioItemInputModal = ({
       submitType === 'new'
       && staticPortfolio.find(item => item.symbol === portfolioItem.symbol)
     ) {
-      alert(`이미 등록한 정보가 있어요. ${symbol}을 찾아서 수정하세요.`);
+      addToast(`이미 등록한 정보가 있어요. ${symbol}을 찾아서 수정하세요.`, {
+        appearance: 'warning',
+        autoDismiss: true,
+      });
 
       return;
     }
@@ -56,12 +67,13 @@ const PortfolioItemInputModal = ({
         : await requestPortfolioItemCreate(currentUser.uid, portfolioItem);
 
     if (response.result !== 'ok') {
-      alert('실패');
+      addToast('등록하다가 문제가 생겼어요', {
+        appearance: 'error',
+        autoDismiss: true,
+      });
 
       return;
     }
-
-    alert('성공');
 
     const fetchStaticPortfolio = async () => {
       const staticPortfolioResponse = await requestPortfolio(currentUser.uid);

@@ -17,7 +17,7 @@
   width: 20px;
   margin: 2px;
   display: inline-block;
-  animation: v-bar-grow 0.8s infinite linear;
+  animation: v-bar-grow .8s infinite linear;
 }
 
 .v-bar.first {
@@ -37,7 +37,7 @@
   left: 50px;
 }
 
-.wrapper {
+.loading_indicator_wrapper {
   width: 100%;
   height: 100%;
   display: flex;

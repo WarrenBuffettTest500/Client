@@ -20,8 +20,10 @@ import RESPONSES from '../../constants/responses';
 import { setRecommendationSymbolList, setRecommendationSymbolInfo } from '../../store/stock';
 import ChatRoom from '../../components/molecules/ChatRoom';
 import requestHitUpdate from '../../api/requestHitUpdate';
+import { useToasts } from 'react-toast-notifications';
 
 const StockDetails = () => {
+  const { addToast } = useToasts();
   const { keyword: symbol } = useParams();
   const dispatch = useDispatch();
   const {
@@ -98,29 +100,24 @@ const StockDetails = () => {
 
   useEffect(() => {
     (async () => {
-      const { result, stockDetails } = await requestStockDetails(symbol);
+      const { message: stockDetailsMessage, stockDetails } = await requestStockDetails(symbol);
 
-      if (result === RESPONSES.OK) {
-        dispatch(setSearchStockDetails(stockDetails));
-        const { result, recommendationSymbolList, recommendationSymbolInfo } = await requestRecommendationSymbolList(symbol);
-
-        if (result === RESPONSES.OK) {
-          dispatch(setRecommendationSymbolList(recommendationSymbolList));
-        }
-
-        if (result === RESPONSES.FAILURE) {
-          alert('리스트를 가져오지 못했습니다');
-        }
-        dispatch(setRecommendationSymbolInfo(recommendationSymbolInfo));
-        setDashboardData({ ...recommendationSymbolInfo, symbol, price: stockDetails.values[0].close });
-        return;
-      }
-
-      if (result === RESPONSES.FAILURE) {
-        history.push(PATHS.FAILURE);
+      if (stockDetailsMessage === 'not found') {
+        addToast('기업 정보를 찾지 못했습니다', {
+          appearance: 'error',
+          autoDismiss: true,
+        });
 
         return;
       }
+
+      dispatch(setSearchStockDetails(stockDetails));
+
+      const { recommendationSymbolList, recommendationSymbolInfo } = await requestRecommendationSymbolList(symbol);
+
+      dispatch(setRecommendationSymbolList(recommendationSymbolList));
+      dispatch(setRecommendationSymbolInfo(recommendationSymbolInfo));
+      setDashboardData({ ...recommendationSymbolInfo, symbol, price: stockDetails.values[0].close });
     })();
   }, [symbol]);
 
@@ -144,7 +141,7 @@ const StockDetails = () => {
             }
           </div>
           <div className='card_list_title'>
-            <p>성격이 비슷한 기업들을 알려드려요</p>
+            <p>성격이 비슷한 기업들을 알려드릴게요</p>
           </div>
           <div className='stock_item card_list'>
             {recommendationSymbolList && <ListContainer className='company_card_list container' />}

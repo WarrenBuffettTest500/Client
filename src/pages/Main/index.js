@@ -14,6 +14,7 @@ import { setRecommendationCriterion } from '../../store/user';
 import TrendingList from '../../components/molecules/TrendingList';
 import formatPortfoliosToChartData from '../../utils/formatPortfoliosToChartData';
 import NUMBERS from '../../constants/numbers';
+import LoadingIndicator from '../../components/molecules/LoadingIndicator';
 
 const Main = () => {
   const dispatch = useDispatch();
@@ -210,7 +211,11 @@ const Main = () => {
             className='portfolio_toggle_button'
             onClick={recommendationToggleHandler}
           >
-            {recommendationCriterion === 'portfolio' ? '투자 성향 기준으로 전환' : '보유 주식 기준으로 전환'}
+            {
+              recommendationCriterion === 'portfolio'
+                ? '투자성향 기준으로 바꾸기'
+                : '보유주식 기준으로 바꾸기'
+            }
           </Button>
         }
       </div>

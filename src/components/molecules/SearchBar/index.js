@@ -4,7 +4,6 @@ import Autosuggest from 'react-autosuggest';
 import SearchInput from '../../atoms/SearchInput';
 import { useToasts } from 'react-toast-notifications';
 import requestSymbolList from '../../../api/requestSymbolList';
-
 import {
   getSuggestions,
   getSuggestionValue,

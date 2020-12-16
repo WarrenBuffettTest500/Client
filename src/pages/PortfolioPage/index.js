@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './index.scss';
 import { useParams, Link } from 'react-router-dom';
 import PortfolioItemInputModal from '../../components/molecules/PortfolioItemInputModal';
+import AddIcon from '@material-ui/icons/Add';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import ClearRoundedIcon from '@material-ui/icons/ClearRounded';
 import Button from '../../components/atoms/Button';
@@ -11,12 +12,16 @@ import concatRealPrice from '../../utils/concatRealPrice';
 import CircleChart from '../../components/molecules/CircleChart';
 import calculateProportions from '../../utils/calculateProportions';
 import requestPortfolio from '../../api/requestPortfolio';
+import commaNumber from 'comma-number';
+import { useToasts } from 'react-toast-notifications';
+import LoadingIndicator from '../../components/molecules/LoadingIndicator';
 
 const PortfolioPage = ({
   currentUser,
   currentUserStaticPortfolio,
   onStaticPortfolioFetched,
 }) => {
+  const { addToast } = useToasts();
   const { portfolio_owner_uid: portfolioOwnerUid } = useParams();
   const [isInputModalOpen, setIsInputModalOpen] = useState(false);
   const [localStaticPortfolio, setLocalStaticPortfolio] = useState([]);
@@ -54,6 +59,7 @@ const PortfolioPage = ({
 
     const setPortfolioPageData = async () => {
       const portfolioWithRealPrice = await concatRealPrice(localStaticPortfolio);
+
       setDynamicPortfolio(portfolioWithRealPrice);
 
       const updatedDashboardData = {
@@ -136,7 +142,10 @@ const PortfolioPage = ({
     const deleteResponse = await requestPortfolioItemDelete(currentUser.uid, portfolioItemId);
 
     if (deleteResponse.result !== 'ok') {
-      alert('삭제하지 못했습니다');
+      addToast('삭제하다가 문제가 생겼어요', {
+        appearance: 'error',
+        autoDismiss: true,
+      });
 
       return;
     }
@@ -161,30 +170,32 @@ const PortfolioPage = ({
           && <div className='portfolio_dashboard'>
             <div className='dashboard_asset'>
               <h3>총 자산:</h3>&nbsp;
-              <h1>{`$${dashboardData.total}`}</h1>
+              <h1>{`$${commaNumber(dashboardData.total)}`}</h1>
             </div>
             <div className='dashboard_return'>
               <h3>수익:</h3>&nbsp;
               <h1>
                 {
                   Number(dashboardData.return) < 0
-                    ? `-$${Math.abs(dashboardData.return)}`
-                    : `$${dashboardData.return}`
+                    ? `-$${commaNumber(Math.abs(dashboardData.return))}`
+                    : `$${commaNumber(dashboardData.return)}`
                 }
               </h1>
             </div>
             <div className='dashboard_earnings_rate'>
               <h3>수익률:</h3>&nbsp;
-              <h1>{`${dashboardData.earningsRate}%`}</h1>
+              <h1>{`${commaNumber(dashboardData.earningsRate)}%`}</h1>
             </div>
           </div>
         }
         <div className='table_wrapper'>
-          <div className='table_title'>
+          <div className='table_header'>
             <h3>주식 목록</h3>
             {
               currentUser.uid === portfolioOwnerUid
-              && <button onClick={createClickHandler}>더하기</button>
+              && <Button onClick={createClickHandler}>
+                <AddIcon className='portfolio_item_create_button' />
+              </Button>
             }
           </div>
           <table className='table'>
@@ -195,10 +206,10 @@ const PortfolioPage = ({
                   currentUser.uid === portfolioOwnerUid
                   && <>
                     <th>보유량</th>
-                    <th>평균단가</th>
+                    <th>평단가</th>
                   </>
                 }
-                <th>현재가격</th>
+                <th>현재가</th>
                 {
                   currentUser.uid === portfolioOwnerUid
                   && <>
@@ -216,37 +227,41 @@ const PortfolioPage = ({
                   const { id, symbol, quantity, avgPrice, price } = item;
                   return (
                     <tr key={id}>
-                      <td>{
-                        <Link to={`/stock_details/${symbol}`}>
-                          {symbol}
-                        </Link>
-                      }</td>
+                      <td className='table_symbol'>
+                        {
+                          <Link to={`/stock_details/${symbol}`}>
+                            {symbol}
+                          </Link>
+                        }
+                      </td>
                       {
                         currentUser.uid === portfolioOwnerUid
                         && <>
-                          <td>{quantity}</td>
-                          <td>{avgPrice}</td>
+                          <td className='table_quantity'>{`${commaNumber(quantity)}주`}</td>
+                          <td className='table_avg_price'>{`$${commaNumber(avgPrice)}`}</td>
                         </>
                       }
-                      <td>{new Decimal(price).toDecimalPlaces(2).toString()}</td>
+                      <td className='table_price'>
+                        {`$${commaNumber(new Decimal(price).toDecimalPlaces(2).toString())}`}
+                      </td>
                       {
                         currentUser.uid === portfolioOwnerUid
                         && <>
-                          <td>{new Decimal(price).minus(new Decimal(avgPrice)).times(new Decimal(quantity)).toDecimalPlaces(2).toString()}</td>
-                          <td>{(new Decimal(price).dividedBy(new Decimal(avgPrice))).minus(1).times(100).toDecimalPlaces(2).toString()}</td>
-                          <td>{new Decimal(price).times(new Decimal(quantity)).toDecimalPlaces(2).toString()}</td>
-                          <td>{new Decimal(avgPrice).times(new Decimal(quantity)).toDecimalPlaces(2).toString()}</td>
-                          <td>
+                          <td className='table_return'>{`$${commaNumber(new Decimal(price).minus(new Decimal(avgPrice)).times(new Decimal(quantity)).toDecimalPlaces(2).toString())}`}</td>
+                          <td className='table_earnings_rate'>{`${commaNumber((new Decimal(price).dividedBy(new Decimal(avgPrice))).minus(1).times(100).toDecimalPlaces(2).toString())}%`}</td>
+                          <td className='table_current_total'>{`$${commaNumber(new Decimal(price).times(new Decimal(quantity)).toDecimalPlaces(2).toString())}`}</td>
+                          <td className='table_buying_total'>{`$${commaNumber(new Decimal(avgPrice).times(new Decimal(quantity)).toDecimalPlaces(2).toString())}`}</td>
+                          <td className='table_update'>
                             <Button
-                              className='editButton'
+                              className='portfolio_item_edit_button'
                               onClick={editClickHandler.bind(null, id, symbol, quantity, avgPrice)}
                             >
                               <EditOutlinedIcon />
                             </Button>
                           </td>
-                          <td>
+                          <td className='table_remove'>
                             <Button
-                              className='deleteButton'
+                              className='portfolio_item_remove_button'
                               onClick={deleteClickHandler.bind(null, id)}
                             >
                               <ClearRoundedIcon />
