@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import Card from '../../components/molecules/Card';
+import Card from '../../components/atoms/Card';
 import { useHistory } from 'react-router-dom';
 import PATHS from '../../constants/paths';
 import requestCompanyProfiles from '../../api/requestCompanyProfiles';
@@ -8,7 +8,7 @@ import { setRecommendationSymbolList, setCompanyProfileList } from '../../store/
 import { useInfinteScroll } from '../../hooks';
 import wait from '../../utils/setTimeOut';
 
-const ListContainer = ({
+const CompanyRecommendations = ({
   className,
 }) => {
   const viewport = useRef(null);
@@ -92,4 +92,4 @@ const ListContainer = ({
   );
 };
 
-export default ListContainer;
+export default CompanyRecommendations;

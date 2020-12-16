@@ -8,7 +8,7 @@ import calculateTotal from '../../utils/calculateTotal';
 import CircleChart from '../../components/molecules/CircleChart';
 import requestRecommendations from '../../api/requestRecommendations';
 import requestTrendingStocks from '../../api/requestTrendingStocks';
-import Card from '../../components/molecules/Card';
+import Card from '../../components/atoms/Card';
 import Button from '../../components/atoms/Button';
 import { setRecommendationCriterion } from '../../store/user';
 import TrendingList from '../../components/molecules/TrendingList';

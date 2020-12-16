@@ -36,6 +36,8 @@ const SearchBar = () => {
     }
   };
 
+  useEffect(getSymbolList, []);
+
   const onChange = (event, { newValue, method }) => {
     setSearchKeyword(newValue.toUpperCase());
   };
@@ -64,10 +66,6 @@ const SearchBar = () => {
 
     history.push(`${PATHS.STOCK_DETAILS}/${searchKeyword}`);
   };
-
-  useEffect(() => {
-    getSymbolList();
-  }, []);
 
   const inputProps = {
     placeholder: '관심있는 주식을 검색하세요',

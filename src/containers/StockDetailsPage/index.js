@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import ListContainer from '../../containers/ListContainer';
+import CompanyRecommendations from '../CompanyRecommendations';
 import CandlestickChart from '../../components/molecules/CandlestickChart';
 import dateToObject from '../../utils/dateToObject';
 import StockDetailsDashboard from '../../components/molecules/StockDetailsDashboard';
@@ -144,7 +144,10 @@ const StockDetails = () => {
             <p>성격이 비슷한 기업들을 알려드릴게요</p>
           </div>
           <div className='stock_item card_list'>
-            {recommendationSymbolList && <ListContainer className='company_card_list container' />}
+            {
+              recommendationSymbolList
+              && <CompanyRecommendations className='company_card_list container' />
+            }
           </div>
         </div>
         <div className='stock_details_right'>

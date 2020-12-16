@@ -1,20 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import './index.scss';
 import { useParams, Link } from 'react-router-dom';
-import PortfolioItemInputModal from '../../components/molecules/PortfolioItemInputModal';
+import PortfolioItemInputModal from '../../molecules/PortfolioItemInputModal';
 import AddIcon from '@material-ui/icons/Add';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import ClearRoundedIcon from '@material-ui/icons/ClearRounded';
-import Button from '../../components/atoms/Button';
+import Button from '../../atoms/Button';
 import { Decimal } from 'decimal.js';
-import requestPortfolioItemDelete from '../../api/requestPortfolioItemDelete';
-import concatRealPrice from '../../utils/concatRealPrice';
-import CircleChart from '../../components/molecules/CircleChart';
-import calculateProportions from '../../utils/calculateProportions';
-import requestPortfolio from '../../api/requestPortfolio';
+import requestPortfolioItemDelete from '../../../api/requestPortfolioItemDelete';
+import concatRealPrice from '../../../utils/concatRealPrice';
+import CircleChart from '../../molecules/CircleChart';
+import calculateProportions from '../../../utils/calculateProportions';
+import requestPortfolio from '../../../api/requestPortfolio';
 import commaNumber from 'comma-number';
 import { useToasts } from 'react-toast-notifications';
-import LoadingIndicator from '../../components/molecules/LoadingIndicator';
+import LoadingIndicator from '../../molecules/LoadingIndicator';
 
 const PortfolioPage = ({
   currentUser,
