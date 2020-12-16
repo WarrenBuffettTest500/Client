@@ -2,7 +2,7 @@ import METHODS from '../constants/methods';
 import PATHS from '../constants/paths';
 
 const requestHitUpdate = async keyword => {
-  const res = await fetch(
+  const response = await fetch(
     `${PATHS.HOST}${PATHS.SERVER_PORT}/hits/${keyword}`,
     {
       method: METHODS.POST,
@@ -13,8 +13,7 @@ const requestHitUpdate = async keyword => {
     },
   );
 
-  const response = await res.json();
-  console.log(response);
+  return await response.json();
 };
 
 export default requestHitUpdate;

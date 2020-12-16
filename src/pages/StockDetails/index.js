@@ -10,7 +10,7 @@ import {
   setSearchStockDetails,
   setOneWeekStockDetails,
   setOneMonthStockDetails,
-  setInitialState,
+  initializeStockStates,
 } from '../../store/stock';
 import PATHS from '../../constants/paths';
 import requestStockDetails from '../../api/requestStockDetails';
@@ -79,8 +79,10 @@ const StockDetails = () => {
 
         return;
       }
+
       if (result === RESPONSES.FAILURE) {
         history.push(PATHS.FAILURE);
+
         return;
       }
     } catch (error) {
@@ -93,7 +95,7 @@ const StockDetails = () => {
   }, [currentUser, keyword]);
 
   useEffect(() => {
-    dispatch(setInitialState());
+    dispatch(initializeStockStates());
     setCurrentClickedTab('1day');
     setClickedTabList(['1day']);
   }, [keyword]);
@@ -114,11 +116,13 @@ const StockDetails = () => {
         if (result === RESPONSES.FAILURE) {
           alert('리스트를 가져오지 못했습니다');
         }
+
         return;
       }
 
       if (result === RESPONSES.FAILURE) {
         history.push(PATHS.FAILURE);
+
         return;
       }
 

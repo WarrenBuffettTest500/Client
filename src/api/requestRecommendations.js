@@ -1,18 +1,15 @@
 import METHODS from '../constants/methods';
 import PATHS from '../constants/paths';
 
-const requestRecommendations = async (recommendationCriterion, currentUser, staticPortfolio) => {
+const requestRecommendations = async (recommendationCriterion, currentUser, page) => {
   let fetchUrl;
 
-  if (recommendationCriterion === 'randomCompanies') {
-    // fetchUrl = `${PATHS.HOST}${PATHS.SERVER_PORT}/company_profiles/random`;
-    return;
-  } else if (recommendationCriterion === 'preference') {
-    fetchUrl = `${PATHS.HOST}${PATHS.SERVER_PORT}${PATHS.USERS}/${currentUser.uid}/portfolios/recommendations/preference`;
+  if (recommendationCriterion === 'preference') {
+    fetchUrl = `${PATHS.HOST}${PATHS.SERVER_PORT}${PATHS.USERS}/${currentUser.uid}/portfolios/recommendations/preference/?page=${page}`;
   } else if (recommendationCriterion === 'portfolio') {
-    fetchUrl = `${PATHS.HOST}${PATHS.SERVER_PORT}${PATHS.USERS}/${currentUser.uid}/portfolios/recommendations/portfolio`;
+    fetchUrl = `${PATHS.HOST}${PATHS.SERVER_PORT}${PATHS.USERS}/${currentUser.uid}/portfolios/recommendations/portfolio/?page=${page}`;
   } else {
-    fetchUrl = `${PATHS.HOST}${PATHS.SERVER_PORT}${PATHS.USERS}/${currentUser.uid}/companies/recommendations`;
+    fetchUrl = `${PATHS.HOST}${PATHS.SERVER_PORT}/portfolios/random`;
   }
 
   const response = await fetch(fetchUrl, {

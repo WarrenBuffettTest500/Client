@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import './index.scss';
 import { useHistory } from 'react-router-dom';
 import concatRealPrice from '../../utils/concatRealPrice';
 import calculateProportions from '../../utils/calculateProportions';
@@ -8,17 +10,46 @@ import requestRecommendations from '../../api/requestRecommendations';
 import requestTrendingStocks from '../../api/requestTrendingStocks';
 import Card from '../../components/molecules/Card';
 import Button from '../../components/atoms/Button';
+import { setRecommendationCriterion } from '../../store/user';
+import TrendingList from '../../components/molecules/TrendingList';
+import formatPortfoliosToChartData from '../../utils/formatPortfoliosToChartData';
+import NUMBERS from '../../constants/numbers';
 
-const Main = ({ currentUser, staticPortfolio }) => {
+const Main = () => {
+  const dispatch = useDispatch();
+  const {
+    currentUser,
+    staticPortfolio,
+    recommendationCriterion,
+  } = useSelector(state => ({
+    currentUser: state.user.currentUser,
+    staticPortfolio: state.user.staticPortfolio,
+    recommendationCriterion: state.user.recommendationCriterion,
+  }));
   const [dynamicPortfolio, setDynamicPortfolio] = useState([]);
   const [chartData, setChartData] = useState([]);
   const [total, setTotal] = useState(0);
-  const [recommendationCriterion, setRecommendationCriterion] = useState('randomCompanies');
+  const [trendingStocks, setTrendingStocks] = useState([]);
   const [recommendedChartDatas, setRecommendedChartDatas] = useState([]);
+  const [isLoadingRecommendations, setIsLoadingRecommendations] = useState(true);
+  const [hasMoreRecommendations, setHasMoreRecommendations] = useState(true);
+  const [page, setPage] = useState(0);
   const history = useHistory();
   const cardRefs = useRef({});
+  const observer = useRef();
+  const lastRecommendationRef = useCallback(recommendation => {
+    if (isLoadingRecommendations || !hasMoreRecommendations) return;
+    if (observer.current) observer.current.disconnect();
+    if (recommendationCriterion === 'random') return;
 
-  const [trendingStocks, setTrendingStocks] = useState([]);
+    observer.current = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting) {
+        setPage(previous => previous + NUMBERS.ONE);
+      }
+    });
+
+    if (recommendation) observer.current.observe(recommendation);
+  });
 
   useEffect(() => {
     const fetchTrendingStocks = async () => {
@@ -27,58 +58,49 @@ const Main = ({ currentUser, staticPortfolio }) => {
       setTrendingStocks(trendingStocksResponse.topTen);
     };
 
-    const setFetchInterval = setInterval(fetchTrendingStocks, 60 * 1000);
+    fetchTrendingStocks();
+
+    const setFetchInterval = setInterval(fetchTrendingStocks, NUMBERS.ONE_MINUTE);
 
     return () => clearInterval(setFetchInterval);
   }, []);
 
   useEffect(() => {
-    if (!currentUser) {
-      setRecommendationCriterion('randomCompanies');
+    if (!currentUser && recommendationCriterion !== 'random') return;
 
-      return;
-    }
+    setIsLoadingRecommendations(true);
 
-    setRecommendationCriterion('portfolio');
-  }, [currentUser]);
-
-  useEffect(() => {
     const fetchRecommendations = async () => {
-      const recommendationsResponse = await requestRecommendations(recommendationCriterion, currentUser, staticPortfolio);
+      const { portfolios, hasMore } = await requestRecommendations(recommendationCriterion, currentUser, page);
 
-      if (recommendationCriterion === 'randomCompanies') {
-        return;
-      } else {
-        const recommendedChartDatas = [];
-
-        const formatPortfolios = () => {
-          recommendationsResponse.portfolios.forEach(portfolio => {
-            const total = calculateTotal(portfolio.items);
-
-            recommendedChartDatas.push({
-              owner: portfolio.owner,
-              items: calculateProportions(portfolio.items, total),
-            });
-          });
-        };
-
-        formatPortfolios();
-
-        setRecommendedChartDatas(recommendedChartDatas);
-      }
+      setRecommendedChartDatas(formatPortfoliosToChartData(portfolios));
+      setIsLoadingRecommendations(false);
+      if (hasMore === false) setHasMoreRecommendations(false);
     };
 
     fetchRecommendations();
   }, [currentUser, recommendationCriterion, staticPortfolio]);
 
   useEffect(() => {
+    if (!page || !hasMoreRecommendations || isLoadingRecommendations) return;
+
+    setIsLoadingRecommendations(true);
+
+    const concatRecommendations = async () => {
+      const { portfolios, hasMore } = await requestRecommendations(recommendationCriterion, currentUser, page);
+
+      setRecommendedChartDatas(previous => {
+        return [...previous, ...formatPortfoliosToChartData(portfolios)];
+      });
+      setIsLoadingRecommendations(false);
+      if (hasMore === false) setHasMoreRecommendations(false);
+    };
+
+    concatRecommendations();
+  }, [page]);
+
+  useEffect(() => {
     if (!currentUser) return;
-
-    if (!staticPortfolio.length) {
-      setRecommendationCriterion('randomCompanies');
-
-      return;
-    }
 
     const fetchDynamicData = async () => {
       const portfolioWithRealPrice = await concatRealPrice(staticPortfolio);
@@ -105,19 +127,24 @@ const Main = ({ currentUser, staticPortfolio }) => {
 
   const recommendationToggleHandler = () => {
     if (recommendationCriterion === 'portfolio') {
-      setRecommendationCriterion('preference');
+      dispatch(setRecommendationCriterion('preference'));
     } else {
-      setRecommendationCriterion('portfolio');
+      dispatch(setRecommendationCriterion('portfolio'));
     }
+
+    setPage(0);
+    setHasMoreRecommendations(true);
   };
 
-  const onPortFolioButtonClick = (e, portfolio) => {
-    const { className } = e.target;
+  const portfolioClickHandler = (event, portfolio) => {
+    const { className } = event.target;
 
     if (className === 'portfolio_button') {
       history.push(`/users/${currentUser?.uid}/portfolios/${portfolio.owner}`);
+
       return;
     }
+
     history.push(`/users/${currentUser?.uid}/portfolios/${currentUser?.uid}`);
   };
 
@@ -127,39 +154,39 @@ const Main = ({ currentUser, staticPortfolio }) => {
 
   return (
     <div className='mainpage_wrapper'>
-      <div className='myportfolio_card_wrapper'>
-        {currentUser
-          ?
-          <Card className='myportfolio_card'>
-            {staticPortfolio.length
-              ? <>
-                <div className='circle_chart_wrapper mychart'>
-                  <CircleChart data={chartData} type='donut' />
-                </div>
-                <Button
-                  className='my_portfolio_button'
-                  onClick={e => onPortFolioButtonClick(e)}
-                >
-                  <p>SHOW YOUR PORTFOLIO</p>
-                 </Button>
+      <div className='main_page_dashboard_wrapper'>
+        {
+          currentUser
+            ? <Card className='my_portfolio_card'>
+              {staticPortfolio.length
+                ? <>
+                  <div className='circle_chart_wrapper mychart'>
+                    <CircleChart data={chartData} type='donut' />
+                  </div>
+                  <Button
+                    className='my_portfolio_button'
+                    onClick={event => portfolioClickHandler(event)}
+                  >
+                    <p>SHOW YOUR PORTFOLIO</p>
+                  </Button>
                 </>
-              :
-              <>
-                <p>go to my portfolio</p>
-                <div
-                  onClick={e => onPortFolioButtonClick(e)}
-                  className='card_message'
-                >
-                  포트폴리오를 등록해주세요👀
-                </div>
-              </>
-            }
-          </Card>
-          :
-          <Card className='myportfolio_card'>
-            <p>go to my portfolio</p>
-            <div className='card_message'>로그인후이용가능합니다</div>
-          </Card>}
+                : <>
+                  <p>go to my portfolio</p>
+                  <div
+                    onClick={event => portfolioClickHandler(event)}
+                    className='card_message'
+                  >
+                    포트폴리오를 등록해주세요👀
+                  </div>
+                </>
+              }
+            </Card>
+            : <Card className='my_portfolio_card'>
+              <p>go to my portfolio</p>
+              <div className='card_message'>로그인하고 포트폴리오를 관리하세요</div>
+            </Card>
+        }
+        <TrendingList symbols={trendingStocks} />
       </div>
       <div className='recommended_portfolios_title'><p>Recommendation Portfolios</p></div>
       <div className='toggle_button_wrapper'>
@@ -168,44 +195,79 @@ const Main = ({ currentUser, staticPortfolio }) => {
             className='portfolio_toggle_button'
             onClick={recommendationToggleHandler}>
             {recommendationCriterion === 'portfolio' ? '투자 성향 기준으로 보기' : '보유 주식 기준으로 보기'}
-          </Button>}
+          </Button>
+        }
       </div>
       <div className='recommended_portfolios_wrapper'>
-        {recommendedChartDatas.map((portfolio, i) => {
-          return (
-            <Card
-              key={portfolio.owner}
-              className='portfolio_card'
-            >
-              <div
-                ref={element => cardRefs.current[i] = element}
-                className='portfolio_wrapper'
-              >
-                <div className='portfolio_front'>
-                  <div className='circle_chart_wrapper'>
-                    <CircleChart
-                      data={portfolio.items}
-                      type='pie'
-                    />
-                    <h3>This Is Title Article</h3>
-                  </div>
-                </div>
-                <div className='portfolio_back'>
-                  <div className='portfolio_back_item'>
-                    <h3 onMouseOver={() => scrollIntoView(i)}>This Is Title Article</h3>
-                    <p> Lorem Ipsum is simply dummy text of the printing and typesetting industry. </p>
-                    <Button
-                      className='portfolio_button'
-                      onClick={e => onPortFolioButtonClick(e, portfolio)}
+        {
+          recommendedChartDatas.map((portfolio, index) => {
+            if (index >= recommendedChartDatas.length - 3) {
+              return (
+                <div key={portfolio.owner} ref={lastRecommendationRef} className='portfolio_card'>
+                  <Card>
+                    <div
+                      ref={element => cardRefs.current[index] = element}
+                      className='portfolio_wrapper'
                     >
-                      show
-                    </Button>
-                  </div>
+                      <div className='portfolio_front'>
+                        <div className='circle_chart_wrapper'>
+                          <CircleChart
+                            data={portfolio.items}
+                            type='pie'
+                          />
+                          <h3>This Is Title Article</h3>
+                        </div>
+                      </div>
+                      <div className='portfolio_back'>
+                        <div className='portfolio_back_item'>
+                          <h3 onMouseOver={() => scrollIntoView(index)}>This Is Title Article</h3>
+                          <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                          <Button
+                            className='portfolio_button'
+                            onClick={event => portfolioClickHandler(event, portfolio)}
+                          >
+                            show
+                        </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
                 </div>
-              </div>
-            </Card>
-          );
-        })}
+              );
+            } else {
+              return (
+                <Card key={portfolio.owner} className='portfolio_card'>
+                  <div
+                    ref={element => cardRefs.current[index] = element}
+                    className='portfolio_wrapper'
+                  >
+                    <div className='portfolio_front'>
+                      <div className='circle_chart_wrapper'>
+                        <CircleChart
+                          data={portfolio.items}
+                          type='pie'
+                        />
+                        <h3>This Is Title Article</h3>
+                      </div>
+                    </div>
+                    <div className='portfolio_back'>
+                      <div className='portfolio_back_item'>
+                        <h3 onMouseOver={() => scrollIntoView(index)}>This Is Title Article</h3>
+                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                        <Button
+                          className='portfolio_button'
+                          onClick={event => portfolioClickHandler(event, portfolio)}
+                        >
+                          show
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+              );
+            }
+          })
+        }
       </div>
     </div>
   );

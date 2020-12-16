@@ -19,6 +19,8 @@ const CircleChart = ({ data, type }) => {
     const arcs = pie(data);
     const svg = d3.select(svgRef.current).attr('viewBox', [-width / 2, -height / 2, width, height]);
 
+    svg.selectAll('*').remove();
+
     svg.selectAll('path')
       .data(arcs)
       .join('path')
@@ -56,10 +58,10 @@ const CircleChart = ({ data, type }) => {
   }, [data]);
 
   return (
-      <svg
-        className='circle_chart'
-        ref={svgRef}>
-      </svg>
+    <svg
+      className='circle_chart'
+      ref={svgRef}>
+    </svg>
   );
 };
 

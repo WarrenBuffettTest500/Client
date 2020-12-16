@@ -64,6 +64,7 @@ const ListContainer = ({
   };
 
   useEffect(scrollIntoView, [target]);
+
   return (
     <div ref={viewport} className={className}>
       {companyProfileList && companyProfileList.map(item =>

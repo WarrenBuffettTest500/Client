@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import App from './containers/App';
@@ -7,12 +7,14 @@ import store from './store/index';
 import { ToastProvider } from 'react-toast-notifications';
 
 ReactDOM.render(
-  <Provider store={store}>
-    <Router>
-      <ToastProvider>
-        <App />
-      </ToastProvider>
-    </Router>
-  </Provider>,
+  <Suspense fallback={<div>spinner...</div>}>
+    <Provider store={store}>
+      <Router>
+        <ToastProvider>
+          <App />
+        </ToastProvider>
+      </Router>
+    </Provider>
+  </Suspense>,
   document.getElementById('root'),
 );
