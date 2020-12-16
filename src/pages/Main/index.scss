@@ -19,7 +19,8 @@
 .recommended_portfolios_wrapper {
   margin: 0 8rem;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  min-width: 38rem;
+  grid-template-columns: repeat(auto-fit, minmax(38rem, max-content));
   justify-items: center;
   background-color: #142649;
 }

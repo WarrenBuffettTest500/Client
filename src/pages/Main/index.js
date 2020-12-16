@@ -190,7 +190,8 @@ const Main = () => {
       </div>
       <div className='recommended_portfolios_title'><p>Recommendation Portfolios</p></div>
       <div className='toggle_button_wrapper'>
-        {(recommendationCriterion === 'portfolio' || recommendationCriterion === 'preference') &&
+        {
+          (recommendationCriterion === 'portfolio' || recommendationCriterion === 'preference') &&
           <Button
             className='portfolio_toggle_button'
             onClick={recommendationToggleHandler}>
@@ -251,7 +252,7 @@ const Main = () => {
                       </div>
                     </div>
                     <div className='portfolio_back'>
-                      <div className='portfolio_back_item'>
+                      <div className='portfolio_back_item'                                                                                                                                                                                                                                                  >
                         <h3 onMouseOver={() => scrollIntoView(index)}>This Is Title Article</h3>
                         <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
                         <Button

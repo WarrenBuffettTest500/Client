@@ -14,11 +14,11 @@ const ChatRoom = () => {
     currentUser: state.user.currentUser,
   }));
   const messageBox = useRef(null);
-  const { keyword: roomname } = useParams();
+  const { keyword: roomName } = useParams();
   const [chats, setChats] = useState([]);
   const [nickname, setNickname] = useState('');
   const [newchat, setNewchat] = useState({
-    roomname: '',
+    roomName: '',
     nickname: '',
     message: '',
     date: '',
@@ -35,12 +35,12 @@ const ChatRoom = () => {
     if (type === 'keypress' && key !== 'Enter') return;
     const chat = newchat;
 
-    chat.roomname = roomname;
+    chat.roomName = roomName;
     chat.nickname = nickname;
     chat.date = Moment(new Date()).format('DD/MM/YYYY HH:mm:ss');
     chat.type = 'message';
     createNewChat(chat);
-    setNewchat({ roomname: '', nickname: '', message: '', date: '', type: '' });
+    setNewchat({ roomName: '', nickname: '', message: '', date: '', type: '' });
   };
 
   const onChange = event => {
@@ -51,15 +51,15 @@ const ChatRoom = () => {
   };
 
   useEffect(() => {
-    createRoom(roomname);
+    createRoom(roomName);
   }, []);
 
   useEffect(() => {
     if (!currentUser) return;
 
     setNickname(currentUser.displayName);
-    fetchChats(setChats, roomname);
-  }, [roomname]);
+    fetchChats(setChats, roomName);
+  }, [roomName]);
 
   useEffect(scrollToBottom, [newchat]);
 

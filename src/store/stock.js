@@ -1,10 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  returned: {
-    searchStockDetails: null,
-    recommendationSymbolList: [],
-  },
+  searchStockDetails: null,
+  recommendationSymbolList: '',
+  companyProfileList: '',
 };
 
 const stockSlice = createSlice({
@@ -29,7 +28,7 @@ const stockSlice = createSlice({
     setCompanyProfileList: (state, action) => {
       state.companyProfileList = action.payload;
     },
-    initializeStockStates: () => initialState,
+    initializeStockStates: state => state = initialState,
   },
 });
 

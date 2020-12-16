@@ -7,14 +7,12 @@ import store from './store/index';
 import { ToastProvider } from 'react-toast-notifications';
 
 ReactDOM.render(
-  <Suspense fallback={<div>spinner...</div>}>
     <Provider store={store}>
       <Router>
         <ToastProvider>
           <App />
         </ToastProvider>
       </Router>
-    </Provider>
-  </Suspense>,
+    </Provider>,
   document.getElementById('root'),
 );

@@ -14,10 +14,6 @@ const userSlice = createSlice({
     setCurrentUser: (state, action) => {
       state.currentUser = action.payload;
     },
-    // removeCurrentUser: (state, action) => {
-    //   localStorage.removeItem('token');
-    //   state.currentUser = null;
-    // },
     setPreferenceInfo: (state, action) => {
       state.preferenceInfo = action.payload;
     },

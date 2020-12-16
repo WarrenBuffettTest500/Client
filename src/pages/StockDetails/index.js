@@ -4,8 +4,9 @@ import { useParams } from 'react-router-dom';
 import ListContainer from '../../components/molecules/ListContainer';
 import CandlestickChart from '../../components/molecules/CandlestickChart';
 import dateToObject from '../../utils/dateToObject';
-import Card from '../../components/molecules/Card';
+import Dashbord from '../../components/molecules/Dashbord';
 import TabBar from '../../components/molecules/TabBar';
+import Loader from '../../components/molecules/Loader';
 import {
   setSearchStockDetails,
   setOneWeekStockDetails,
@@ -21,16 +22,13 @@ import ChatRoom from '../../components/molecules/ChatRoom';
 import requestHitUpdate from '../../api/requestHitUpdate';
 
 const StockDetails = () => {
-  const { keyword } = useParams();
+  const { keyword : symbol } = useParams();
   const dispatch = useDispatch();
   const {
     searchKeyWord,
     searchStockDetails,
     oneWeekStockDetails,
     oneMonthStockDetails,
-    sector,
-    industry,
-    website,
     recommendationSymbolList,
     currentUser,
   } = useSelector(state => ({
@@ -38,15 +36,12 @@ const StockDetails = () => {
     searchStockDetails: state.stock.searchStockDetails?.values,
     oneWeekStockDetails: state.stock.oneWeekStockDetails?.values,
     oneMonthStockDetails: state.stock.oneMonthStockDetails?.values,
-    sector: state.stock.recommendationSymbolInfo?.sector,
-    industry: state.stock.recommendationSymbolInfo?.industry,
-    website: state.stock.recommendationSymbolInfo?.website,
     recommendationSymbolList: state.stock?.recommendationSymbolList,
     currentUser: state.user.currentUser,
   }));
-
   const [currentClickedTab, setCurrentClickedTab] = useState('');
   const [clickedTabList, setClickedTabList] = useState();
+  const [dashbordData, setDashbordData] = useState({});
 
   const tabBarButtonClickHandle = async event => {
     const interval = event.target.dataset.apiParam;
@@ -91,32 +86,32 @@ const StockDetails = () => {
   };
 
   useEffect(() => {
-    requestHitUpdate(keyword);
-  }, [currentUser, keyword]);
+    requestHitUpdate(symbol);
+  }, [currentUser, symbol]);
 
   useEffect(() => {
     dispatch(initializeStockStates());
     setCurrentClickedTab('1day');
     setClickedTabList(['1day']);
-  }, [keyword]);
+  }, [symbol]);
 
   useEffect(() => {
     (async () => {
-      const { result, stockDetails } = await requestStockDetails(keyword);
+      const { result, stockDetails } = await requestStockDetails(symbol);
 
       if (result === RESPONSES.OK) {
         dispatch(setSearchStockDetails(stockDetails));
-        const { result, recommendationSymbolList, recommendationSymbolInfo } = await requestRecommendationSymbolList(keyword);
+        const { result, recommendationSymbolList, recommendationSymbolInfo } = await requestRecommendationSymbolList(symbol);
 
         if (result === RESPONSES.OK) {
           dispatch(setRecommendationSymbolList(recommendationSymbolList));
-          dispatch(setRecommendationSymbolInfo(recommendationSymbolInfo));
         }
 
         if (result === RESPONSES.FAILURE) {
           alert('리스트를 가져오지 못했습니다');
         }
-
+        dispatch(setRecommendationSymbolInfo(recommendationSymbolInfo));
+        setDashbordData({...recommendationSymbolInfo, symbol, price: stockDetails.values[0].close});
         return;
       }
 
@@ -125,38 +120,25 @@ const StockDetails = () => {
 
         return;
       }
-
     })();
-  }, [keyword]);
+  }, [symbol]);
 
   return (
     <>
       <div className='stock_details_wrapper'>
         <div className='stock_details_left'>
           <div className='stock_item chart'>
-            {searchStockDetails &&
-              <>
-                <div className='stock_item dashbord'>
-                  <Card
-                    key={keyword}
-                    className='dashbord_card'>
-                    <div className='dashbord_card_left'>
-                      <div className='dashbord_card_info'>📂{sector}</div>
-                      <div className='dashbord_card_info'>📉{industry}</div>
-                      <a className='dashbord_card_info' href={website}>🌐{website}</a>
-                    </div>
-                    <div className='dashbord_card_right'>
-                      <div className='dashbord_card_name'>{keyword}</div>
-                      <div className='dashbord_card_price'>{`$${searchStockDetails[0].close}`}</div>
-                    </div>
-                  </Card>
-                </div>
-                <div className='stock_item chart'>
-                  <TabBar onTabButtonClick={tabBarButtonClickHandle} />
-                  {currentClickedTab === '1day' && <CandlestickChart data={dateToObject(searchStockDetails)} interval='day' />}
-                  {currentClickedTab === '1week' && <CandlestickChart data={dateToObject(oneWeekStockDetails)} interval='week' />}
-                  {currentClickedTab === '1month' && <CandlestickChart data={dateToObject(oneMonthStockDetails)} interval='month' />}
-                </div>
+            {
+            !searchStockDetails
+            ? <Loader />
+            : <>
+              <Dashbord data={dashbordData} />
+              <TabBar onTabButtonClick={tabBarButtonClickHandle} />
+              <div className='chart_wrapper'>
+                {currentClickedTab === '1day' && <CandlestickChart data={dateToObject(searchStockDetails)} interval='day' />}
+                {currentClickedTab === '1week' && <CandlestickChart data={dateToObject(oneWeekStockDetails)} interval='week' />}
+                {currentClickedTab === '1month' && <CandlestickChart data={dateToObject(oneMonthStockDetails)} interval='month' />}
+              </div>
               </>
             }
           </div>
@@ -164,7 +146,7 @@ const StockDetails = () => {
             <p>Similar Company Stock</p>
           </div>
           <div className='stock_item card_list'>
-            {recommendationSymbolList && <ListContainer className='company_card_list container' />}
+          {recommendationSymbolList && <ListContainer className='company_card_list container' />}
           </div>
         </div>
         <div className='stock_details_right'>
