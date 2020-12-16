@@ -1,5 +1,6 @@
 .mainpage_wrapper {
   width: 100%;
+  text-align: center;
   margin-top: 5rem;
 }
 
@@ -17,10 +18,11 @@
 }
 
 .recommended_portfolios_wrapper {
-  margin: 0 8rem;
+  width: 90vw;
+  margin: 0 auto;
   display: grid;
-  min-width: 38rem;
-  grid-template-columns: repeat(auto-fit, minmax(38rem, max-content));
+  grid-template-columns: repeat(auto-fit, minmax(34rem, max-content));
+  justify-content: center;
   justify-items: center;
   background-color: #142649;
 }

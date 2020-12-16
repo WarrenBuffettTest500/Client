@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Autosuggest from 'react-autosuggest';
 import SearchInput from '../../atoms/SearchInput';
@@ -20,7 +20,7 @@ const SearchBar = () => {
   const { addToast } = useToasts();
   const history = useHistory();
 
-  const onChange = async (event, { newValue, method }) => {
+  const getSymbolList = async () => {
     if (!symbols) {
       const { result, symbolList } = await requestSymbolList();
 
@@ -38,7 +38,9 @@ const SearchBar = () => {
         return;
       }
     }
+  };
 
+  const onChange = (event, { newValue, method }) => {
     setSearchKeyword(newValue);
   };
 
@@ -65,6 +67,10 @@ const SearchBar = () => {
       return;
     }
   };
+  
+  useEffect(() => {
+    getSymbolList();
+  }, []);
 
   const inputProps = {
     placeholder: '관심있는 주식을 검색하세요',

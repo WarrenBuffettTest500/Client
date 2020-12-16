@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react';
-import Card from '../../molecules/Card';
+import Card from '../../components/molecules/Card';
 import { useHistory } from 'react-router-dom';
-import PATHS from '../../../constants/paths';
-import requestCompanyProfiles from '../../../api/requestCompanyProfiles';
+import PATHS from '../../constants/paths';
+import requestCompanyProfiles from '../../api/requestCompanyProfileUpdate';
 import { useSelector, useDispatch } from 'react-redux';
-import { setRecommendationSymbolList, setCompanyProfileList } from '../../../store/stock';
-import { useInfinteScroll } from '../../../hooks';
-import wait from '../../../utils/setTimeOut';
+import { setRecommendationSymbolList, setCompanyProfileList } from '../../store/stock';
+import { useInfinteScroll } from '../../hooks';
+import wait from '../../utils/setTimeOut';
 
 const ListContainer = ({
   className,

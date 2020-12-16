@@ -18,7 +18,7 @@ const Dashbord = ({ data }) => {
           </a>
         </div>
         <div className='dashbord_card_right'>
-          <div className='dashbord_card_name'>{data.keyword}</div>
+          <div className='dashbord_card_name'>{data.symbol}</div>
           <div className='dashbord_card_price'>{`$${data.price}`}</div>
         </div>
       </Card>
