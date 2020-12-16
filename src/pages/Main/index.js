@@ -216,7 +216,6 @@ const Main = () => {
                             data={portfolio.items}
                             type='pie'
                           />
-                          <h3>This Is Title Article</h3>
                         </div>
                       </div>
                       <div className='portfolio_back'>
@@ -248,7 +247,6 @@ const Main = () => {
                           data={portfolio.items}
                           type='pie'
                         />
-                        <h3>This Is Title Article</h3>
                       </div>
                     </div>
                     <div className='portfolio_back'>

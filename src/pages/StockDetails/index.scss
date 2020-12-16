@@ -15,21 +15,21 @@
 .stock_item.card_list {
   display: flex;
   width: 95%;
-  height: 5rem;
+  height: 3rem;
   justify-content: flex-end;
 }
 
 .card_list_title {
   width: 95%;
   text-align: right;
-  line-height: 0.3rem;
+  line-height: 0.2rem;
   font-size: 3rem;
   height: 2rem;
-  margin-top: 5rem;
+  margin-top: 3.5rem;
 
   p {
-    font-size: 2rem;
-    padding-top: 2rem;
+    margin-top: 1rem;
+    font-size: 1.5rem;
   }
 }
 
