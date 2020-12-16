@@ -25,6 +25,7 @@
   line-height: 0.3rem;
   font-size: 3rem;
   height: 2rem;
+  margin-top: 5rem;
 
   p {
     font-size: 2rem;
@@ -36,12 +37,10 @@
   height: 38rem;
 }
 
-.chart_stick {
-  &:hover {
+.chart_stick:hover {
     opacity: 0.2;
-  }
 }
 
-.candlestick_chart {
+.chart_wrapper {
   height: 60%;
 }

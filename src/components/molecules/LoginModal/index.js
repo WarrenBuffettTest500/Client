@@ -100,16 +100,6 @@ const LoginModal = ({
           text='signup with google'
         />
       </Modal>
-      {/* <ModalOverlay isOpen={isModalOpen}>
-      <Button
-        onClick={googleAuthClickHandler}
-        text='login with google'
-      />
-      <Button
-        onClick={googleAuthClickHandler}
-        text='signup with google'
-      />
-    </ModalOverlay> */}
     </>
   );
 };

@@ -2,18 +2,18 @@ import { firebaseDB } from '../config/firebase';
 import snapshotToArray from '../utils/snapshotToArray';
 const ref = firebaseDB.ref('rooms/');
 
-export const createRoom = roomname => {
-  ref.orderByChild('roomname').equalTo(roomname).once('value', snapshot => {
+export const createRoom = roomName => {
+  ref.orderByChild('roomName').equalTo(roomName).once('value', snapshot => {
     if (snapshot.exists()) return;
 
     const newRoom = firebaseDB.ref('rooms/').push();
 
-    newRoom.set(roomname);
+    newRoom.set(roomName);
   });
 };
 
-export const fetchChats = async (setChats, roomname) => {
-  await firebaseDB.ref('chats/').orderByChild('roomname').equalTo(roomname).limitToLast(100).on('value', resp => {
+export const fetchChats = async (setChats, roomName) => {
+  await firebaseDB.ref('chats/').orderByChild('roomName').equalTo(roomName).limitToLast(100).on('value', resp => {
     setChats([]);
     setChats(snapshotToArray(resp));
   });

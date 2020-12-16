@@ -2,8 +2,8 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   searchStockDetails: null,
-  recommendationSymbolList: [],
-  companyProfileList: [],
+  recommendationSymbolList: '',
+  companyProfileList: '',
 };
 
 const stockSlice = createSlice({
@@ -28,7 +28,7 @@ const stockSlice = createSlice({
     setCompanyProfileList: (state, action) => {
       state.companyProfileList = action.payload;
     },
-    setInitialState: state => state = initialState,
+    initializeStockStates: state => state = initialState,
   },
 });
 
@@ -41,5 +41,5 @@ export const {
   setRecommendationSymbolList,
   setRecommendationSymbolInfo,
   setCompanyProfileList,
-  setInitialState,
+  initializeStockStates,
 } = stockSlice.actions;

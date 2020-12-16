@@ -1,7 +1,6 @@
 import METHODS from '../constants/methods';
 
 const requestCompanyProfiles = async symbolList => {
-  if (!symbolList.length) return;
   const { symbol } = symbolList[0];
 
   try {
