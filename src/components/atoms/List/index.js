@@ -1,21 +1,25 @@
 import React from 'react';
+import styles from './index.module.scss';
 
 const List = ({
   title,
   children,
-  titleWrapperClassName,
-  childrenWrapperClassName,
+  className,
+  ...attributes
 }) => {
   return (
-    <div>
+    <div
+      className={styles[className]}
+      {...attributes}
+    >
       {
         title
-        && <div className={titleWrapperClassName}>
+        && <div>
           <h3>{title}</h3>
         </div>
       }
-      <div className={childrenWrapperClassName}>
-        {children}
+      <div>
+        <h4>{children}</h4>
       </div>
     </div>
   );
