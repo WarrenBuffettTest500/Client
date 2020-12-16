@@ -6,6 +6,7 @@ import CandlestickChart from '../../components/molecules/CandlestickChart';
 import dateToObject from '../../utils/dateToObject';
 import Card from '../../components/molecules/Card';
 import TabBar from '../../components/molecules/TabBar';
+import Loager from '../../components/molecules/Loader';
 import {
   setSearchStockDetails,
   setOneWeekStockDetails,
@@ -109,6 +110,7 @@ const StockDetails = () => {
         if (result === RESPONSES.OK) {
           dispatch(setRecommendationSymbolList(recommendationSymbolList));
           dispatch(setRecommendationSymbolInfo(recommendationSymbolInfo));
+          return;
         }
 
         if (result === RESPONSES.FAILURE) {
@@ -130,12 +132,14 @@ const StockDetails = () => {
       <div className='stock_details_wrapper'>
         <div className='stock_details_left'>
           <div className='stock_item chart'>
-            {searchStockDetails &&
-              <>
-                <div className='stock_item dashbord'>
+            {!searchStockDetails
+            ? <Loager />
+            :  <>
+                <div className='dashbord'>
                   <Card
                     key={keyword}
-                    className='dashbord_card'>
+                    className='dashbord_card'
+                  >
                     <div className='dashbord_card_left'>
                       <div className='dashbord_card_info'>📂{sector}</div>
                       <div className='dashbord_card_info'>📉{industry}</div>
@@ -147,8 +151,10 @@ const StockDetails = () => {
                     </div>
                   </Card>
                 </div>
-                <div className='stock_item chart'>
+                <div className='tabbar'>
                   <TabBar onTabButtonClick={tabBarButtonClickHandle} />
+                </div>
+                <div className='candlestick_chart'>
                   {currentClickedTab === '1day' && <CandlestickChart data={dateToObject(searchStockDetails)} interval='day' />}
                   {currentClickedTab === '1week' && <CandlestickChart data={dateToObject(oneWeekStockDetails)} interval='week' />}
                   {currentClickedTab === '1month' && <CandlestickChart data={dateToObject(oneMonthStockDetails)} interval='month' />}
@@ -160,7 +166,7 @@ const StockDetails = () => {
             <p>Similar Company Stock</p>
           </div>
           <div className='stock_item card_list'>
-            {recommendationSymbolList && <ListContainer className='company_card_list container' />}
+          {recommendationSymbolList && <ListContainer className='company_card_list container' />}
           </div>
         </div>
         <div className='stock_details_right'>

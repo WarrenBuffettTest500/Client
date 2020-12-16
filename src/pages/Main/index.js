@@ -161,7 +161,6 @@ const Main = ({ currentUser, staticPortfolio }) => {
             <div className='card_message'>로그인후이용가능합니다</div>
           </Card>}
       </div>
-      <div className='recommended_portfolios_title'><p>Recommendation Portfolios</p></div>
       <div className='toggle_button_wrapper'>
         {(recommendationCriterion === 'portfolio' || recommendationCriterion === 'preference') &&
           <Button
