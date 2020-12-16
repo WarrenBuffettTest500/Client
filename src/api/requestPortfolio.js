@@ -2,18 +2,15 @@ import METHODS from '../constants/methods';
 import PATHS from '../constants/paths';
 
 const requestPortfolio = async portfolioOwnerUid => {
-  const response = await fetch(
-    `${PATHS.HOST}${PATHS.SERVER_PORT}${PATHS.USERS}/${portfolioOwnerUid}/portfolio`,
-    {
-      method: METHODS.GET,
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
+  const portfolioResponse = await fetch(`${PATHS.HOST}${PATHS.SERVER_PORT}${PATHS.USERS}/${portfolioOwnerUid}/portfolio`, {
+    method: METHODS.GET,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
     },
-  );
+  });
 
-  return await response.json();
+  return portfolioResponse.json();
 };
 
 export default requestPortfolio;

@@ -74,8 +74,10 @@ const CandlestickChart = ({ data, interval }) => {
       .attr('y1', d => y(d.open))
       .attr('y2', d => y(d.close))
       .attr('stroke-width', 20)
-      .attr('stroke', d => d.open > d.close ? d3.schemeSet1[0]
-        : d.close > d.open ? d3.schemeSet1[2]
+      .attr('stroke', d => d.open > d.close
+        ? d3.schemeSet1[0]
+        : d.close > d.open
+          ? d3.schemeSet1[2]
           : d3.schemeSet1[8]);
 
     g.on('mouseover', (event, data) => {
@@ -83,7 +85,7 @@ const CandlestickChart = ({ data, interval }) => {
         .duration(100)
         .style('opacity', 0.9);
       div.html(
-          `${formatDate(data.date)} <br/>
+        `${formatDate(data.date)} <br/>
            Open: ${formatValue(data.open)} <br/>
            Close: ${formatValue(data.close)} (${formatChange(data.open, data.close)}) <br/>
            Low: ${formatValue(data.low)} <br/>

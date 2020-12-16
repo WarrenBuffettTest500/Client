@@ -13,6 +13,8 @@ const PortfolioItemInputModal = ({
   setPortfolioItemToEdit,
   staticPortfolio,
   onStaticPortfolioFetched,
+  submitType,
+  setSubmitType,
 }) => {
   const [symbol, setSymbol] = useState(portfolioItemToEdit?.symbol || '');
   const [avgPrice, setAvgPrice] = useState(portfolioItemToEdit?.avgPrice || '');
@@ -39,7 +41,10 @@ const PortfolioItemInputModal = ({
       quantity,
     };
 
-    if (staticPortfolio.find(item => item.symbol === portfolioItem.symbol)) {
+    if (
+      submitType === 'new'
+      && staticPortfolio.find(item => item.symbol === portfolioItem.symbol)
+    ) {
       alert(`이미 등록한 정보가 있어요. ${symbol}을 찾아서 수정하세요.`);
 
       return;
@@ -68,6 +73,7 @@ const PortfolioItemInputModal = ({
 
     setPortfolioItemToEdit(null);
     setIsInputModalOpen(false);
+    setSubmitType('new');
   };
 
   return (

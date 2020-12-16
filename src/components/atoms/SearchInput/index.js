@@ -4,8 +4,7 @@ import SearchIcon from '@material-ui/icons/Search';
 const SearchInput = inputProps => (
   <div className='input_container'>
     <SearchIcon className='icon' />
-    <input
-      {...inputProps} />
+    <input {...inputProps} />
   </div>
 );
 

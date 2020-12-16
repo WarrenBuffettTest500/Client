@@ -4,9 +4,9 @@ import { useParams } from 'react-router-dom';
 import ListContainer from '../../containers/ListContainer';
 import CandlestickChart from '../../components/molecules/CandlestickChart';
 import dateToObject from '../../utils/dateToObject';
-import Dashbord from '../../components/molecules/Dashbord';
+import StockDetailsDashboard from '../../components/molecules/StockDetailsDashboard';
 import TabBar from '../../components/molecules/TabBar';
-import Loader from '../../components/molecules/Loader';
+import LoadingIndicator from '../../components/molecules/LoadingIndicator';
 import {
   setSearchStockDetails,
   setOneWeekStockDetails,
@@ -22,7 +22,7 @@ import ChatRoom from '../../components/molecules/ChatRoom';
 import requestHitUpdate from '../../api/requestHitUpdate';
 
 const StockDetails = () => {
-  const { keyword : symbol } = useParams();
+  const { keyword: symbol } = useParams();
   const dispatch = useDispatch();
   const {
     searchKeyWord,
@@ -41,13 +41,14 @@ const StockDetails = () => {
   }));
   const [currentClickedTab, setCurrentClickedTab] = useState('');
   const [clickedTabList, setClickedTabList] = useState();
-  const [dashbordData, setDashbordData] = useState({});
+  const [dashboardData, setDashboardData] = useState({});
 
   const tabBarButtonClickHandle = async event => {
     const interval = event.target.dataset.apiParam;
 
     if (clickedTabList.includes(interval)) {
       setCurrentClickedTab(interval);
+
       return;
     }
 
@@ -111,7 +112,7 @@ const StockDetails = () => {
           alert('리스트를 가져오지 못했습니다');
         }
         dispatch(setRecommendationSymbolInfo(recommendationSymbolInfo));
-        setDashbordData({...recommendationSymbolInfo, symbol, price: stockDetails.values[0].close});
+        setDashboardData({ ...recommendationSymbolInfo, symbol, price: stockDetails.values[0].close });
         return;
       }
 
@@ -129,24 +130,24 @@ const StockDetails = () => {
         <div className='stock_details_left'>
           <div className='stock_item chart'>
             {
-            !searchStockDetails
-            ? <Loader />
-            : <>
-              <Dashbord data={dashbordData} />
-              <TabBar onTabButtonClick={tabBarButtonClickHandle} />
-              <div className='chart_wrapper'>
-                {currentClickedTab === '1day' && <CandlestickChart data={dateToObject(searchStockDetails)} interval='day' />}
-                {currentClickedTab === '1week' && <CandlestickChart data={dateToObject(oneWeekStockDetails)} interval='week' />}
-                {currentClickedTab === '1month' && <CandlestickChart data={dateToObject(oneMonthStockDetails)} interval='month' />}
-              </div>
-              </>
+              !searchStockDetails
+                ? <LoadingIndicator />
+                : <>
+                  <StockDetailsDashboard data={dashboardData} />
+                  <TabBar onTabButtonClick={tabBarButtonClickHandle} />
+                  <div className='chart_wrapper'>
+                    {currentClickedTab === '1day' && <CandlestickChart data={dateToObject(searchStockDetails)} interval='day' />}
+                    {currentClickedTab === '1week' && <CandlestickChart data={dateToObject(oneWeekStockDetails)} interval='week' />}
+                    {currentClickedTab === '1month' && <CandlestickChart data={dateToObject(oneMonthStockDetails)} interval='month' />}
+                  </div>
+                </>
             }
           </div>
           <div className='card_list_title'>
-            <p>Similar Company Stock</p>
+            <p>성격이 비슷한 기업들을 알려드려요</p>
           </div>
           <div className='stock_item card_list'>
-          {recommendationSymbolList && <ListContainer className='company_card_list container' />}
+            {recommendationSymbolList && <ListContainer className='company_card_list container' />}
           </div>
         </div>
         <div className='stock_details_right'>

@@ -28,11 +28,11 @@ const PortfolioPage = ({
   });
   const [portfolioItemToEdit, setPortfolioItemToEdit] = useState(null);
   const [chartData, setChartData] = useState([]);
+  const [submitType, setSubmitType] = useState('new');
 
   useEffect(() => {
     const fetchStaticPortfolio = async () => {
       const staticPortfolioResponse = await requestPortfolio(portfolioOwnerUid);
-
       setLocalStaticPortfolio(staticPortfolioResponse.portfolio);
     };
 
@@ -54,7 +54,6 @@ const PortfolioPage = ({
 
     const setPortfolioPageData = async () => {
       const portfolioWithRealPrice = await concatRealPrice(localStaticPortfolio);
-
       setDynamicPortfolio(portfolioWithRealPrice);
 
       const updatedDashboardData = {
@@ -62,17 +61,38 @@ const PortfolioPage = ({
         return: 0,
         earningsRate: 0,
       };
-
       let originalCapital = 0;
 
       portfolioWithRealPrice.forEach(portfolioItem => {
         const { price, avgPrice, quantity } = portfolioItem;
-        updatedDashboardData.total = new Decimal(price).times(new Decimal(quantity)).plus(new Decimal(updatedDashboardData.total)).toDecimalPlaces(2).toString();
-        updatedDashboardData.return = new Decimal(price).minus(new Decimal(avgPrice)).times(new Decimal(quantity)).plus(new Decimal(updatedDashboardData.return)).toDecimalPlaces(2).toString();
-        originalCapital = new Decimal(avgPrice).times(new Decimal(quantity)).plus(new Decimal(originalCapital)).toDecimalPlaces(2).toString();
+
+        updatedDashboardData.total
+          = new Decimal(price)
+            .times(new Decimal(quantity))
+            .plus(new Decimal(updatedDashboardData.total))
+            .toDecimalPlaces(2)
+            .toString();
+        updatedDashboardData.return
+          = new Decimal(price)
+            .minus(new Decimal(avgPrice))
+            .times(new Decimal(quantity))
+            .plus(new Decimal(updatedDashboardData.return))
+            .toDecimalPlaces(2)
+            .toString();
+        originalCapital
+          = new Decimal(avgPrice)
+            .times(new Decimal(quantity))
+            .plus(new Decimal(originalCapital))
+            .toDecimalPlaces(2)
+            .toString();
       });
 
-      updatedDashboardData.earningsRate = `${new Decimal(updatedDashboardData.return).dividedBy(new Decimal(originalCapital)).times(100).toDecimalPlaces(2).toString()}%`;
+      updatedDashboardData.earningsRate
+        = new Decimal(updatedDashboardData.return)
+          .dividedBy(new Decimal(originalCapital))
+          .times(100)
+          .toDecimalPlaces(2)
+          .toString();
 
       setDashboardData({
         total: updatedDashboardData.total,
@@ -104,8 +124,8 @@ const PortfolioPage = ({
       quantity,
       avgPrice,
     });
-
     setIsInputModalOpen(true);
+    setSubmitType('update');
   };
 
   const deleteClickHandler = async portfolioItemId => {
@@ -132,26 +152,35 @@ const PortfolioPage = ({
 
   return (
     <>
-      <div className='portfolioPageWrapper'>
-        <div className='graphsWrapper'>
+      <div className='portfolio_page_wrapper'>
+        <div className='graphs_wrapper'>
           <CircleChart data={chartData} type='pie' />
         </div>
         {
           currentUser.uid === portfolioOwnerUid
-          && <div className='dashboard'>
-            <div>
-              {`총 자산: ${dashboardData.total}`}
+          && <div className='portfolio_dashboard'>
+            <div className='dashboard_asset'>
+              <h3>총 자산:</h3>&nbsp;
+              <h1>{`$${dashboardData.total}`}</h1>
             </div>
-            <div>
-              {`수익: ${dashboardData.return}`}
+            <div className='dashboard_return'>
+              <h3>수익:</h3>&nbsp;
+              <h1>
+                {
+                  Number(dashboardData.return) < 0
+                    ? `-$${Math.abs(dashboardData.return)}`
+                    : `$${dashboardData.return}`
+                }
+              </h1>
             </div>
-            <div>
-              {`수익률: ${dashboardData.earningsRate}`}
+            <div className='dashboard_earnings_rate'>
+              <h3>수익률:</h3>&nbsp;
+              <h1>{`${dashboardData.earningsRate}%`}</h1>
             </div>
           </div>
         }
-        <div className='tableWrapper'>
-          <div className='tableTitle'>
+        <div className='table_wrapper'>
+          <div className='table_title'>
             <h3>주식 목록</h3>
             {
               currentUser.uid === portfolioOwnerUid
@@ -242,6 +271,8 @@ const PortfolioPage = ({
           setPortfolioItemToEdit={setPortfolioItemToEdit}
           staticPortfolio={currentUserStaticPortfolio}
           onStaticPortfolioFetched={onStaticPortfolioFetched}
+          submitType={submitType}
+          setSubmitType={setSubmitType}
         />
       }
     </>

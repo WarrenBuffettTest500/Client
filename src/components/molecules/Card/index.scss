@@ -98,11 +98,11 @@
 .portfolio_card {
   position: relative;
 	width: 90%;
-	min-height:350px;
+	min-height: 350px;
 	transform-style: preserve-3d;
-	perspective:800px;
-	transition:1s;
-  margin:1.2rem;
+	perspective: 800px;
+	transition: 1s;
+  margin: 1.2rem;
 }
 
 .my_portfolio_card {
@@ -114,7 +114,7 @@
   background-color: #142649;
   position: relative;
   border-radius: 0.3rem;
-  box-shadow:0 0 10px 2px rgba(0,0,0,.3);
+  box-shadow: 0 0 10px 2px rgba(0,0,0,.3);
 
   p {
     font-size: 3rem;
@@ -168,7 +168,6 @@
 
 .circle_chart_wrapper {
   display: flex;
-  margin: 0.3rem auto;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -177,7 +176,7 @@
   border-radius: 0.3rem;
 
   &.mychart {
-    width: 60%;
+    width: 100%;
     margin: 0;
   }
 
@@ -197,32 +196,32 @@
 	cursor: pointer;
   transition: 0.5s;
   background-color: lavender;
-  backface-visibility:hidden;
-  padding-bottom: 1rem;
+  backface-visibility: hidden;
 }
 
 .portfolio_back {
   background-color: $theme_color;
 	color: $primary;
-	display:table;
-	transform:rotateX(180deg);
+	display: table;
+	transform: rotateX(180deg);
 }
 
 .portfolio_back_item {
   display: table-cell;
 	vertical-align: middle;
 	text-align: center;
-  padding:20px;
+  padding: 20px;
 
   h3 {
-    font-size:22px;
+    font-size: 22px;
   }
+
   p {
-    font-size:17px;
-	  margin-top:10px;
+    font-size: 17px;
+	  margin-top: 10px;
   }
 }
 
 .portfolio_card:hover .portfolio_wrapper {
-  transform:rotateX(180deg);
+  transform: rotateX(180deg);
 }

@@ -24,11 +24,6 @@ const SearchBar = () => {
     if (!symbols) {
       const { result, symbolList } = await requestSymbolList();
 
-      if (result === RESPONSES.OK) {
-        setSymbols(symbolList);
-
-        return;
-      }
       if (result === RESPONSES.FAILURE) {
         addToast('데이터가 없습니다', {
           appearance: 'error',
@@ -37,11 +32,13 @@ const SearchBar = () => {
 
         return;
       }
+
+      setSymbols(symbolList);
     }
   };
 
   const onChange = (event, { newValue, method }) => {
-    setSearchKeyword(newValue);
+    setSearchKeyword(newValue.toUpperCase());
   };
 
   const onSuggestionsFetchRequested = ({ value }) => {
@@ -62,12 +59,13 @@ const SearchBar = () => {
         appearance: 'info',
         autoDismiss: true,
       });
-    } else {
-      history.push(`${PATHS.STOCK_DETAILS}/${searchKeyword}`);
+
       return;
     }
+
+    history.push(`${PATHS.STOCK_DETAILS}/${searchKeyword}`);
   };
-  
+
   useEffect(() => {
     getSymbolList();
   }, []);
@@ -81,17 +79,15 @@ const SearchBar = () => {
   };
 
   return (
-    <>
-      <Autosuggest
-        suggestions={suggestions}
-        onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-        onSuggestionsClearRequested={onSuggestionsClearRequested}
-        getSuggestionValue={getSuggestionValue}
-        renderSuggestion={renderSuggestion}
-        inputProps={inputProps}
-        renderInputComponent={SearchInput}
-      />
-    </>
+    <Autosuggest
+      suggestions={suggestions}
+      onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+      onSuggestionsClearRequested={onSuggestionsClearRequested}
+      getSuggestionValue={getSuggestionValue}
+      renderSuggestion={renderSuggestion}
+      inputProps={inputProps}
+      renderInputComponent={SearchInput}
+    />
   );
 };
 

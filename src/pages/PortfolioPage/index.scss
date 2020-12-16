@@ -1,34 +1,41 @@
-.portfolioPageWrapper {
+.portfolio_page_wrapper {
   width: 960px;
-  border: 1px solid green;
-  margin: 80px auto;
   padding: 15px;
+  margin: 80px auto;
 }
 
-.graphsWrapper,
-.dashboard,
-.tableWrapper {
+.graphs_wrapper,
+.portfolio_dashboard,
+.table_wrapper {
   margin: 10px auto;
+  border-radius: 0.3rem;
+  box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.3);
+  background-color: #142649;
 }
 
-.graphsWrapper {
-  border: 1px solid yellow;
+.graphs_wrapper {
+  padding: 14px;
 }
 
-.dashboard {
-  border: 1px solid orange;
+.portfolio_dashboard {
   display: flex;
   flex-direction: row;
   color: white;
   justify-content: space-evenly;
 }
 
-.tableWrapper {
-  border: 1px solid red;
+.dashboard_asset,
+.dashboard_return,
+.dashboard_earnings_rate {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
-.tableTitle {
-  border: 1px solid white;
+.table_wrapper {
+}
+
+.table_title {
   display: flex;
   flex-direction: row;
 
@@ -40,8 +47,4 @@
 table {
   color: white;
   border-collapse: collapse;
-}
-
-.myPortfolioPieChart {
-  margin: 0 auto;
 }

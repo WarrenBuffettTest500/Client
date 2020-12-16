@@ -54,7 +54,6 @@ const Main = () => {
   useEffect(() => {
     const fetchTrendingStocks = async () => {
       const trendingStocksResponse = await requestTrendingStocks();
-
       setTrendingStocks(trendingStocksResponse.topTen);
     };
 
@@ -71,7 +70,8 @@ const Main = () => {
     setIsLoadingRecommendations(true);
 
     const fetchRecommendations = async () => {
-      const { portfolios, hasMore } = await requestRecommendations(recommendationCriterion, currentUser, page);
+      const { portfolios, hasMore }
+        = await requestRecommendations(recommendationCriterion, currentUser, page);
 
       setRecommendedChartDatas(formatPortfoliosToChartData(portfolios));
       setIsLoadingRecommendations(false);
@@ -87,11 +87,12 @@ const Main = () => {
     setIsLoadingRecommendations(true);
 
     const concatRecommendations = async () => {
-      const { portfolios, hasMore } = await requestRecommendations(recommendationCriterion, currentUser, page);
+      const { portfolios, hasMore }
+        = await requestRecommendations(recommendationCriterion, currentUser, page);
 
-      setRecommendedChartDatas(previous => {
-        return [...previous, ...formatPortfoliosToChartData(portfolios)];
-      });
+      setRecommendedChartDatas(previous => (
+        [...previous, ...formatPortfoliosToChartData(portfolios)]
+      ));
       setIsLoadingRecommendations(false);
       if (hasMore === false) setHasMoreRecommendations(false);
     };
@@ -157,54 +158,72 @@ const Main = () => {
       <div className='main_page_dashboard_wrapper'>
         {
           currentUser
-            ? <Card className='my_portfolio_card'>
-              {staticPortfolio.length
-                ? <>
-                  <div className='circle_chart_wrapper mychart'>
-                    <CircleChart data={chartData} type='donut' />
+          && <Card className='my_portfolio_card'>
+            {staticPortfolio.length
+              ? <>
+                <div className='circle_chart_wrapper mychart'>
+                  <CircleChart data={chartData} type='donut' />
+                </div>
+                <Button
+                  className='my_portfolio_button'
+                  onClick={event => portfolioClickHandler(event)}
+                >
+                  <p>GO TO PORTFOLIO</p>
+                </Button>
+              </>
+              : <>
+                <p>Go to my portfolio</p>
+                <div
+                  onClick={event => portfolioClickHandler(event)}
+                  className='card_message'
+                >
+                  포트폴리오를 등록해주세요👀
                   </div>
-                  <Button
-                    className='my_portfolio_button'
-                    onClick={event => portfolioClickHandler(event)}
-                  >
-                    <p>SHOW YOUR PORTFOLIO</p>
-                  </Button>
-                </>
-                : <>
-                  <p>go to my portfolio</p>
-                  <div
-                    onClick={event => portfolioClickHandler(event)}
-                    className='card_message'
-                  >
-                    포트폴리오를 등록해주세요👀
-                  </div>
-                </>
-              }
-            </Card>
-            : <Card className='my_portfolio_card'>
-              <p>go to my portfolio</p>
-              <div className='card_message'>로그인하고 포트폴리오를 관리하세요</div>
-            </Card>
+              </>
+            }
+          </Card>
+        }
+        {
+          !currentUser
+          && <Card className='my_portfolio_card'>
+            <p>go to my portfolio</p>
+            <div className='card_message'>로그인하고 포트폴리오를 관리하세요</div>
+          </Card>
         }
         <TrendingList symbols={trendingStocks} />
       </div>
-      <div className='recommended_portfolios_title'><p>Recommendation Portfolios</p></div>
+      <div className='recommended_portfolios_title'>
+        {
+          (!currentUser || (currentUser && recommendationCriterion === 'random'))
+            ? <span>주식을 등록하시면 포트폴리오를 추천해드립니다</span>
+            : <span>
+              {
+                `${currentUser.displayName}님의 ${recommendationCriterion === 'preference' ? '투자 성향' : '보유 주식'}을 분석해 추천 포트폴리오를 모아봤어요`
+              }
+            </span>
+        }
+      </div>
       <div className='toggle_button_wrapper'>
         {
-          (recommendationCriterion === 'portfolio' || recommendationCriterion === 'preference') &&
-          <Button
+          (recommendationCriterion === 'portfolio' || recommendationCriterion === 'preference')
+          && <Button
             className='portfolio_toggle_button'
-            onClick={recommendationToggleHandler}>
-            {recommendationCriterion === 'portfolio' ? '투자 성향 기준으로 보기' : '보유 주식 기준으로 보기'}
+            onClick={recommendationToggleHandler}
+          >
+            {recommendationCriterion === 'portfolio' ? '투자 성향 기준으로 전환' : '보유 주식 기준으로 전환'}
           </Button>
         }
       </div>
       <div className='recommended_portfolios_wrapper'>
         {
           recommendedChartDatas.map((portfolio, index) => {
-            if (index >= recommendedChartDatas.length - 3) {
+            if (index === recommendedChartDatas.length - 1) {
               return (
-                <div key={portfolio.owner} ref={lastRecommendationRef} className='portfolio_card'>
+                <div
+                  key={portfolio.owner}
+                  ref={lastRecommendationRef}
+                  className='portfolio_card'
+                >
                   <Card>
                     <div
                       ref={element => cardRefs.current[index] = element}
@@ -250,7 +269,7 @@ const Main = () => {
                       </div>
                     </div>
                     <div className='portfolio_back'>
-                      <div className='portfolio_back_item'                                                                                                                                                                                                                                                  >
+                      <div className='portfolio_back_item'>
                         <h3 onMouseOver={() => scrollIntoView(index)}>This Is Title Article</h3>
                         <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
                         <Button
