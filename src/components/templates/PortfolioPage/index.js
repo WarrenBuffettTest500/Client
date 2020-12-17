@@ -13,7 +13,6 @@ import calculateProportions from '../../../utils/calculateProportions';
 import requestPortfolio from '../../../api/requestPortfolio';
 import commaNumber from 'comma-number';
 import { useToasts } from 'react-toast-notifications';
-import LoadingIndicator from '../../molecules/LoadingIndicator';
 
 const PortfolioPage = ({
   currentUser,
