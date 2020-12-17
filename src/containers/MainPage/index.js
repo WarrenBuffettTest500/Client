@@ -14,7 +14,6 @@ import { setRecommendationCriterion } from '../../store/user';
 import TrendingList from '../../components/molecules/TrendingList';
 import formatPortfoliosToChartData from '../../utils/formatPortfoliosToChartData';
 import NUMBERS from '../../constants/numbers';
-import LoadingIndicator from '../../components/molecules/LoadingIndicator';
 
 const Main = () => {
   const dispatch = useDispatch();
@@ -163,7 +162,7 @@ const Main = () => {
             {staticPortfolio.length
               ? <>
                 <div className='circle_chart_wrapper mychart'>
-                  <CircleChart data={chartData} type='donut' />
+                  <CircleChart data={chartData} type='donut' total={total} />
                 </div>
                 <Button
                   className='my_portfolio_button'

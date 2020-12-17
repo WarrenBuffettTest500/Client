@@ -1,7 +1,8 @@
 import React, { useRef, useEffect } from 'react';
 import * as d3 from 'd3';
+import commaNumber from 'comma-number';
 
-const CircleChart = ({ data, type }) => {
+const CircleChart = ({ data, type, total }) => {
   const svgRef = useRef();
 
   useEffect(() => {
@@ -18,7 +19,7 @@ const CircleChart = ({ data, type }) => {
     const arc = d3.arc().innerRadius(type === 'donut' ? radius * 0.67 : 0).outerRadius(radius - 1);
     const arcs = pie(data);
     const svg = d3.select(svgRef.current).attr('viewBox', [-width / 2, -height / 2, width, height]);
-
+    console.log(arcs);
     svg.selectAll('*').remove();
 
     svg.selectAll('path')
@@ -55,6 +56,13 @@ const CircleChart = ({ data, type }) => {
           if (Number(d.data.value) < 5) return;
           return `${d.data.value.toLocaleString()}%`;
         }));
+
+    if (type !== 'donut') return;
+
+    svg.append('text')
+      .attr('text-anchor', 'middle')
+      .text(total ? `$${commaNumber(total)}` : null)
+      .style('fill', 'white');
   }, [data]);
 
   return (
