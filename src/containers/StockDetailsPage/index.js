@@ -55,34 +55,33 @@ const StockDetails = () => {
     }
 
     try {
-      const { result, stockDetails } = await requestStockDetails(searchKeyWord, interval);
+      const { message: stockDetailsMessage, stockDetails } = await requestStockDetails(symbol);
 
-      if (result === RESPONSES.OK) {
-        switch (interval) {
-          case '1day':
-            dispatch(setSearchStockDetails(stockDetails));
-            break;
-          case '1week':
-            dispatch(setOneWeekStockDetails(stockDetails));
-            break;
-          case '1month':
-            dispatch(setOneMonthStockDetails(stockDetails));
-            break;
-          default: dispatch(setSearchStockDetails(stockDetails));
-            break;
-        }
-
-        setClickedTabList([...clickedTabList, interval]);
-        setCurrentClickedTab(interval);
+      if (stockDetailsMessage === 'not found') {
+        addToast('기업 정보를 찾지 못했습니다', {
+          appearance: 'error',
+          autoDismiss: true,
+        });
 
         return;
       }
 
-      if (result === RESPONSES.FAILURE) {
-        history.push(PATHS.FAILURE);
-
-        return;
+      switch (interval) {
+        case '1day':
+          dispatch(setSearchStockDetails(stockDetails));
+          break;
+        case '1week':
+          dispatch(setOneWeekStockDetails(stockDetails));
+          break;
+        case '1month':
+          dispatch(setOneMonthStockDetails(stockDetails));
+          break;
+        default: dispatch(setSearchStockDetails(stockDetails));
+          break;
       }
+
+      setClickedTabList([...clickedTabList, interval]);
+      setCurrentClickedTab(interval);
     } catch (error) {
       console.error(error.message);
     }
@@ -113,7 +112,8 @@ const StockDetails = () => {
 
       dispatch(setSearchStockDetails(stockDetails));
 
-      const { recommendationSymbolList, recommendationSymbolInfo } = await requestRecommendationSymbolList(symbol);
+      const { recommendationSymbolList, recommendationSymbolInfo }
+        = await requestRecommendationSymbolList(symbol);
 
       dispatch(setRecommendationSymbolList(recommendationSymbolList));
       dispatch(setRecommendationSymbolInfo(recommendationSymbolInfo));
@@ -133,9 +133,27 @@ const StockDetails = () => {
                   <StockDetailsDashboard data={dashboardData} />
                   <TabBar onTabButtonClick={tabBarButtonClickHandle} />
                   <div className='chart_wrapper'>
-                    {currentClickedTab === '1day' && <CandlestickChart data={dateToObject(searchStockDetails)} interval='day' />}
-                    {currentClickedTab === '1week' && <CandlestickChart data={dateToObject(oneWeekStockDetails)} interval='week' />}
-                    {currentClickedTab === '1month' && <CandlestickChart data={dateToObject(oneMonthStockDetails)} interval='month' />}
+                    {
+                      currentClickedTab === '1day'
+                      && <CandlestickChart
+                        data={dateToObject(searchStockDetails)}
+                        interval='day'
+                      />
+                    }
+                    {
+                      currentClickedTab === '1week'
+                      && <CandlestickChart
+                        data={dateToObject(oneWeekStockDetails)}
+                        interval='week'
+                      />
+                    }
+                    {
+                      currentClickedTab === '1month'
+                      && <CandlestickChart
+                        data={dateToObject(oneMonthStockDetails)}
+                        interval='month'
+                      />
+                    }
                   </div>
                 </>
             }

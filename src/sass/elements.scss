@@ -5,6 +5,7 @@ html {
     color: $primary;
     box-sizing: border-box;
     margin: 0;
+
     button {
       background-color: transparent;
       border-color: transparent;
@@ -13,7 +14,11 @@ html {
       cursor: pointer;
       font-family: $font;
     }
-    a { color: inherit };
+
+    a {
+      color: inherit;
+    }
+
     input {
       font-family: $font;
     }
