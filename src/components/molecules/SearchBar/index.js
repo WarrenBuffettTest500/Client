@@ -4,7 +4,6 @@ import Autosuggest from 'react-autosuggest';
 import SearchInput from '../../atoms/SearchInput';
 import { useToasts } from 'react-toast-notifications';
 import requestSymbolList from '../../../api/requestSymbolList';
-
 import {
   getSuggestions,
   getSuggestionValue,
@@ -24,11 +23,6 @@ const SearchBar = () => {
     if (!symbols) {
       const { result, symbolList } = await requestSymbolList();
 
-      if (result === RESPONSES.OK) {
-        setSymbols(symbolList);
-
-        return;
-      }
       if (result === RESPONSES.FAILURE) {
         addToast('데이터가 없습니다', {
           appearance: 'error',
@@ -37,11 +31,15 @@ const SearchBar = () => {
 
         return;
       }
+
+      setSymbols(symbolList);
     }
   };
 
+  useEffect(getSymbolList, []);
+
   const onChange = (event, { newValue, method }) => {
-    setSearchKeyword(newValue);
+    setSearchKeyword(newValue.toUpperCase());
   };
 
   const onSuggestionsFetchRequested = ({ value }) => {
@@ -62,15 +60,12 @@ const SearchBar = () => {
         appearance: 'info',
         autoDismiss: true,
       });
-    } else {
-      history.push(`${PATHS.STOCK_DETAILS}/${searchKeyword}`);
+
       return;
     }
+
+    history.push(`${PATHS.STOCK_DETAILS}/${searchKeyword}`);
   };
-  
-  useEffect(() => {
-    getSymbolList();
-  }, []);
 
   const inputProps = {
     placeholder: '관심있는 주식을 검색하세요',
@@ -81,17 +76,15 @@ const SearchBar = () => {
   };
 
   return (
-    <>
-      <Autosuggest
-        suggestions={suggestions}
-        onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-        onSuggestionsClearRequested={onSuggestionsClearRequested}
-        getSuggestionValue={getSuggestionValue}
-        renderSuggestion={renderSuggestion}
-        inputProps={inputProps}
-        renderInputComponent={SearchInput}
-      />
-    </>
+    <Autosuggest
+      suggestions={suggestions}
+      onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+      onSuggestionsClearRequested={onSuggestionsClearRequested}
+      getSuggestionValue={getSuggestionValue}
+      renderSuggestion={renderSuggestion}
+      inputProps={inputProps}
+      renderInputComponent={SearchInput}
+    />
   );
 };
 

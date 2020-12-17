@@ -1,9 +1,9 @@
 import React from 'react';
 
-const Loader = () => {
+const LoadingIndicator = () => {
   return (
-    <div className='wrapper'>
-      <div className='loader'>
+    <div className='loading_indicator_wrapper'>
+      <div className='loading_indicator'>
         <div className='v-bar first'></div>
         <div className='v-bar second'></div>
         <div className='v-bar third'></div>
@@ -12,4 +12,4 @@ const Loader = () => {
   );
 };
 
-export default Loader;
+export default LoadingIndicator;

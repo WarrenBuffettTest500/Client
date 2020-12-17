@@ -1,14 +1,14 @@
 import React, { useEffect, useState, useRef } from 'react';
-import Card from '../../components/molecules/Card';
+import Card from '../../components/atoms/Card';
 import { useHistory } from 'react-router-dom';
 import PATHS from '../../constants/paths';
-import requestCompanyProfiles from '../../api/requestCompanyProfileUpdate';
+import requestCompanyProfiles from '../../api/requestCompanyProfiles';
 import { useSelector, useDispatch } from 'react-redux';
 import { setRecommendationSymbolList, setCompanyProfileList } from '../../store/stock';
 import { useInfinteScroll } from '../../hooks';
 import wait from '../../utils/setTimeOut';
 
-const ListContainer = ({
+const CompanyRecommendations = ({
   className,
 }) => {
   const viewport = useRef(null);
@@ -24,7 +24,7 @@ const ListContainer = ({
     companyProfileList: state.stock?.companyProfileList,
   }));
 
-  const onCardClick = path => {
+  const cardClickHandler = path => {
     history.push(path);
   };
 
@@ -32,7 +32,8 @@ const ListContainer = ({
     if (!recommendationSymbolList.length || !isIntersecting) return;
 
     await wait(3000);
-    const data = await requestCompanyProfiles(recommendationSymbolList, 1);
+
+    const data = await requestCompanyProfiles(recommendationSymbolList);
 
     dispatch(setRecommendationSymbolList(recommendationSymbolList?.slice(1)));
     dispatch(setCompanyProfileList([...companyProfileList, data]));
@@ -67,25 +68,28 @@ const ListContainer = ({
 
   return (
     <div ref={viewport} className={className}>
-      {companyProfileList && companyProfileList.map(item =>
-        <>
-          <Card
-            key={item.symbol}
-            onClick={() => onCardClick(`${PATHS.STOCK_DETAILS}/${item.symbol}`)}
-            className='company_card'>
-            <div className='card_item_wrapper' ref={card}>
-              <h3 className='company_symbol'>{item.symbol}</h3>
-              <p>{`${item.percent_change}%`}</p>
-              <p>{item.name}</p>
-              <p>{`$${item.close}`}</p>
-            </div>
-          </Card>
-          <div ref={setTarget} className='last_company_card' />
-          <div ref={setTarget} className='last_company_card' />
-        </>,
-      )}
+      {
+        companyProfileList
+        && companyProfileList.map(item => (
+          <div key={item.symbol}>
+            <Card
+              onClick={() => cardClickHandler(`${PATHS.STOCK_DETAILS}/${item.symbol}`)}
+              className='company_card'
+            >
+              <div className='card_item_wrapper' ref={card}>
+                <h3 className='company_symbol'>{item.symbol}</h3>
+                <p>{`${item.percent_change}%`}</p>
+                <p>{item.name}</p>
+                <p>{`$${item.close}`}</p>
+              </div>
+            </Card>
+            <div ref={setTarget} className='last_company_card' />
+            <div ref={setTarget} className='last_company_card' />
+          </div>
+        ))
+      }
     </div>
   );
 };
 
-export default ListContainer;
+export default CompanyRecommendations;

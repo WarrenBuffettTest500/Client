@@ -1,12 +1,13 @@
 import React, { useRef, useEffect } from 'react';
 import * as d3 from 'd3';
+import commaNumber from 'comma-number';
 
-const CircleChart = ({ data, type }) => {
+const CircleChart = ({ data, type, total }) => {
   const svgRef = useRef();
 
   useEffect(() => {
-    const width = 250;
-    const height = 180;
+    const width = 240;
+    const height = 200;
     const radius = Math.min(width, height) / 2;
     const pie = d3.pie()
       .padAngle(0.005)
@@ -55,13 +56,20 @@ const CircleChart = ({ data, type }) => {
           if (Number(d.data.value) < 5) return;
           return `${d.data.value.toLocaleString()}%`;
         }));
+
+    if (type !== 'donut') return;
+
+    svg.append('text')
+      .attr('text-anchor', 'middle')
+      .text(total ? `$${commaNumber(total)}` : null)
+      .style('fill', 'white');
   }, [data]);
 
   return (
     <svg
       className='circle_chart'
-      ref={svgRef}>
-    </svg>
+      ref={svgRef}
+    />
   );
 };
 

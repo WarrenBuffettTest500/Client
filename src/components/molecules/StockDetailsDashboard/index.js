@@ -1,12 +1,10 @@
 import React from 'react';
-import Card from '../../molecules/Card';
+import Card from '../../atoms/Card';
 
-const Dashbord = ({ data }) => {
+const StockDetailsDashboard = ({ data }) => {
   return (
     <div className='dashbord'>
-      <Card
-        className='dashbord_card'
-      >
+      <Card className='dashbord_card'>
         <div className='dashbord_card_left'>
           <div className='dashbord_card_info'>📂{data.sector}</div>
           <div className='dashbord_card_info'>📉{data.industry}</div>
@@ -26,4 +24,4 @@ const Dashbord = ({ data }) => {
   );
 };
 
-export default Dashbord;
+export default StockDetailsDashboard;

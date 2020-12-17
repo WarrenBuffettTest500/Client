@@ -9,14 +9,14 @@ import {
 } from '../../store/user';
 import LoginModal from '../../components/molecules/LoginModal/';
 import PreferencesForm from '../../components/templates/PreferencesForm';
-import StockDetails from '../../pages/StockDetails';
-import PortfolioPage from '../../pages/PortfolioPage';
+import StockDetails from '../StockDetailsPage';
+import PortfolioPage from '../../components/templates/PortfolioPage';
 import requestUser from '../../api/requestUser';
 import requestPreferenceInfo from '../../api/requestPreferenceInfo';
 import { Switch, Route } from 'react-router-dom';
 import PATHS from '../../constants/paths';
 import '../../sass/app.scss';
-import Main from '../../pages/Main';
+import Main from '../MainPage';
 import requestPortfolio from '../../api/requestPortfolio';
 import setCookie from '../../utils/setCookie';
 import getCookie from '../../utils/getCookie';

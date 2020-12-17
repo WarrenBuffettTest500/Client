@@ -4,15 +4,13 @@ import PATHS from '../constants/paths';
 const requestSymbolList = async () => {
   try {
     const response = await fetch(
-      `${PATHS.HOST}${PATHS.SERVER_PORT}${PATHS.COMPANY_PROFILES}${PATHS.SYMBOL}`,
-      {
-        method: METHODS.GET,
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: localStorage.getItem('token'),
-        },
+      `${PATHS.HOST}${PATHS.SERVER_PORT}${PATHS.COMPANY_PROFILES}${PATHS.SYMBOL}`, {
+      method: METHODS.GET,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: localStorage.getItem('token'),
       },
-    );
+    });
 
     const { result, data } = await response.json();
     const symbolList = data.map(item => item.symbol);

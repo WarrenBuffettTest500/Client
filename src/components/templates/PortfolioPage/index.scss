@@ -1,0 +1,78 @@
+.portfolio_page_wrapper {
+  width: 960px;
+  padding: 15px;
+  margin: 80px auto;
+}
+
+.graphs_wrapper,
+.portfolio_dashboard,
+.table_wrapper {
+  margin: 10px auto;
+  border-radius: 0.3rem;
+  box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.3);
+  background-color: #142649;
+}
+
+.graphs_wrapper {
+  padding: 14px;
+  text-align: center;
+}
+
+.portfolio_dashboard {
+  display: flex;
+  flex-direction: row;
+  color: white;
+  justify-content: space-evenly;
+}
+
+.dashboard_asset,
+.dashboard_return,
+.dashboard_earnings_rate {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.table_wrapper {
+  padding: 20px;
+}
+
+.table_header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 10px;
+
+  h3 {
+    color: white;
+    margin-block-start: 0;
+    margin-block-end: 0;
+  }
+}
+
+table {
+  color: white;
+  border-collapse: collapse;
+  text-align: center;
+  width: 100%;
+}
+
+.table_symbol,
+.table_update,
+.table_remove {
+  width: 4%;
+}
+
+.table_quantity,
+.table_avg_price,
+.table_price,
+.table_return,
+.table_earnings_rate,
+.table_current_total,
+.table_buying_total {
+  width: 14%;
+}
+
+tr:nth-child(even) {
+  background-color: #0d1a35;
+}

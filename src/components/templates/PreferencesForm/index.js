@@ -4,12 +4,14 @@ import './index.scss';
 import requestPreferenceInfoUpdate from '../../../api/requestPreferenceInfoUpdate';
 import requestUserPreferenceIdUpdate from '../../../api/requestUserPreferenceIdUpdate';
 import PATHS from '../../../constants/paths';
+import { useToasts } from 'react-toast-notifications';
 
 const PreferencesForm = ({
   currentUser,
   onUserUpdate,
   onPreferenceInfoUpdate,
 }) => {
+  const { addToast } = useToasts();
   const [interestedSectors, setInterestedSectors] = useState([]);
   const [riskAppetite, setRiskAppetite] = useState('');
   const [stockProportion, setStockProportion] = useState('');
@@ -21,7 +23,10 @@ const PreferencesForm = ({
     event.preventDefault();
 
     if (interestedSectors.length > 3) {
-      alert('관심 섹터는 최대 3개까지 고를 수 있습니다');
+      addToast('관심 섹터는 최대 3개까지 고를 수 있습니다', {
+        appearance: 'warning',
+        autoDismiss: true,
+      });
 
       return;
     }
@@ -33,7 +38,10 @@ const PreferencesForm = ({
       || !preferredStockType
       || !period
     ) {
-      alert('정보를 모두 입력해주세요');
+      addToast('정보를 모두 입력해주세요', {
+        appearance: 'warning',
+        autoDismiss: true,
+      });
 
       return;
     }

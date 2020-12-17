@@ -18,8 +18,6 @@ export const useInfinteScroll = ({
 
     observer.observe(target);
 
-    return () => {
-      observer.unobserve(target);
-    };
+    return () => observer.unobserve(target);
   }, [target, root]);
 };

@@ -3,15 +3,13 @@ import PATHS from '../constants/paths';
 
 const requestUser = async () => {
   const response = await fetch(
-    `${PATHS.HOST}${PATHS.SERVER_PORT}${PATHS.USERS}/current_user`,
-    {
-      method: METHODS.GET,
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
+    `${PATHS.HOST}${PATHS.SERVER_PORT}${PATHS.USERS}/current_user`, {
+    method: METHODS.GET,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
     },
-  );
+  });
 
   return await response.json();
 };

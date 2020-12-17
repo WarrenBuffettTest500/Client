@@ -22,7 +22,7 @@
   margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(34rem, max-content));
-  justify-content: center;
+  justify-content: space-evenly;
   justify-items: center;
   background-color: #142649;
 }
@@ -30,7 +30,7 @@
 .recommended_portfolios_title {
   margin: 2rem 8rem;
   text-align: left;
-  font-size: 3rem;
+  font-size: 1.5rem;
 
   p {
     margin-block-start: .5em;

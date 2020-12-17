@@ -1,17 +1,14 @@
 import METHODS from '../constants/methods';
 import PATHS from '../constants/paths';
 
-const requestCompanyProfileUpdate = async keyword => {
+const requestCompanyProfileUpdate = async symbol => {
   try {
-    const response = await fetch(
-      `${PATHS.HOST}${PATHS.SERVER_PORT}${PATHS.COMPANY_PROFILES}/${keyword}${PATHS.VIEWS}`,
-      {
-        method: METHODS.PUT,
-        headers: {
-          'Content-Type': 'application/json',
-        },
+    const response = await fetch(`${PATHS.HOST}${PATHS.SERVER_PORT}${PATHS.COMPANY_PROFILES}/${symbol}${PATHS.VIEWS}`, {
+      method: METHODS.PUT,
+      headers: {
+        'Content-Type': 'application/json',
       },
-    );
+    });
 
     return await response.json();
   } catch (error) {

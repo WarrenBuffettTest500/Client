@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import List from '../../atoms/List';
 
 const TrendingList = ({ symbols }) => {
@@ -6,10 +7,14 @@ const TrendingList = ({ symbols }) => {
     <List title='실시간 인기 주식' className='trending_list'>
       {
         symbols.map((symbol, index) => (
-          <div key={symbol}>{`${index + 1}. ${symbol}`}</div>
+          <Link to={`/stock_details/${symbol}`} key={symbol}>
+            <div className='trending_list_item'>
+              {`${index + 1}. ${symbol}`}
+            </div>
+          </Link>
         ))
       }
-    </List>
+    </List >
   );
 };
 

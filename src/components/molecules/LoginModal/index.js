@@ -1,5 +1,4 @@
 import React from 'react';
-// import Modal from 'react-modal';
 import { useHistory } from 'react-router-dom';
 import Button from '../../atoms/Button';
 import PATHS from '../../../constants/paths';
@@ -31,22 +30,22 @@ const LoginModal = ({
       try {
         const { result, user, token } = await requestSignIn(userInfo, PATHS.LOGIN);
 
-        if (result === RESPONSES.OK) {
-          localStorage.setItem('token', token);
-          onLogin(user);
-          setIsModalOpen(false);
-          addToast('성공적으로 로그인했습니다', {
-            appearance: 'success',
-            autoDismiss: true,
-          });
-          return;
-        }
         if (result === RESPONSES.FAILURE) {
-          addToast('회원가입이 필요합니다', {
+          addToast('회원가입을 해주세요', {
             appearance: 'info',
             autoDismiss: true,
           });
+
+          return;
         }
+
+        localStorage.setItem('token', token);
+        onLogin(user);
+        setIsModalOpen(false);
+        addToast('성공적으로 로그인했습니다', {
+          appearance: 'success',
+          autoDismiss: true,
+        });
       } catch (error) {
         addToast(error.message, {
           appearance: 'error',
@@ -57,17 +56,6 @@ const LoginModal = ({
       try {
         const { result, user, token } = await requestSignIn(userInfo, PATHS.SIGNUP);
 
-        if (result === RESPONSES.OK) {
-          localStorage.setItem('token', token);
-          onLogin(user);
-          setIsModalOpen(false);
-          addToast('회원가입에 성공하였습니다', {
-            appearance: 'info',
-            autoDismiss: true,
-          });
-          history.push(PATHS.PREFERENCES);
-          return;
-        }
         if (result === RESPONSES.FAILURE) {
           localStorage.setItem('token', token);
           onLogin(user);
@@ -76,8 +64,19 @@ const LoginModal = ({
             appearance: 'info',
             autoDismiss: true,
           });
+
           return;
         }
+
+        localStorage.setItem('token', token);
+        onLogin(user);
+        setIsModalOpen(false);
+        addToast('회원가입에 성공하였습니다', {
+          appearance: 'info',
+          autoDismiss: true,
+        });
+
+        history.push(PATHS.PREFERENCES);
       } catch (error) {
         addToast(error.message, {
           appearance: 'error',
