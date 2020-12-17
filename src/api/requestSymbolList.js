@@ -8,7 +8,6 @@ const requestSymbolList = async () => {
       method: METHODS.GET,
       headers: {
         'Content-Type': 'application/json',
-        Authorization: localStorage.getItem('token'),
       },
     });
 

@@ -7,7 +7,6 @@ const requestStockDetails = async (keyword, interval = '1day') => {
       method: METHODS.GET,
       headers: {
         'Content-Type': 'application/json',
-        Authorization: localStorage.getItem('token'),
       },
     });
 

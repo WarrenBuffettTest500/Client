@@ -14,7 +14,6 @@ import requestPortfolio from '../../../api/requestPortfolio';
 import commaNumber from 'comma-number';
 import { useToasts } from 'react-toast-notifications';
 import TOAST_APPEARANCES from '../../../constants/toastAppearances';
-import LoadingIndicator from '../../molecules/LoadingIndicator';
 import PortfolioDashboard from '../../organisms/PortfolioDashboard';
 
 const PortfolioPage = ({
