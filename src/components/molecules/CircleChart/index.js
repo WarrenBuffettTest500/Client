@@ -19,7 +19,7 @@ const CircleChart = ({ data, type, total }) => {
     const arc = d3.arc().innerRadius(type === 'donut' ? radius * 0.67 : 0).outerRadius(radius - 1);
     const arcs = pie(data);
     const svg = d3.select(svgRef.current).attr('viewBox', [-width / 2, -height / 2, width, height]);
-    console.log(arcs);
+
     svg.selectAll('*').remove();
 
     svg.selectAll('path')
