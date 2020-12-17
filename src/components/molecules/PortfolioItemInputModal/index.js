@@ -6,6 +6,9 @@ import requestPortfolioItemCreate from '../../../api/requestPortfolioItemCreate'
 import requestPortfolioItemUpdate from '../../../api/requestPortfolioItemUpdate';
 import requestPortfolio from '../../../api/requestPortfolio';
 import { useToasts } from 'react-toast-notifications';
+import TOAST_APPEARANCES from '../../../constants/toastAppearances';
+import { RESPONSE_RESULTS } from '../../../constants/responses';
+import ModalInputField from '../ModalInputField';
 
 const PortfolioItemInputModal = ({
   currentUser,
@@ -25,7 +28,7 @@ const PortfolioItemInputModal = ({
   const portfolioItemSumbitHandler = async () => {
     if (!symbol || !avgPrice || !quantity) {
       addToast('정보를 모두 입력해 주세요', {
-        appearance: 'warning',
+        appearance: TOAST_APPEARANCES.WARNING,
         autoDismiss: true,
       });
 
@@ -34,7 +37,7 @@ const PortfolioItemInputModal = ({
 
     if (isNaN(avgPrice) || isNaN(quantity)) {
       addToast('평균단가와 보유수량은 모두 숫자로 입력해야 합니다', {
-        appearance: 'warning',
+        appearance: TOAST_APPEARANCES.WARNING,
         autoDismiss: true,
       });
 
@@ -54,7 +57,7 @@ const PortfolioItemInputModal = ({
       && staticPortfolio.find(item => item.symbol === portfolioItem.symbol)
     ) {
       addToast(`이미 등록한 정보가 있어요. ${symbol}을 찾아서 수정하세요.`, {
-        appearance: 'warning',
+        appearance: TOAST_APPEARANCES.WARNING,
         autoDismiss: true,
       });
 
@@ -66,9 +69,9 @@ const PortfolioItemInputModal = ({
         ? await requestPortfolioItemUpdate(currentUser.uid, portfolioItem, portfolioItemToEdit.portfolioItemId)
         : await requestPortfolioItemCreate(currentUser.uid, portfolioItem);
 
-    if (response.result !== 'ok') {
+    if (response.result !== RESPONSE_RESULTS.OK) {
       addToast('등록하다가 문제가 생겼어요', {
-        appearance: 'error',
+        appearance: TOAST_APPEARANCES.ERROR,
         autoDismiss: true,
       });
 
@@ -82,7 +85,6 @@ const PortfolioItemInputModal = ({
     };
 
     fetchStaticPortfolio();
-
     setPortfolioItemToEdit(null);
     setIsInputModalOpen(false);
     setSubmitType('new');
@@ -94,33 +96,24 @@ const PortfolioItemInputModal = ({
         setIsModalOpen={setIsInputModalOpen}
         onClick={() => setPortfolioItemToEdit(null)}
       />
-      <Modal className='portfolioItemInputModal'>
-        <div>
-          <h3>티커</h3>
-          <input
-            type='text'
-            value={symbol}
-            onChange={event => setSymbol(event.target.value.toUpperCase())}
-          />
-        </div>
-        <div>
-          <h3>평균단가</h3>
-          <input
-            type='text'
-            value={avgPrice}
-            onChange={event => setAvgPrice(event.target.value)}
-          />
-        </div>
-        <div>
-          <h3>보유 수량</h3>
-          <input
-            type='text'
-            value={quantity}
-            onChange={event => setQuantity(event.target.value)}
-          />
-        </div>
+      <Modal className='portfolio_item_input_modal'>
+        <ModalInputField
+          title='티커'
+          value={symbol}
+          onChange={event => setSymbol(event.target.value.toUpperCase())}
+        />
+        <ModalInputField
+          title='평균단가'
+          value={avgPrice}
+          onChange={event => setAvgPrice(event.target.value)}
+        />
+        <ModalInputField
+          title='보유 수량'
+          value={quantity}
+          onChange={event => setQuantity(event.target.value)}
+        />
         <Button
-          className='portfolioItemSumbitButton'
+          className='portfolio_item_sumbit_button'
           onClick={portfolioItemSumbitHandler}
           text='확인'
         />

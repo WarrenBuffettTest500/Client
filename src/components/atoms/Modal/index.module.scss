@@ -8,13 +8,13 @@
 }
 
 @mixin centered() {
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
 
-.userModal {
+.user_modal {
   @include modalBase;
   justify-content: space-evenly;
   height: 150px;
@@ -24,7 +24,7 @@
   top: 70px;
 }
 
-.portfolioItemInputModal {
+.portfolio_item_input_modal {
   @include modalBase;
   @include centered;
   justify-content: space-around;
@@ -38,7 +38,7 @@
   }
 }
 
-.authModal {
+.auth_modal {
   @include modalBase;
   @include centered;
   justify-content: space-evenly;

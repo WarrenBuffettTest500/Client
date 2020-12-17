@@ -17,13 +17,14 @@ const ChatRoom = () => {
   const { keyword: roomName } = useParams();
   const [chats, setChats] = useState([]);
   const [nickname, setNickname] = useState('');
-  const [newchat, setNewchat] = useState({
+  const emptyChat = {
     roomName: '',
     nickname: '',
     message: '',
     date: '',
     type: '',
-  });
+  };
+  const [newchat, setNewchat] = useState(emptyChat);
 
   const scrollToBottom = () => {
     if (!messageBox.current) return;
@@ -44,7 +45,7 @@ const ChatRoom = () => {
     chat.type = 'message';
 
     createNewChat(chat);
-    setNewchat({ roomName: '', nickname: '', message: '', date: '', type: '' });
+    setNewchat(emptyChat);
   };
 
   const onChange = event => {
@@ -115,7 +116,7 @@ const ChatRoom = () => {
               <ArrowUpIcon className='arrowup_icon' />
             </Button>
           </>
-          : <div className='chatroom_description'>채팅은 로그인 후 이용가능합니다 💬</div>
+          : <div className='chatroom_description'>채팅은 로그인 후 이용할 수 있습니다 💬</div>
         }
       </div>
     </div>

@@ -13,6 +13,8 @@ import calculateProportions from '../../../utils/calculateProportions';
 import requestPortfolio from '../../../api/requestPortfolio';
 import commaNumber from 'comma-number';
 import { useToasts } from 'react-toast-notifications';
+import TOAST_APPEARANCES from '../../../constants/toastAppearances';
+import PortfolioDashboard from '../../organisms/PortfolioDashboard';
 
 const PortfolioPage = ({
   currentUser,
@@ -141,7 +143,7 @@ const PortfolioPage = ({
 
     if (deleteResponse.result !== 'ok') {
       addToast('삭제하다가 문제가 생겼어요', {
-        appearance: 'error',
+        appearance: TOAST_APPEARANCES.ERROR,
         autoDismiss: true,
       });
 
@@ -165,26 +167,11 @@ const PortfolioPage = ({
         </div>
         {
           currentUser.uid === portfolioOwnerUid
-          && <div className='portfolio_dashboard'>
-            <div className='dashboard_asset'>
-              <h3>총 자산:</h3>&nbsp;
-              <h1>{`$${commaNumber(dashboardData.total)}`}</h1>
-            </div>
-            <div className='dashboard_return'>
-              <h3>수익:</h3>&nbsp;
-              <h1>
-                {
-                  Number(dashboardData.return) < 0
-                    ? `-$${commaNumber(Math.abs(dashboardData.return))}`
-                    : `$${commaNumber(dashboardData.return)}`
-                }
-              </h1>
-            </div>
-            <div className='dashboard_earnings_rate'>
-              <h3>수익률:</h3>&nbsp;
-              <h1>{`${commaNumber(dashboardData.earningsRate)}%`}</h1>
-            </div>
-          </div>
+          && <PortfolioDashboard
+            total={dashboardData.total}
+            earnings={dashboardData.return}
+            earningsRate={dashboardData.earningsRate}
+          />
         }
         <div className='table_wrapper'>
           <div className='table_header'>

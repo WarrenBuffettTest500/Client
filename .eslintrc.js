@@ -24,7 +24,7 @@ module.exports = {
     'eol-last': ['warn', 'always'],
     'no-unused-vars': ['warn', { 'args': 'none' }],
     'arrow-parens': ['warn', 'as-needed'],
-    // 'func-style': ['warn', 'expression'],
+    'func-style': ['warn', 'expression'],
     'no-unsafe-finally': 'off',
     'react/prop-types': 'off',
   },

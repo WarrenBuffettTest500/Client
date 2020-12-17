@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import CompanyRecommendations from '../CompanyRecommendations';
 import CandlestickChart from '../../components/molecules/CandlestickChart';
 import dateToObject from '../../utils/dateToObject';
-import StockDetailsDashboard from '../../components/molecules/StockDetailsDashboard';
+import StockDetailsDashboard from '../../components/organisms/StockDetailsDashboard';
 import TabBar from '../../components/molecules/TabBar';
 import LoadingIndicator from '../../components/molecules/LoadingIndicator';
 import {
@@ -19,7 +19,9 @@ import { setRecommendationSymbolList, setRecommendationSymbolInfo } from '../../
 import ChatRoom from '../../components/molecules/ChatRoom';
 import requestHitUpdate from '../../api/requestHitUpdate';
 import { useToasts } from 'react-toast-notifications';
-import RESPONSES from '../../constants/responses';
+import TOAST_APPEARANCES from '../../constants/toastAppearances';
+import { CANDLESTICK_CHART_TABS, INTERVALS } from '../../constants/intervals';
+import { RESPONSE_MESSAGES } from '../../constants/responses';
 
 const StockDetails = () => {
   const { addToast } = useToasts();
@@ -55,9 +57,9 @@ const StockDetails = () => {
     try {
       const { message: stockDetailsMessage, stockDetails } = await requestStockDetails(symbol);
 
-      if (stockDetailsMessage === RESPONSES.NOT_FOUND) {
-        addToast(RESPONSES.NOT_FOUND, {
-          appearance: 'error',
+      if (stockDetailsMessage === RESPONSE_MESSAGES.NOT_FOUND) {
+        addToast('기업 정보를 찾지 못했습니다', {
+          appearance: TOAST_APPEARANCES.ERROR,
           autoDismiss: true,
         });
 
@@ -65,13 +67,13 @@ const StockDetails = () => {
       }
 
       switch (interval) {
-        case '1day':
+        case CANDLESTICK_CHART_TABS.ONE_Day:
           dispatch(setSearchStockDetails(stockDetails));
           break;
-        case '1week':
+        case CANDLESTICK_CHART_TABS.ONE_WEEK:
           dispatch(setOneWeekStockDetails(stockDetails));
           break;
-        case '1month':
+        case CANDLESTICK_CHART_TABS.ONE_MONTH:
           dispatch(setOneMonthStockDetails(stockDetails));
           break;
         default: dispatch(setSearchStockDetails(stockDetails));
@@ -91,17 +93,17 @@ const StockDetails = () => {
 
   useEffect(() => {
     dispatch(initializeStockStates());
-    setCurrentClickedTab('1day');
-    setClickedTabList(['1day']);
+    setCurrentClickedTab(CANDLESTICK_CHART_TABS.ONE_Day);
+    setClickedTabList([CANDLESTICK_CHART_TABS.ONE_Day]);
   }, [symbol]);
 
   useEffect(() => {
     (async () => {
       const { message: stockDetailsMessage, stockDetails } = await requestStockDetails(symbol);
 
-      if (stockDetailsMessage === RESPONSES.NOT_FOUND) {
+      if (stockDetailsMessage === RESPONSE_MESSAGES.NOT_FOUND) {
         addToast('기업 정보를 찾지 못했습니다', {
-          appearance: 'error',
+          appearance: TOAST_APPEARANCES.ERROR,
           autoDismiss: true,
         });
 
@@ -115,7 +117,11 @@ const StockDetails = () => {
 
       dispatch(setRecommendationSymbolList(recommendationSymbolList));
       dispatch(setRecommendationSymbolInfo(recommendationSymbolInfo));
-      setDashboardData({ ...recommendationSymbolInfo, symbol, price: stockDetails.values[0].close });
+      setDashboardData({
+        ...recommendationSymbolInfo,
+        symbol,
+        price: stockDetails.values[0].close,
+      });
     })();
   }, [symbol]);
 
@@ -132,24 +138,24 @@ const StockDetails = () => {
                   <TabBar onTabButtonClick={tabBarButtonClickHandle} />
                   <div className='chart_wrapper'>
                     {
-                      currentClickedTab === '1day'
+                      currentClickedTab === CANDLESTICK_CHART_TABS.ONE_Day
                       && <CandlestickChart
                         data={dateToObject(searchStockDetails)}
-                        interval='day'
+                        interval={INTERVALS.DAY}
                       />
                     }
                     {
-                      currentClickedTab === '1week'
+                      currentClickedTab === CANDLESTICK_CHART_TABS.ONE_WEEK
                       && <CandlestickChart
                         data={dateToObject(oneWeekStockDetails)}
-                        interval='week'
+                        interval={INTERVALS.WEEK}
                       />
                     }
                     {
-                      currentClickedTab === '1month'
+                      currentClickedTab === CANDLESTICK_CHART_TABS.ONE_MONTH
                       && <CandlestickChart
                         data={dateToObject(oneMonthStockDetails)}
-                        interval='month'
+                        interval={INTERVALS.MONTH}
                       />
                     }
                   </div>

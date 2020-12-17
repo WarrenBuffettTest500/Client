@@ -2,15 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Autosuggest from 'react-autosuggest';
 import SearchInput from '../../atoms/SearchInput';
-import { useToasts } from 'react-toast-notifications';
 import requestSymbolList from '../../../api/requestSymbolList';
 import {
   getSuggestions,
   getSuggestionValue,
   renderSuggestion,
 } from '../../../utils/autosuggest';
+import { useToasts } from 'react-toast-notifications';
+import TOAST_APPEARANCES from '../../../constants/toastAppearances';
 import PATHS from '../../../constants/paths';
-import RESPONSES from '../../../constants/responses';
+import { RESPONSE_RESULTS } from '../../../constants/responses';
 
 const SearchBar = () => {
   const [searchKeyword, setSearchKeyword] = useState('');
@@ -23,9 +24,9 @@ const SearchBar = () => {
     if (!symbols) {
       const { result, symbolList } = await requestSymbolList();
 
-      if (result === RESPONSES.FAILURE) {
+      if (result === RESPONSE_RESULTS.FAILURE) {
         addToast('데이터가 없습니다', {
-          appearance: 'error',
+          appearance: TOAST_APPEARANCES.WARNING,
           autoDismiss: true,
         });
 
@@ -56,8 +57,8 @@ const SearchBar = () => {
     if (event.key !== 'Enter' || !searchKeyword) return;
 
     if (!symbols.includes(searchKeyword)) {
-      addToast('정보가 없는 주식입니다', {
-        appearance: 'info',
+      addToast('주식 정보가 없습니다', {
+        appearance: TOAST_APPEARANCES.WARNING,
         autoDismiss: true,
       });
 

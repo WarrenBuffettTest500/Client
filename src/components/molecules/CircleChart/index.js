@@ -61,8 +61,9 @@ const CircleChart = ({ data, type, total }) => {
 
     svg.append('text')
       .attr('text-anchor', 'middle')
-      .text(total ? `$${commaNumber(total)}` : null)
-      .style('fill', 'white');
+      .text(total ? `$${commaNumber(parseFloat(total).toFixed(2))}` : null)
+      .style('fill', 'white')
+      .attr('font-weight', 'bold');
   }, [data]);
 
   return (

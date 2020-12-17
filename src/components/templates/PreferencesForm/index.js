@@ -4,7 +4,10 @@ import './index.scss';
 import requestPreferenceInfoUpdate from '../../../api/requestPreferenceInfoUpdate';
 import requestUserPreferenceIdUpdate from '../../../api/requestUserPreferenceIdUpdate';
 import PATHS from '../../../constants/paths';
+import TOAST_APPEARANCES from '../../../constants/toastAppearances';
 import { useToasts } from 'react-toast-notifications';
+import PreferencesSectorField from '../../organisms/PreferencesSectorField';
+import FormInputField from '../../molecules/FormInputField';
 
 const PreferencesForm = ({
   currentUser,
@@ -18,13 +21,35 @@ const PreferencesForm = ({
   const [preferredStockType, setPreferredStockType] = useState('');
   const [period, setPeriod] = useState('');
   const history = useHistory();
+  const riskAppetiteTypes = [
+    { high: '높음 (손해 40% 이상 감수)' },
+    { meduim: '중간 (손해 20% 이상 40% 미만 감수)' },
+    { low: '낮음 (손해 20% 미만 감수)' },
+  ];
+  const stockProportionsTypes = [
+    { below20: '20% 미만' },
+    { below40: '40% 미만' },
+    { below60: '60% 미만' },
+    { below80: '80% 미만' },
+    { above80: '80% 이상' },
+  ];
+  const preferredStockTypes = [
+    { growth: '성장주' },
+    { dividends: '배당주' },
+  ];
+  const investmentPeriods = [
+    { short: '2년 미만' },
+    { mid: '2년 이상 5년 미만' },
+    { long: '5년 이상 10년 미만' },
+    { 'very-long': '10년 이상' },
+  ];
 
   const submitHandler = async event => {
     event.preventDefault();
 
     if (interestedSectors.length > 3) {
       addToast('관심 섹터는 최대 3개까지 고를 수 있습니다', {
-        appearance: 'warning',
+        appearance: TOAST_APPEARANCES.WARNING,
         autoDismiss: true,
       });
 
@@ -39,7 +64,7 @@ const PreferencesForm = ({
       || !period
     ) {
       addToast('정보를 모두 입력해주세요', {
-        appearance: 'warning',
+        appearance: TOAST_APPEARANCES.WARNING,
         autoDismiss: true,
       });
 
@@ -110,64 +135,34 @@ const PreferencesForm = ({
   };
 
   return (
-    <div className='preferencesFormWrapper'>
+    <div className='preferences_form_wrapper'>
       <form onChange={preferenceChangeHandler}>
         <ul>
-          <li>관심 섹터 (최대 3개)</li>
-          <input type='checkbox' name='interested-sector' value='Energy' />
-          <label> Energy</label><br />
-          <input type='checkbox' name='interested-sector' value='Basic Materials' />
-          <label> Basic Materials</label><br />
-          <input type='checkbox' name='interested-sector' value='Industrials' />
-          <label> Industrials</label><br />
-          <input type='checkbox' name='interested-sector' value='Utilities' />
-          <label> Utilities</label><br />
-          <input type='checkbox' name='interested-sector' value='Healthcare' />
-          <label> Healthcare</label><br />
-          <input type='checkbox' name='interested-sector' value='Financial Services' />
-          <label> Financial Services</label><br />
-          <input type='checkbox' name='interested-sector' value='Consumer Cyclical' />
-          <label> Consumer Cyclical</label><br />
-          <input type='checkbox' name='interested-sector' value='Consumer Defensive' />
-          <label> Consumer Defensive</label><br />
-          <input type='checkbox' name='interested-sector' value='Technology' />
-          <label> Technology</label><br />
-          <input type='checkbox' name='interested-sector' value='Communication Services' />
-          <label> Communication Services</label><br />
-          <input type='checkbox' name='interested-sector' value='Real Estate' />
-          <label> Real Estate</label><br /><br />
-          <li>위험 선호도</li>
-          <input type='radio' name='risk-appetite' value='high' />
-          <label> 높음 (손해 40% 이상 감수)</label><br />
-          <input type='radio' name='risk-appetite' value='medium' />
-          <label> 중간 (손해 20% 이상 40% 미만 감수)</label><br />
-          <input type='radio' name='risk-appetite' value='low' />
-          <label> 낮음 (손해 20% 미만 감수)</label><br /><br />
-          <li>자산 중 주식 비중</li>
-          <input type='radio' name='stock-proportion' value='below20' />
-          <label> 20% 미만</label><br />
-          <input type='radio' name='stock-proportion' value='below40' />
-          <label> 20% 이상 40% 미만</label><br />
-          <input type='radio' name='stock-proportion' value='below60' />
-          <label> 40% 이상 60% 미만</label><br />
-          <input type='radio' name='stock-proportion' value='below80' />
-          <label> 60% 이상 80% 미만</label><br />
-          <input type='radio' name='stock-proportion' value='above80' />
-          <label> 80% 이상</label><br /><br />
-          <li>선호 주식 종류</li>
-          <input type='radio' name='preferred-stock-type' value='growth' />
-          <label> 성장주</label><br />
-          <input type='radio' name='preferred-stock-type' value='dividends' />
-          <label> 가치주 배당주</label><br /><br />
-          <li>예상 투자 기간</li>
-          <input type='radio' name='period' value='short' />
-          <label> 2년 미만</label><br />
-          <input type='radio' name='period' value='mid' />
-          <label> 2년 이상 5년 미만</label><br />
-          <input type='radio' name='period' value='long' />
-          <label> 5년 이상 10년 미만</label><br />
-          <input type='radio' name='period' value='very-long' />
-          <label> 10년 이상</label><br />
+          <PreferencesSectorField /><br />
+          <FormInputField
+            type='radio'
+            title='위험 선호도'
+            options={riskAppetiteTypes}
+            name='risk-appetite'
+          /><br />
+          <FormInputField
+            type='radio'
+            title='자산 중 주식 비중'
+            options={stockProportionsTypes}
+            name='stock-proportion'
+          /><br />
+          <FormInputField
+            type='radio'
+            title='선호 주식 종류'
+            options={preferredStockTypes}
+            name='preferred-stock-type'
+          /><br />
+          <FormInputField
+            type='radio'
+            title='예상 투자 기간'
+            options={investmentPeriods}
+            name='period'
+          />
         </ul>
       </form>
       <input type='submit' value='제출' onClick={submitHandler} />

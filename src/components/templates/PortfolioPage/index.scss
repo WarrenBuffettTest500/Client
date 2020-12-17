@@ -5,7 +5,6 @@
 }
 
 .graphs_wrapper,
-.portfolio_dashboard,
 .table_wrapper {
   margin: 10px auto;
   border-radius: 0.3rem;
@@ -16,21 +15,6 @@
 .graphs_wrapper {
   padding: 14px;
   text-align: center;
-}
-
-.portfolio_dashboard {
-  display: flex;
-  flex-direction: row;
-  color: white;
-  justify-content: space-evenly;
-}
-
-.dashboard_asset,
-.dashboard_return,
-.dashboard_earnings_rate {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
 }
 
 .table_wrapper {
