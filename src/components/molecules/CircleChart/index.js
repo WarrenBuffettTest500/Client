@@ -6,8 +6,8 @@ const CircleChart = ({ data, type, total }) => {
   const svgRef = useRef();
 
   useEffect(() => {
-    const width = 250;
-    const height = 180;
+    const width = 240;
+    const height = 200;
     const radius = Math.min(width, height) / 2;
     const pie = d3.pie()
       .padAngle(0.005)
@@ -68,8 +68,8 @@ const CircleChart = ({ data, type, total }) => {
   return (
     <svg
       className='circle_chart'
-      ref={svgRef}>
-    </svg>
+      ref={svgRef}
+    />
   );
 };
 

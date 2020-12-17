@@ -199,6 +199,10 @@
   backface-visibility: hidden;
 }
 
+.portfolio_front {
+  padding: 10px 0;
+}
+
 .portfolio_back {
   background-color: $theme_color;
 	color: $primary;
