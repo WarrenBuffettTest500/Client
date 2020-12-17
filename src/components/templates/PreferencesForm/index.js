@@ -22,26 +22,26 @@ const PreferencesForm = ({
   const [period, setPeriod] = useState('');
   const history = useHistory();
   const riskAppetiteTypes = [
-    { high: ' 높음 (손해 40% 이상 감수)' },
-    { meduim: ' 중간 (손해 20% 이상 40% 미만 감수)' },
+    { high: '높음 (손해 40% 이상 감수)' },
+    { meduim: '중간 (손해 20% 이상 40% 미만 감수)' },
     { low: '낮음 (손해 20% 미만 감수)' },
   ];
   const stockProportionsTypes = [
-    { below20: '  20% 미만' },
-    { below40: '  40% 미만' },
-    { below60: '  60% 미만' },
-    { below80: '  80% 미만' },
-    { above80: '  80% 이상' },
+    { below20: '20% 미만' },
+    { below40: '40% 미만' },
+    { below60: '60% 미만' },
+    { below80: '80% 미만' },
+    { above80: '80% 이상' },
   ];
   const preferredStockTypes = [
-    { growth: ' 성장주' },
-    { dividends: ' 배당주' },
+    { growth: '성장주' },
+    { dividends: '배당주' },
   ];
   const investmentPeriods = [
-    { short: ' 2년 미만' },
-    { mid: ' 2년 이상 5년 미만' },
-    { long: ' 5년 이상 10년 미만' },
-    { 'very-long': ' 10년 이상' },
+    { short: '2년 미만' },
+    { mid: '2년 이상 5년 미만' },
+    { long: '5년 이상 10년 미만' },
+    { 'very-long': '10년 이상' },
   ];
 
   const submitHandler = async event => {
