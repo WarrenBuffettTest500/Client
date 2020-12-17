@@ -72,42 +72,25 @@
 }
 
 .portfolio_toggle_button {
-  position: absolute;
   width: 16%;
-  bottom: 0;
-  right: 10%;
-  background-color: rgb(255, 204, 0);
+  background-color: rgb(255, 205, 5);
   color: $theme_color;
   border-radius: 1rem 1rem 0 0;
   font-size: 1rem;
   font-weight: 700;
 }
 
-.my_portfolio_button {
-  color: $primary;
+.my_portfolio_button,
+.portfolio_button {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+};
 
-  &:hover {
-    background-color: $theme_color;
-    color: $primary;
-  }
+.dash_board_icon {
+  color: $theme_color;
 }
 
-.portfolio_button {
-  color: #fff;
-  text-decoration: none;
-  display: inline-block;
-  margin-top: 20px;
-  width: 120px;
-  height: 45px;
-  background-color: $primary;
-  color: #222;
-  line-height: 45px;
-  box-shadow: 0px 0px 10px rgba(0,0,0,.5);
-  transition: .5s;
-  font-weight: bold;
-
-  &:hover {
-    background-color: #081a25;
-    color: #fff;
-  }
+.my_portfolio_button .dash_board_icon {
+  color: $primary;
 }
