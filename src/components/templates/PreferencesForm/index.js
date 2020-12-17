@@ -135,7 +135,7 @@ const PreferencesForm = ({
   };
 
   return (
-    <div className='preferencesFormWrapper'>
+    <div className='preferences_form_wrapper'>
       <form onChange={preferenceChangeHandler}>
         <ul>
           <PreferencesSectorField /><br />
