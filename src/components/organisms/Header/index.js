@@ -48,14 +48,14 @@ const Header = ({
         {
           currentUser
             ? <Button
-              className='profileButton'
+              className='profile_button'
               onClick={profileButtonClickHandler}>
               <img
                 className='profile_img'
                 src={currentUser.photoURL} />
             </Button>
             : <Button
-              className='loginButton'
+              className='login_button'
               text='로그인'
               onClick={onLoginClick}
             />
@@ -64,15 +64,15 @@ const Header = ({
       {
         isUserModalOpen
         && <Modal
-          className='userModal'
+          className='user_modal'
         >
           <Button
-            className='preferencesButton'
+            className='preferences_button'
             text='투자성향 설정'
             onClick={preferencesButtonClickHandler}
           />
           <Button
-            className='logoutButton'
+            className='logout_button'
             text='로그아웃'
             onClick={onLogoutClick}
           />

@@ -16,13 +16,13 @@
   }
 }
 
-.profileButton {
+.profile_button {
   width: 40px;
   height: 40px;
   border-radius: 50%;
 }
 
-.loginButton {
+.login_button {
   @include rightAlignedButton;
   padding: 10px 15px;
   border: none;
@@ -32,8 +32,8 @@
   font-weight: bold;
 }
 
-.preferencesButton,
-.logoutButton {
+.preferences_button,
+.logout_button {
   padding: 10px 15px;
   border: none;
   border-radius: 10px;
@@ -43,10 +43,14 @@
   font-weight: bold;
 }
 
-.closeModal {
-  font-size: 16px;
-  font-weight: bold;
+.portfolio_item_sumbit_button {
+  padding: 10px 15px;
   border: none;
+  border-radius: 10px;
+  width: 120px;
+  background-color: #FF5391;
+  font-size: 12px;
+  font-weight: bold;
 }
 
 .portfolio_item_create_button,

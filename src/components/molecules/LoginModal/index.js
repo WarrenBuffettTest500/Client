@@ -5,12 +5,12 @@ import PATHS from '../../../constants/paths';
 import { authService, provider } from '../../../config/firebase';
 import requestSignIn from '../../../api/requestSignIn';
 import { useToasts } from 'react-toast-notifications';
-import RESPONSES from '../../../constants/responses';
+import TOAST_APPEARANCES from '../../../constants/toastAppearances';
+import { RESPONSE_RESULTS } from '../../../constants/responses';
 import Modal from '../../atoms/Modal';
 import ModalOverlay from '../../atoms/ModalOverlay';
 
 const LoginModal = ({
-  isModalOpen,
   setIsModalOpen,
   onLogin,
 }) => {
@@ -30,9 +30,9 @@ const LoginModal = ({
       try {
         const { result, user, token } = await requestSignIn(userInfo, PATHS.LOGIN);
 
-        if (result === RESPONSES.FAILURE) {
+        if (result === RESPONSE_RESULTS.FAILURE) {
           addToast('회원가입을 해주세요', {
-            appearance: 'info',
+            appearance: TOAST_APPEARANCES.INFO,
             autoDismiss: true,
           });
 
@@ -43,12 +43,12 @@ const LoginModal = ({
         onLogin(user);
         setIsModalOpen(false);
         addToast('성공적으로 로그인했습니다', {
-          appearance: 'success',
+          appearance: TOAST_APPEARANCES.SUCCESS,
           autoDismiss: true,
         });
       } catch (error) {
         addToast(error.message, {
-          appearance: 'error',
+          appearance: TOAST_APPEARANCES.ERROR,
           autoDismiss: true,
         });
       }
@@ -56,12 +56,12 @@ const LoginModal = ({
       try {
         const { result, user, token } = await requestSignIn(userInfo, PATHS.SIGNUP);
 
-        if (result === RESPONSES.FAILURE) {
+        if (result === RESPONSE_RESULTS.FAILURE) {
           localStorage.setItem('token', token);
           onLogin(user);
           setIsModalOpen(false);
           addToast('이미 회원가입했습니다', {
-            appearance: 'info',
+            appearance: TOAST_APPEARANCES.INFO,
             autoDismiss: true,
           });
 
@@ -71,15 +71,15 @@ const LoginModal = ({
         localStorage.setItem('token', token);
         onLogin(user);
         setIsModalOpen(false);
-        addToast('회원가입에 성공하였습니다', {
-          appearance: 'info',
+        addToast('회원가입에 성공했습니다', {
+          appearance: TOAST_APPEARANCES.INFO,
           autoDismiss: true,
         });
 
         history.push(PATHS.PREFERENCES);
       } catch (error) {
         addToast(error.message, {
-          appearance: 'error',
+          appearance: TOAST_APPEARANCES.ERROR,
           autoDismiss: true,
         });
       }
@@ -89,7 +89,7 @@ const LoginModal = ({
   return (
     <>
       <ModalOverlay setIsModalOpen={setIsModalOpen} />
-      <Modal className='authModal'>
+      <Modal className='auth_modal'>
         <Button
           onClick={googleAuthClickHandler}
           text='login with google'

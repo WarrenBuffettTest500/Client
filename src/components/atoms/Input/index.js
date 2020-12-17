@@ -7,8 +7,7 @@ const Input = ({
   return (
     <input className={className}
       {...attributes}
-    >
-    </input>
+    />
   );
 };
 

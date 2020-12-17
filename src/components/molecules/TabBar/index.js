@@ -1,30 +1,31 @@
 import React from 'react';
 import Button from '../../atoms/Button';
+import { CANDLESTICK_CHART_TABS, INTERVALS } from '../../../constants/intervals';
 
 const TabBar = ({ onTabButtonClick }) => {
   return (
     <div className='tab_bar'>
       <Button
-        name='day'
+        name={INTERVALS.DAY}
         onClick={onTabButtonClick}
         className='tab_bar_button'
-        data-api-param='1day'
+        data-api-param={CANDLESTICK_CHART_TABS.ONE_DAY}
       >
         day
       </Button>
       <Button
-        name='week'
+        name={INTERVALS.WEEK}
         onClick={onTabButtonClick}
         className='tab_bar_button'
-        data-api-param='1week'
+        data-api-param={CANDLESTICK_CHART_TABS.ONE_WEEK}
       >
         week
       </Button>
       <Button
-        name='month'
+        name={INTERVALS.MONTH}
         onClick={onTabButtonClick}
         className='tab_bar_button'
-        data-api-param='1month'
+        data-api-param={CANDLESTICK_CHART_TABS.ONE_MONTH}
       >
         month
       </Button>

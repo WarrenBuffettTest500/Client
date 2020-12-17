@@ -1,4 +1,4 @@
-@keyframes v-bar-grow {
+@keyframes v_bar_grow {
   0%  {height:20px;}
   20%  {height:45px;}
   40%  {height:60px;}
@@ -11,7 +11,7 @@
   position: relative;
 }
 
-.loading_indicator .v-bar {
+.loading_indicator .v_bar {
   position: absolute;
   bottom: 0;
   width: 20px;
@@ -20,18 +20,18 @@
   animation: v-bar-grow .8s infinite linear;
 }
 
-.v-bar.first {
+.v_bar.first {
   background-color: #235789;
   animation-delay: .3s;
   left: 0;
 }
 
-.v-bar.second {
+.v_bar.second {
   background-color: #ED1C24;
   left: 25px;
 }
 
-.v-bar.third {
+.v_bar.third {
   background-color: #F1D302;
   animation-delay: .5s;
   left: 50px;
