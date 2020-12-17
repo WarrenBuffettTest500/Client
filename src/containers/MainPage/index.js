@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import './index.scss';
+import DashboardIcon from '@material-ui/icons/Dashboard';
 import { useHistory } from 'react-router-dom';
 import concatRealPrice from '../../utils/concatRealPrice';
 import calculateProportions from '../../utils/calculateProportions';
@@ -10,12 +10,13 @@ import requestRecommendations from '../../api/requestRecommendations';
 import requestTrendingStocks from '../../api/requestTrendingStocks';
 import Card from '../../components/atoms/Card';
 import Button from '../../components/atoms/Button';
+import LoadingIndicator from '../../components/molecules/LoadingIndicator';
 import { setRecommendationCriterion } from '../../store/user';
 import TrendingList from '../../components/molecules/TrendingList';
 import formatPortfoliosToChartData from '../../utils/formatPortfoliosToChartData';
 import NUMBERS from '../../constants/numbers';
 
-const Main = () => {
+const Main = ({ setIsModalOpen }) => {
   const dispatch = useDispatch();
   const {
     currentUser,
@@ -34,6 +35,7 @@ const Main = () => {
   const [isLoadingRecommendations, setIsLoadingRecommendations] = useState(true);
   const [hasMoreRecommendations, setHasMoreRecommendations] = useState(true);
   const [page, setPage] = useState(0);
+  const [isLoaded, setIsLoaded] = useState(false);
   const history = useHistory();
   const cardRefs = useRef({});
   const observer = useRef();
@@ -124,6 +126,7 @@ const Main = () => {
       = calculateProportions(dynamicPortfolio, total);
 
     setChartData(portfolioByProportions);
+    setIsLoaded(true);
   }, [total]);
 
   const recommendationToggleHandler = () => {
@@ -137,20 +140,16 @@ const Main = () => {
     setHasMoreRecommendations(true);
   };
 
-  const portfolioClickHandler = (event, portfolio) => {
-    const { className } = event.target;
-
-    if (className === 'portfolio_button') {
-      history.push(`/users/${currentUser?.uid}/portfolios/${portfolio.owner}`);
-
+  const myPortfolioClickHandler = () => {
+    if (!currentUser) {
+      setIsModalOpen(true);
       return;
     }
-
     history.push(`/users/${currentUser?.uid}/portfolios/${currentUser?.uid}`);
   };
 
-  const scrollIntoView = i => {
-    cardRefs.current[i - 3]?.scrollIntoView({ behavior: 'smooth' });
+  const recommendationPortfolioClickHandler = portfolio => {
+    history.push(`/users/${currentUser?.uid}/portfolios/${portfolio.owner}`);
   };
 
   return (
@@ -158,37 +157,48 @@ const Main = () => {
       <div className='main_page_dashboard_wrapper'>
         {
           currentUser
-          && <Card className='my_portfolio_card'>
-            {staticPortfolio.length
-              ? <>
-                <div className='circle_chart_wrapper mychart'>
-                  <CircleChart data={chartData} type='donut' total={total} />
-                </div>
-                <Button
-                  className='my_portfolio_button'
-                  onClick={event => portfolioClickHandler(event)}
-                >
-                  <p>GO TO PORTFOLIO</p>
-                </Button>
-              </>
-              : <>
-                <p>Go to my portfolio</p>
-                <div
-                  onClick={event => portfolioClickHandler(event)}
-                  className='card_message'
-                >
-                  포트폴리오를 등록해주세요👀
-                  </div>
-              </>
+          ? <Card className='my_portfolio_card'>
+            {
+              !isLoaded
+                ? <LoadingIndicator />
+                : (
+                   staticPortfolio.length
+                   ? <>
+                      <div className='circle_chart_wrapper mychart'>
+                        <CircleChart
+                          data={chartData}
+                          type='donut'
+                          total={total}
+                        />
+                      </div>
+                      <Button
+                        className='my_portfolio_button'
+                        onClick={myPortfolioClickHandler}
+                      >
+                        <DashboardIcon className='dash_board_icon' />
+                      </Button>
+                    </>
+                   :<>
+                      <p>포트폴리오를 등록해주세요👀</p>
+                      <div
+                        onClick={myPortfolioClickHandler}
+                        className='card_message'
+                      >
+                        go to my portfolio
+                      </div>
+                      </>
+                  )
             }
-          </Card>
-        }
-        {
-          !currentUser
-          && <Card className='my_portfolio_card'>
+            </Card>
+          : <Card className='my_portfolio_card'>
             <p>go to my portfolio</p>
-            <div className='card_message'>로그인하고 포트폴리오를 관리하세요</div>
-          </Card>
+            <div
+              onClick={myPortfolioClickHandler}
+              className='card_message'
+            >
+              로그인하고 포트폴리오를 관리하세요
+             </div>
+            </Card>
         }
         <TrendingList symbols={trendingStocks} />
       </div>
@@ -221,73 +231,43 @@ const Main = () => {
       <div className='recommended_portfolios_wrapper'>
         {
           recommendedChartDatas.map((portfolio, index) => {
-            if (index === recommendedChartDatas.length - 1) {
-              return (
-                <div
+            const isLastRecommendatioinData = index === recommendedChartDatas.length - 1;
+
+            return (
+              <div
+                key={portfolio.owner}
+                ref={element => isLastRecommendatioinData ? lastRecommendationRef(element) : 'null'}
+                className='portfolio_card'
+              >
+                <Card
                   key={portfolio.owner}
-                  ref={lastRecommendationRef}
                   className='portfolio_card'
                 >
-                  <Card>
-                    <div
-                      ref={element => cardRefs.current[index] = element}
-                      className='portfolio_wrapper'
-                    >
-                      <div className='portfolio_front'>
-                        <div className='circle_chart_wrapper'>
-                          <CircleChart
-                            data={portfolio.items}
-                            type='pie'
-                          />
-                        </div>
-                      </div>
-                      <div className='portfolio_back'>
-                        <div className='portfolio_back_item'>
-                          <h3 onMouseOver={() => scrollIntoView(index)}>This Is Title Article</h3>
-                          <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                          <Button
-                            className='portfolio_button'
-                            onClick={event => portfolioClickHandler(event, portfolio)}
-                          >
-                            show
-                        </Button>
-                        </div>
-                      </div>
-                    </div>
-                  </Card>
-                </div>
-              );
-            } else {
-              return (
-                <Card key={portfolio.owner} className='portfolio_card'>
                   <div
                     ref={element => cardRefs.current[index] = element}
                     className='portfolio_wrapper'
                   >
-                    <div className='portfolio_front'>
+                    <div className='portfolio_content'>
                       <div className='circle_chart_wrapper'>
+                        {
+                          currentUser
+                          && <Button
+                            className='portfolio_button'
+                            onClick={() => recommendationPortfolioClickHandler(portfolio)}
+                          >
+                            <DashboardIcon className='dash_board_icon' />
+                          </Button>
+                        }
                         <CircleChart
                           data={portfolio.items}
                           type='pie'
                         />
                       </div>
                     </div>
-                    <div className='portfolio_back'>
-                      <div className='portfolio_back_item'>
-                        <h3 onMouseOver={() => scrollIntoView(index)}>This Is Title Article</h3>
-                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                        <Button
-                          className='portfolio_button'
-                          onClick={event => portfolioClickHandler(event, portfolio)}
-                        >
-                          show
-                        </Button>
-                      </div>
-                    </div>
                   </div>
                 </Card>
-              );
-            }
+              </div>
+            );
           })
         }
       </div>

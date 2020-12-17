@@ -100,7 +100,7 @@ const App = ({
       }
       <Switch>
         <Route path={PATHS.ROOT} exact>
-          <Main />
+          <Main setIsModalOpen={setIsAuthModalOpen} />
         </Route>
         {
           currentUser
