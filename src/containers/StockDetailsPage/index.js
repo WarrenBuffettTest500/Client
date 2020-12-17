@@ -13,21 +13,19 @@ import {
   setOneMonthStockDetails,
   initializeStockStates,
 } from '../../store/stock';
-import PATHS from '../../constants/paths';
 import requestStockDetails from '../../api/requestStockDetails';
 import requestRecommendationSymbolList from '../../api/requestRecommendationSymbolList';
-import RESPONSES from '../../constants/responses';
 import { setRecommendationSymbolList, setRecommendationSymbolInfo } from '../../store/stock';
 import ChatRoom from '../../components/molecules/ChatRoom';
 import requestHitUpdate from '../../api/requestHitUpdate';
 import { useToasts } from 'react-toast-notifications';
+import RESPONSES from '../../constants/responses';
 
 const StockDetails = () => {
   const { addToast } = useToasts();
   const { keyword: symbol } = useParams();
   const dispatch = useDispatch();
   const {
-    searchKeyWord,
     searchStockDetails,
     oneWeekStockDetails,
     oneMonthStockDetails,
@@ -57,8 +55,8 @@ const StockDetails = () => {
     try {
       const { message: stockDetailsMessage, stockDetails } = await requestStockDetails(symbol);
 
-      if (stockDetailsMessage === 'not found') {
-        addToast('기업 정보를 찾지 못했습니다', {
+      if (stockDetailsMessage === RESPONSES.NOT_FOUND) {
+        addToast(RESPONSES.NOT_FOUND, {
           appearance: 'error',
           autoDismiss: true,
         });
@@ -101,7 +99,7 @@ const StockDetails = () => {
     (async () => {
       const { message: stockDetailsMessage, stockDetails } = await requestStockDetails(symbol);
 
-      if (stockDetailsMessage === 'not found') {
+      if (stockDetailsMessage === RESPONSES.NOT_FOUND) {
         addToast('기업 정보를 찾지 못했습니다', {
           appearance: 'error',
           autoDismiss: true,

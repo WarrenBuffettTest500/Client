@@ -6,6 +6,7 @@ const requestPortfolioItemDelete = async (userUid, portfolioItemId) => {
     method: METHODS.DELETE,
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
     },
   });
 
