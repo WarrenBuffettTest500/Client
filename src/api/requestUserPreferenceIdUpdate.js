@@ -7,6 +7,7 @@ const requestUserPreferenceIdUpdate = async (user, info) => {
     method: METHODS.PUT,
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
     },
     body: JSON.stringify(info),
   });

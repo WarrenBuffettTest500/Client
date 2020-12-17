@@ -7,6 +7,7 @@ const requestPreferenceInfoUpdate = async (user, info) => {
     method: user.preferenceInfoId ? METHODS.PUT : METHODS.POST,
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
     },
     body: JSON.stringify(info),
   });
