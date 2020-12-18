@@ -88,6 +88,12 @@ const PortfolioItemInputModal = ({
     setSubmitType('new');
   };
 
+  const keyPressHandler = event => {
+    if (event.key !== 'Enter') return;
+
+    portfolioItemSumbitHandler();
+  };
+
   return (
     <>
       <ModalOverlay
@@ -99,16 +105,19 @@ const PortfolioItemInputModal = ({
           title='티커'
           value={symbol}
           onChange={event => setSymbol(event.target.value.toUpperCase())}
+          onKeyPress={keyPressHandler}
         />
         <ModalInputField
           title='평균단가'
           value={avgPrice}
           onChange={event => setAvgPrice(event.target.value)}
+          onKeyPress={keyPressHandler}
         />
         <ModalInputField
           title='보유 수량'
           value={quantity}
           onChange={event => setQuantity(event.target.value)}
+          onKeyPress={keyPressHandler}
         />
         <Button
           className='portfolio_item_sumbit_button'

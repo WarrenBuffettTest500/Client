@@ -177,7 +177,7 @@ const PortfolioPage = ({
               }
             </div>
             : <div className='comment_wrapper' onClick={createClickHandler}>
-              주식을 등록하고 포트폴리오를 관리하세요
+              <h3>주식을 등록하고 포트폴리오를 관리하세요</h3>
             </div>
         }
         {
