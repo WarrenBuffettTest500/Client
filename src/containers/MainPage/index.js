@@ -32,10 +32,10 @@ const Main = ({ setIsModalOpen }) => {
   const [total, setTotal] = useState(0);
   const [trendingStocks, setTrendingStocks] = useState([]);
   const [recommendedChartDatas, setRecommendedChartDatas] = useState([]);
+  const [isLoadingMyPortfolio, setIsLoadingMyPortfolio] = useState(true);
   const [isLoadingRecommendations, setIsLoadingRecommendations] = useState(true);
   const [hasMoreRecommendations, setHasMoreRecommendations] = useState(true);
   const [page, setPage] = useState(0);
-  const [isLoadingMyPortfolio, setIsLoadingMyPortfolio] = useState(true);
   const history = useHistory();
   const cardRefs = useRef({});
   const observer = useRef();

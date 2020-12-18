@@ -3,7 +3,7 @@
   flex-direction: column;
   align-items: center;
   color: white;
-  background-color: #1D304A;
+  background-color: #142649;
   z-index: 10;
 }
 
@@ -21,7 +21,8 @@
   width: 220px;
   position: fixed;
   right: 0;
-  top: 70px;
+  transition: all 1 ease-in-out;
+  top: 80px;
 }
 
 .portfolio_item_input_modal {
