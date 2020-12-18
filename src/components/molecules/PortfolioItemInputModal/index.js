@@ -61,6 +61,8 @@ const PortfolioItemInputModal = ({
         autoDismiss: true,
       });
 
+      hasItemInPortfolio = true;
+
       return;
     }
 

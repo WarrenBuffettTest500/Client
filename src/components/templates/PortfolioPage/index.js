@@ -180,7 +180,6 @@ const PortfolioPage = ({
               주식을 등록하고 포트폴리오를 관리하세요
             </div>
         }
-
         {
           currentUser.uid === portfolioOwnerUid
           && <PortfolioDashboard
