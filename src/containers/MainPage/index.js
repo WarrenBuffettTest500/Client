@@ -35,7 +35,7 @@ const Main = ({ setIsModalOpen }) => {
   const [isLoadingRecommendations, setIsLoadingRecommendations] = useState(true);
   const [hasMoreRecommendations, setHasMoreRecommendations] = useState(true);
   const [page, setPage] = useState(0);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoadingMyPortfolio, setIsLoadingMyPortfolio] = useState(true);
   const history = useHistory();
   const cardRefs = useRef({});
   const observer = useRef();
@@ -65,6 +65,10 @@ const Main = ({ setIsModalOpen }) => {
 
     return () => clearInterval(setFetchInterval);
   }, []);
+
+  useEffect(() => {
+    if (!staticPortfolio.length) setIsLoadingMyPortfolio(false);
+  }, [staticPortfolio]);
 
   useEffect(() => {
     if (!currentUser && recommendationCriterion !== 'random') return;
@@ -126,7 +130,7 @@ const Main = ({ setIsModalOpen }) => {
       = calculateProportions(dynamicPortfolio, total);
 
     setChartData(portfolioByProportions);
-    setIsLoaded(true);
+    setIsLoadingMyPortfolio(false);
   }, [total]);
 
   const recommendationToggleHandler = () => {
@@ -157,46 +161,46 @@ const Main = ({ setIsModalOpen }) => {
       <div className='main_page_dashboard_wrapper'>
         {
           currentUser
-          ? <Card className='my_portfolio_card'>
-            {
-              !isLoaded
-                ? <LoadingIndicator />
-                : (
-                   staticPortfolio.length
-                   ? <>
-                      <div className='circle_chart_wrapper mychart'>
-                        <CircleChart
-                          data={chartData}
-                          type='donut'
-                          total={total}
-                        />
-                      </div>
-                      <Button
-                        className='my_portfolio_button'
-                        onClick={myPortfolioClickHandler}
-                      >
-                        <DashboardIcon className='dash_board_icon' />
-                      </Button>
-                    </>
-                   :<>
-                      <p>포트폴리오를 등록해주세요👀</p>
-                      <div
-                        onClick={myPortfolioClickHandler}
-                        className='card_message'
-                      >
-                        go to my portfolio
+            ? <Card className='my_portfolio_card'>
+              {
+                isLoadingMyPortfolio
+                  ? <LoadingIndicator />
+                  : (
+                    staticPortfolio.length
+                      ? <>
+                        <div className='circle_chart_wrapper mychart'>
+                          <CircleChart
+                            data={chartData}
+                            type='donut'
+                            total={total}
+                          />
+                        </div>
+                        <Button
+                          className='my_portfolio_button'
+                          onClick={myPortfolioClickHandler}
+                        >
+                          <DashboardIcon className='dash_board_icon' />
+                        </Button>
+                      </>
+                      : <>
+                        <p>포트폴리오를 등록해주세요👀</p>
+                        <div
+                          onClick={myPortfolioClickHandler}
+                          className='card_message'
+                        >
+                          go to my portfolio
                       </div>
                       </>
                   )
-            }
+              }
             </Card>
-          : <Card className='my_portfolio_card'>
-            <p>go to my portfolio</p>
-            <div
-              onClick={myPortfolioClickHandler}
-              className='card_message'
-            >
-              로그인하고 포트폴리오를 관리하세요
+            : <Card className='my_portfolio_card'>
+              <p>go to my portfolio</p>
+              <div
+                onClick={myPortfolioClickHandler}
+                className='card_message'
+              >
+                로그인하고 포트폴리오를 관리하세요
              </div>
             </Card>
         }

@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import Button from '../../atoms/Button';
 import PATHS from '../../../constants/paths';
 import { authService, provider } from '../../../config/firebase';
-import requestSignIn from '../../../api/requestSignIn';
+import requestUserSignIn from '../../../api/requestUserSignIn';
 import { useToasts } from 'react-toast-notifications';
 import TOAST_APPEARANCES from '../../../constants/toastAppearances';
 import { RESPONSE_RESULTS } from '../../../constants/responses';
@@ -28,7 +28,7 @@ const LoginModal = ({
 
     if (event.target.name === 'login with google') {
       try {
-        const { result, user, token } = await requestSignIn(userInfo, PATHS.LOGIN);
+        const { result, user, token } = await requestUserSignIn(userInfo, PATHS.LOGIN);
 
         if (result === RESPONSE_RESULTS.FAILURE) {
           addToast('회원가입을 해주세요', {
@@ -54,7 +54,7 @@ const LoginModal = ({
       }
     } else {
       try {
-        const { result, user, token } = await requestSignIn(userInfo, PATHS.SIGNUP);
+        const { result, user, token } = await requestUserSignIn(userInfo, PATHS.SIGNUP);
 
         if (result === RESPONSE_RESULTS.FAILURE) {
           localStorage.setItem('token', token);

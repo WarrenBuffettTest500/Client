@@ -12,6 +12,7 @@
     "comma-number": "^2.0.1",
     "d3": "^6.3.0",
     "decimal.js-light": "^2.5.1",
+    "eslint": "^7.14.0",
     "firebase": "^8.1.1",
     "moment": "^2.29.1",
     "react": "^17.0.1",
@@ -55,7 +56,6 @@
   },
   "devDependencies": {
     "dotenv": "^8.2.0",
-    "eslint": "^7.14.0",
     "redux-logger": "^3.0.6"
   }
 }

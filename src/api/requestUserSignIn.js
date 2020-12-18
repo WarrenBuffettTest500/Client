@@ -1,7 +1,7 @@
 import METHODS from '../constants/methods';
 import PATHS from '../constants/paths';
 
-const requestSignIn = async (userInfo, path) => {
+const requestUserSignIn = async (userInfo, path) => {
   const response = await fetch(`${PATHS.HOST}${PATHS.SERVER_PORT}${path}`, {
     method: METHODS.POST,
     headers: {
@@ -13,4 +13,4 @@ const requestSignIn = async (userInfo, path) => {
   return await response.json();
 };
 
-export default requestSignIn;
+export default requestUserSignIn;

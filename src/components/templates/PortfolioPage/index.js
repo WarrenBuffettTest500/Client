@@ -15,6 +15,7 @@ import commaNumber from 'comma-number';
 import { useToasts } from 'react-toast-notifications';
 import TOAST_APPEARANCES from '../../../constants/toastAppearances';
 import PortfolioDashboard from '../../organisms/PortfolioDashboard';
+import LoadingIndicator from '../../molecules/LoadingIndicator';
 
 const PortfolioPage = ({
   currentUser,
@@ -34,6 +35,7 @@ const PortfolioPage = ({
   const [portfolioItemToEdit, setPortfolioItemToEdit] = useState(null);
   const [chartData, setChartData] = useState([]);
   const [submitType, setSubmitType] = useState('new');
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchStaticPortfolio = async () => {
@@ -42,6 +44,7 @@ const PortfolioPage = ({
     };
 
     fetchStaticPortfolio();
+    setIsLoading(true);
   }, [currentUserStaticPortfolio]);
 
   useEffect(() => {
@@ -53,6 +56,7 @@ const PortfolioPage = ({
         earningsRate: 0,
       });
       setChartData([]);
+      setIsLoading(false);
 
       return;
     }
@@ -117,6 +121,7 @@ const PortfolioPage = ({
       = calculateProportions(dynamicPortfolio, dashboardData.total);
 
     setChartData(portfolioByProportions);
+    setIsLoading(false);
   }, [dynamicPortfolio, dashboardData]);
 
   const createClickHandler = () => {
@@ -162,9 +167,20 @@ const PortfolioPage = ({
   return (
     <>
       <div className='portfolio_page_wrapper'>
-        <div className='graphs_wrapper'>
-          <CircleChart data={chartData} type='pie' />
-        </div>
+        {
+          localStaticPortfolio.length
+            ? <div className='graphs_wrapper'>
+              {
+                isLoading
+                  ? <LoadingIndicator />
+                  : <CircleChart data={chartData} type='pie' page={'portfolio'} />
+              }
+            </div>
+            : <div className='comment_wrapper' onClick={createClickHandler}>
+              주식을 등록하고 포트폴리오를 관리하세요
+            </div>
+        }
+
         {
           currentUser.uid === portfolioOwnerUid
           && <PortfolioDashboard

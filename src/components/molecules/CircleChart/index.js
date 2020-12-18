@@ -1,13 +1,16 @@
 import React, { useRef, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import * as d3 from 'd3';
 import commaNumber from 'comma-number';
+import PATHS from '../../../constants/paths';
 
-const CircleChart = ({ data, type, total }) => {
+const CircleChart = ({ data, type, total, page }) => {
   const svgRef = useRef();
+  const history = useHistory();
 
   useEffect(() => {
     const width = 240;
-    const height = 200;
+    const height = 190;
     const radius = Math.min(width, height) / 2;
     const pie = d3.pie()
       .padAngle(0.005)
@@ -16,9 +19,20 @@ const CircleChart = ({ data, type, total }) => {
     const color = d3.scaleOrdinal()
       .domain(data.map(d => d.name))
       .range(d3.quantize(t => d3.interpolateSpectral(t * 0.8 + 0.1), data.length).reverse());
-    const arc = d3.arc().innerRadius(type === 'donut' ? radius * 0.67 : 0).outerRadius(radius - 1);
+    const arc = d3.arc()
+      .innerRadius(type === 'donut' ? radius * 0.67 : 0)
+      .outerRadius(radius - 1);
+    const arcOver = d3.arc()
+      .innerRadius(type === 'donut' ? radius * 0.67 : 0)
+      .outerRadius(radius + 7);
     const arcs = pie(data);
-    const svg = d3.select(svgRef.current).attr('viewBox', [-width / 2, -height / 2, width, height]);
+    const svg = d3.select(svgRef.current)
+      .attr('viewBox', [
+        -width / 2,
+        -height / 2,
+        width,
+        height,
+      ]);
 
     svg.selectAll('*').remove();
 
@@ -56,6 +70,33 @@ const CircleChart = ({ data, type, total }) => {
           if (Number(d.data.value) < 5) return;
           return `${d.data.value.toLocaleString()}%`;
         }));
+
+    svg.selectAll('path')
+      .on('mouseenter', function() {
+        d3.select(this)
+          .transition()
+          .duration(450)
+          .attr('d', arcOver);
+
+        if (page === 'portfolio') {
+          d3.select(this).style('cursor', 'pointer');
+        }
+      })
+      .on('mouseleave', function() {
+        d3.select(this)
+          .transition()
+          .duration(200)
+          .attr('d', arc)
+          .style('cursor', 'default');
+      });
+
+    if (page === 'portfolio') {
+      svg.selectAll('path')
+        .on('click', event => {
+          const { name: symbol } = event.target.__data__.data;
+          history.push(`${PATHS.STOCK_DETAILS}/${symbol}`);
+        });
+    }
 
     if (type !== 'donut') return;
 
