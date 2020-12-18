@@ -15,15 +15,19 @@ import { setRecommendationCriterion } from '../../store/user';
 import TrendingList from '../../components/molecules/TrendingList';
 import formatPortfoliosToChartData from '../../utils/formatPortfoliosToChartData';
 import NUMBERS from '../../constants/numbers';
+import TOAST_APPEARANCES from '../../constants/toastAppearances';
+import { useToasts } from 'react-toast-notifications';
 
 const Main = ({ setIsModalOpen }) => {
   const dispatch = useDispatch();
   const {
     currentUser,
+    preferenceInfo,
     staticPortfolio,
     recommendationCriterion,
   } = useSelector(state => ({
     currentUser: state.user.currentUser,
+    preferenceInfo: state.user.preferenceInfo,
     staticPortfolio: state.user.staticPortfolio,
     recommendationCriterion: state.user.recommendationCriterion,
   }));
@@ -39,6 +43,7 @@ const Main = ({ setIsModalOpen }) => {
   const history = useHistory();
   const cardRefs = useRef({});
   const observer = useRef();
+  const { addToast } = useToasts();
   const lastRecommendationRef = useCallback(recommendation => {
     if (isLoadingRecommendations || !hasMoreRecommendations) return;
     if (observer.current) observer.current.disconnect();
@@ -71,8 +76,6 @@ const Main = ({ setIsModalOpen }) => {
   }, [staticPortfolio]);
 
   useEffect(() => {
-    if (!currentUser && recommendationCriterion !== 'random') return;
-
     setIsLoadingRecommendations(true);
 
     const fetchRecommendations = async () => {
@@ -135,8 +138,30 @@ const Main = ({ setIsModalOpen }) => {
 
   const recommendationToggleHandler = () => {
     if (recommendationCriterion === 'portfolio') {
+      if (!currentUser.preferenceInfoId) {
+        addToast('투자성향을 먼저 등록해 주세요', {
+          appearance: TOAST_APPEARANCES.WARNING,
+          autoDismiss: true,
+        });
+
+        dispatch(setRecommendationCriterion('portfolio'));
+
+        return;
+      }
+
       dispatch(setRecommendationCriterion('preference'));
     } else {
+      if (!staticPortfolio.length) {
+        addToast('보유 주식을 먼저 등록해 주세요', {
+          appearance: TOAST_APPEARANCES.WARNING,
+          autoDismiss: true,
+        });
+
+        dispatch(setRecommendationCriterion('preference'));
+
+        return;
+      }
+
       dispatch(setRecommendationCriterion('portfolio'));
     }
 
@@ -168,7 +193,10 @@ const Main = ({ setIsModalOpen }) => {
                   : (
                     staticPortfolio.length
                       ? <>
-                        <div className='circle_chart_wrapper mychart'>
+                        <div
+                          className='circle_chart_wrapper mychart'
+                          onClick={myPortfolioClickHandler}
+                        >
                           <CircleChart
                             data={chartData}
                             type='donut'
@@ -183,19 +211,19 @@ const Main = ({ setIsModalOpen }) => {
                         </Button>
                       </>
                       : <>
-                        <p>포트폴리오를 등록해주세요👀</p>
+                        <p>포트폴리오를 등록해 주세요👀</p>
                         <div
                           onClick={myPortfolioClickHandler}
                           className='card_message'
                         >
-                          go to my portfolio
+                          내 포트폴리오 관리하러 가기
                       </div>
                       </>
                   )
               }
             </Card>
             : <Card className='my_portfolio_card'>
-              <p>go to my portfolio</p>
+              <p>내 포트폴리오 관리</p>
               <div
                 onClick={myPortfolioClickHandler}
                 className='card_message'
@@ -209,7 +237,7 @@ const Main = ({ setIsModalOpen }) => {
       <div className='recommended_portfolios_title'>
         {
           (!currentUser || (currentUser && recommendationCriterion === 'random'))
-            ? <span>주식을 등록하시면 포트폴리오를 추천해드립니다</span>
+            ? <span>주식을 등록하시면 포트폴리오를 추천해 드려요</span>
             : <span>
               {
                 `${currentUser.displayName}님의 ${recommendationCriterion === 'preference' ? '투자 성향' : '보유 주식'}을 분석해 추천 포트폴리오를 모아봤어요`
@@ -250,21 +278,25 @@ const Main = ({ setIsModalOpen }) => {
                   <div
                     ref={element => cardRefs.current[index] = element}
                     className='portfolio_wrapper'
+                    onClick={() => {
+                      if (!currentUser || !staticPortfolio.length) {
+                        addToast('포트폴리오를 등록해야 구경할 수 있습니다', {
+                          appearance: TOAST_APPEARANCES.WARNING,
+                          autoDismiss: true,
+                        });
+
+                        return;
+                      }
+
+                      recommendationPortfolioClickHandler(portfolio);
+                    }}
                   >
-                    <div className='portfolio_content'>
+                    <div className='portfolio_content' >
                       <div className='circle_chart_wrapper'>
-                        {
-                          currentUser
-                          && <Button
-                            className='portfolio_button'
-                            onClick={() => recommendationPortfolioClickHandler(portfolio)}
-                          >
-                            <DashboardIcon className='dash_board_icon' />
-                          </Button>
-                        }
                         <CircleChart
                           data={portfolio.items}
                           type='pie'
+                          category='recommended'
                         />
                       </div>
                     </div>

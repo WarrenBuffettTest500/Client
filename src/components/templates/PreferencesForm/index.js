@@ -8,6 +8,7 @@ import TOAST_APPEARANCES from '../../../constants/toastAppearances';
 import { useToasts } from 'react-toast-notifications';
 import PreferencesSectorField from '../../organisms/PreferencesSectorField';
 import FormInputField from '../../molecules/FormInputField';
+import Button from '../../atoms/Button';
 
 const PreferencesForm = ({
   currentUser,
@@ -23,7 +24,7 @@ const PreferencesForm = ({
   const history = useHistory();
   const riskAppetiteTypes = [
     { high: '높음 (손해 40% 이상 감수)' },
-    { meduim: '중간 (손해 20% 이상 40% 미만 감수)' },
+    { medium: '중간 (손해 20% 이상 40% 미만 감수)' },
     { low: '낮음 (손해 20% 미만 감수)' },
   ];
   const stockProportionsTypes = [
@@ -45,8 +46,6 @@ const PreferencesForm = ({
   ];
 
   const submitHandler = async event => {
-    event.preventDefault();
-
     if (interestedSectors.length > 3) {
       addToast('관심 섹터는 최대 3개까지 고를 수 있습니다', {
         appearance: TOAST_APPEARANCES.WARNING,
@@ -165,7 +164,11 @@ const PreferencesForm = ({
           />
         </ul>
       </form>
-      <input type='submit' value='제출' onClick={submitHandler} />
+      <Button
+        className='preference_submit_button'
+        onClick={submitHandler}
+        text='제출'
+      />
     </div>
   );
 };

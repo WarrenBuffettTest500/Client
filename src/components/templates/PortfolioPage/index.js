@@ -61,6 +61,8 @@ const PortfolioPage = ({
       return;
     }
 
+    setIsLoading(true);
+
     const setPortfolioPageData = async () => {
       const portfolioWithRealPrice = await concatRealPrice(localStaticPortfolio);
 
@@ -173,7 +175,11 @@ const PortfolioPage = ({
               {
                 isLoading
                   ? <LoadingIndicator />
-                  : <CircleChart data={chartData} type='pie' page={'portfolio'} />
+                  : <CircleChart
+                    data={chartData}
+                    type='pie'
+                    category='portfolioDashboard'
+                  />
               }
             </div>
             : <div className='comment_wrapper' onClick={createClickHandler}>
@@ -247,7 +253,13 @@ const PortfolioPage = ({
                       {
                         currentUser.uid === portfolioOwnerUid
                         && <>
-                          <td className='table_return'>{`$${commaNumber(new Decimal(price).minus(new Decimal(avgPrice)).times(new Decimal(quantity)).toDecimalPlaces(2).toString())}`}</td>
+                          <td className='table_return'>
+                            {
+                              commaNumber(new Decimal(price).minus(new Decimal(avgPrice)).times(new Decimal(quantity)).toDecimalPlaces(2).toString()) < 0
+                                ? `-$${Math.abs(commaNumber(new Decimal(price).minus(new Decimal(avgPrice)).times(new Decimal(quantity)).toDecimalPlaces(2).toString()))}`
+                                : commaNumber(new Decimal(price).minus(new Decimal(avgPrice)).times(new Decimal(quantity)).toDecimalPlaces(2).toString())
+                            }
+                          </td>
                           <td className='table_earnings_rate'>{`${commaNumber((new Decimal(price).dividedBy(new Decimal(avgPrice))).minus(1).times(100).toDecimalPlaces(2).toString())}%`}</td>
                           <td className='table_current_total'>{`$${commaNumber(new Decimal(price).times(new Decimal(quantity)).toDecimalPlaces(2).toString())}`}</td>
                           <td className='table_buying_total'>{`$${commaNumber(new Decimal(avgPrice).times(new Decimal(quantity)).toDecimalPlaces(2).toString())}`}</td>

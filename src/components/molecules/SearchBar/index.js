@@ -69,7 +69,7 @@ const SearchBar = () => {
   };
 
   const inputProps = {
-    placeholder: '관심있는 주식을 검색하세요',
+    placeholder: 'S&P500 기업을 티커로 검색해 보세요',
     value: searchKeyword,
     symbols,
     onChange,

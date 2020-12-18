@@ -44,7 +44,7 @@ const Header = ({
           className='logo'
           onClick={homeButtonClickHandler}
         >
-          <h2>Warren Buffett Test 500</h2>
+          <h2>WarrenBuffettTest500</h2>
         </div>
       </div>
       <div className='header_item'>

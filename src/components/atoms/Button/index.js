@@ -5,6 +5,9 @@ const Button = ({
   onClick,
   text,
   imgSrc,
+  alt,
+  imgClassName,
+  textClassName,
   children,
   ...attributes
 }) => {
@@ -16,7 +19,15 @@ const Button = ({
       name={text}
       {...attributes}
     >
-      {text}
+      {
+        imgSrc
+        && <img
+          className={imgClassName}
+          src={imgSrc}
+          alt={alt}
+        />
+      }
+      <span className={textClassName}>{text}</span>
       {children}
     </button>
   );

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import Header from '../../components/organisms/Header';
 import {
   setCurrentUser,
@@ -34,20 +35,34 @@ const App = ({
   onStaticPortfolioFetched,
   setRecommendationCriterion,
 }) => {
+  const history = useHistory();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const loginButtonClickHandler = () => {
     setIsAuthModalOpen(true);
   };
 
   useEffect(() => {
-    if (!currentUser || !staticPortfolio.length) {
+    if (!currentUser) {
       setRecommendationCriterion('random');
 
       return;
     }
 
-    setRecommendationCriterion('portfolio');
-  }, [currentUser, staticPortfolio]);
+    if (
+      !currentUser.preferenceInfoId
+      && !staticPortfolio.length
+    ) {
+      setRecommendationCriterion('random');
+
+      return;
+    }
+
+    if (!currentUser.preferenceInfoId) {
+      setRecommendationCriterion('portfolio');
+    }
+
+    setRecommendationCriterion('preference');
+  }, [currentUser]);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -66,6 +81,14 @@ const App = ({
 
     initializeUserState();
   }, []);
+
+  useEffect(() => {
+    if (!currentUser) return;
+
+    if (!currentUser.preferenceInfoId) {
+      history.push(PATHS.PREFERENCES);
+    }
+  }, [currentUser]);
 
   useEffect(() => {
     if (!currentUser && getCookie('buffettTest500')) return;
@@ -112,13 +135,16 @@ const App = ({
             />
           </Route>
         }
-        <Route path={PATHS.PREFERENCES}>
-          <PreferencesForm
-            currentUser={currentUser}
-            onUserUpdate={onUserUpdate}
-            onPreferenceInfoUpdate={onPreferenceInfoUpdate}
-          />
-        </Route>
+        {
+          currentUser
+          && <Route path={PATHS.PREFERENCES}>
+            <PreferencesForm
+              currentUser={currentUser}
+              onUserUpdate={onUserUpdate}
+              onPreferenceInfoUpdate={onPreferenceInfoUpdate}
+            />
+          </Route>
+        }
         <Route path={`${PATHS.STOCK_DETAILS}${PATHS.KEYWORD}`}>
           <StockDetails />
         </Route>

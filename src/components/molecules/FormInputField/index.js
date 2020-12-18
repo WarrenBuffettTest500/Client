@@ -13,16 +13,15 @@ const FormInputField = ({
       {
         options.map(option => {
           return (
-            <>
+            <div key={Object.keys(option)[0]}>
               <Input
-                key={option}
                 type={type}
                 value={Object.keys(option)[0]}
                 {...attributes}
               />
               <label>{` ${option[Object.keys(option)[0]]}`}</label>
               <br />
-            </>
+            </div>
           );
         })
       }

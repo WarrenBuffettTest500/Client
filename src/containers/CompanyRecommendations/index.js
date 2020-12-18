@@ -6,7 +6,6 @@ import requestCompanyProfiles from '../../api/requestCompanyProfiles';
 import { useSelector, useDispatch } from 'react-redux';
 import { setRecommendationSymbolList, setCompanyProfileList } from '../../store/stock';
 import { useInfinteScroll } from '../../hooks';
-import wait from '../../utils/setTimeOut';
 
 const CompanyRecommendations = ({
   className,
@@ -28,10 +27,8 @@ const CompanyRecommendations = ({
     history.push(path);
   };
 
-  const callback = async ([{ isIntersecting }]) => {
+  const onIntersection = async ([{ isIntersecting }]) => {
     if (!recommendationSymbolList.length || !isIntersecting) return;
-
-    await wait(3000);
 
     const data = await requestCompanyProfiles(recommendationSymbolList);
 
@@ -53,7 +50,7 @@ const CompanyRecommendations = ({
   useInfinteScroll({
     root: viewport.current,
     target,
-    callback,
+    callback: onIntersection,
     threshold: 0.1,
     rootMargin: '500px',
   });

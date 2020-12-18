@@ -45,7 +45,7 @@ const StockDetails = () => {
   const [clickedTabList, setClickedTabList] = useState();
   const [dashboardData, setDashboardData] = useState({});
 
-  const tabBarButtonClickHandle = async event => {
+  const tabBarButtonClickHandler = async event => {
     const interval = event.target.dataset.apiParam;
 
     if (clickedTabList.includes(interval)) {
@@ -55,7 +55,10 @@ const StockDetails = () => {
     }
 
     try {
-      const { message: stockDetailsMessage, stockDetails } = await requestStockDetails(symbol);
+      const {
+        message: stockDetailsMessage,
+        stockDetails,
+      } = await requestStockDetails(symbol);
 
       if (stockDetailsMessage === RESPONSE_MESSAGES.NOT_FOUND) {
         addToast('기업 정보를 찾지 못했습니다', {
@@ -76,8 +79,8 @@ const StockDetails = () => {
         case CANDLESTICK_CHART_TABS.ONE_MONTH:
           dispatch(setOneMonthStockDetails(stockDetails));
           break;
-        default: dispatch(setSearchStockDetails(stockDetails));
-          break;
+        default:
+          return;
       }
 
       setClickedTabList([...clickedTabList, interval]);
@@ -129,39 +132,38 @@ const StockDetails = () => {
     <>
       <div className='stock_details_wrapper'>
         <div className='stock_details_left'>
-          <div className='stock_item chart'>
-            {
-              !searchStockDetails
-                ? <LoadingIndicator />
-                : <>
-                  <StockDetailsDashboard data={dashboardData} />
-                  <TabBar onTabButtonClick={tabBarButtonClickHandle} />
-                  <div className='chart_wrapper'>
-                    {
-                      currentClickedTab === CANDLESTICK_CHART_TABS.ONE_Day
-                      && <CandlestickChart
-                        data={dateToObject(searchStockDetails)}
-                        interval={INTERVALS.DAY}
-                      />
-                    }
-                    {
-                      currentClickedTab === CANDLESTICK_CHART_TABS.ONE_WEEK
-                      && <CandlestickChart
-                        data={dateToObject(oneWeekStockDetails)}
-                        interval={INTERVALS.WEEK}
-                      />
-                    }
-                    {
-                      currentClickedTab === CANDLESTICK_CHART_TABS.ONE_MONTH
-                      && <CandlestickChart
-                        data={dateToObject(oneMonthStockDetails)}
-                        interval={INTERVALS.MONTH}
-                      />
-                    }
-                  </div>
-                </>
-            }
-          </div>
+          {!searchStockDetails && <LoadingIndicator />}
+          {
+            searchStockDetails
+            && <div className='stock_item chart'>
+              <StockDetailsDashboard data={dashboardData} />
+              <TabBar onTabButtonClick={tabBarButtonClickHandler} />
+              <div className='chart_wrapper'>
+                {
+                  currentClickedTab === CANDLESTICK_CHART_TABS.ONE_Day
+                  && <CandlestickChart
+                    data={dateToObject(searchStockDetails)}
+                    interval={INTERVALS.DAY}
+                  />
+                }
+                {
+                  currentClickedTab === CANDLESTICK_CHART_TABS.ONE_WEEK
+                  && <CandlestickChart
+                    data={dateToObject(oneWeekStockDetails)}
+                    interval={INTERVALS.WEEK}
+                  />
+                }
+                {
+                  currentClickedTab === CANDLESTICK_CHART_TABS.ONE_MONTH
+                  && <CandlestickChart
+                    data={dateToObject(oneMonthStockDetails)}
+                    interval={INTERVALS.MONTH}
+                  />
+                }
+              </div>
+            </div>
+          }
+
           <div className='card_list_title'>
             <p>성격이 비슷한 기업들을 알려드릴게요</p>
           </div>

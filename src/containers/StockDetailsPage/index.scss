@@ -9,6 +9,7 @@
 }
 
 .stock_details_left {
+  min-width: 1200px;
   height: 100%;
 }
 
@@ -25,16 +26,14 @@
   line-height: 0.2rem;
   font-size: 3rem;
   height: 2rem;
-  margin-top: 3.5rem;
 
   p {
-    margin-top: 1rem;
     font-size: 1.5rem;
   }
 }
 
 .stock_item.chart {
-  height: 38rem;
+  min-height: 420px;
 }
 
 .chart_stick:hover {
