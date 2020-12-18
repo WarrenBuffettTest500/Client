@@ -44,8 +44,6 @@ const PortfolioItemInputModal = ({
       return;
     }
 
-    let hasItemInPortfolio = false;
-
     const portfolioItem = {
       symbol,
       avgPrice,
@@ -61,13 +59,11 @@ const PortfolioItemInputModal = ({
         autoDismiss: true,
       });
 
-      hasItemInPortfolio = true;
-
       return;
     }
 
     const response
-      = portfolioItemToEdit || hasItemInPortfolio
+      = portfolioItemToEdit
         ? await requestPortfolioItemUpdate(currentUser.uid, portfolioItem, portfolioItemToEdit.portfolioItemId)
         : await requestPortfolioItemCreate(currentUser.uid, portfolioItem);
 
