@@ -22,12 +22,10 @@ const Main = ({ setIsModalOpen }) => {
   const dispatch = useDispatch();
   const {
     currentUser,
-    preferenceInfo,
     staticPortfolio,
     recommendationCriterion,
   } = useSelector(state => ({
     currentUser: state.user.currentUser,
-    preferenceInfo: state.user.preferenceInfo,
     staticPortfolio: state.user.staticPortfolio,
     recommendationCriterion: state.user.recommendationCriterion,
   }));

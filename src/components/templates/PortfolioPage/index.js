@@ -256,8 +256,8 @@ const PortfolioPage = ({
                           <td className='table_return'>
                             {
                               commaNumber(new Decimal(price).minus(new Decimal(avgPrice)).times(new Decimal(quantity)).toDecimalPlaces(2).toString()) < 0
-                                ? `-$${Math.abs(commaNumber(new Decimal(price).minus(new Decimal(avgPrice)).times(new Decimal(quantity)).toDecimalPlaces(2).toString()))}`
-                                : commaNumber(new Decimal(price).minus(new Decimal(avgPrice)).times(new Decimal(quantity)).toDecimalPlaces(2).toString())
+                                ? `-$${Math.abs(commaNumber(new Decimal(price).minus(new Decimal(avgPrice)).times(new Decimal(quantity)).toDecimalPlaces(2)))}`
+                                : `$${commaNumber(new Decimal(price).minus(new Decimal(avgPrice)).times(new Decimal(quantity)).toDecimalPlaces(2).toString())}`
                             }
                           </td>
                           <td className='table_earnings_rate'>{`${commaNumber((new Decimal(price).dividedBy(new Decimal(avgPrice))).minus(1).times(100).toDecimalPlaces(2).toString())}%`}</td>
