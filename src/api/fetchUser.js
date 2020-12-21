@@ -1,8 +1,9 @@
 import METHODS from '../constants/methods';
 import PATHS from '../constants/paths';
 
-const requestRecommendationSymbolList = async keyword => {
-  const response = await fetch(`${PATHS.HOST}${PATHS.SERVER_PORT}${PATHS.COMPANY_PROFILES}${PATHS.RECOMMENDATION_STOCK_LIST}/${keyword}`, {
+const fetchUser = async () => {
+  const response = await fetch(
+    `${PATHS.HOST}${PATHS.SERVER_PORT}${PATHS.USERS}/current_user`, {
     method: METHODS.GET,
     headers: {
       'Content-Type': 'application/json',
@@ -13,4 +14,4 @@ const requestRecommendationSymbolList = async keyword => {
   return await response.json();
 };
 
-export default requestRecommendationSymbolList;
+export default fetchUser;

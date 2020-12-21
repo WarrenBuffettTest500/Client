@@ -95,12 +95,14 @@
   }
 }
 
+.recommendation_wrapper {
+	width: 90%;
+}
+
 .portfolio_card {
   position: relative;
-	width: 90%;
 	min-height: 350px;
-	perspective: 800px;
-  margin: 1.2rem;
+  margin: 1rem;
 }
 
 .my_portfolio_card {
@@ -160,9 +162,8 @@
 	width: 100%;
   height: 100%;
   margin: 0 auto;
-	transition: 1s;
-	transform-style: preserve-3d;
   box-shadow: 0 0 0.6rem 0.2rem rgba(0,0,0,.3);
+  background-color: $primary;
 }
 
 .circle_chart_wrapper {
@@ -178,11 +179,4 @@
     width: 100%;
     margin: 0;
   }
-}
-
-.portfolio_content {
-	width: 100%;
-  height: 100%;
-  border-radius: 0.3rem;
-  background-color: $primary;
 }

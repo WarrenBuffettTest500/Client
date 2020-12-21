@@ -12,13 +12,13 @@ import LoginModal from '../../components/molecules/LoginModal/';
 import PreferencesForm from '../../components/templates/PreferencesForm';
 import StockDetails from '../StockDetailsPage';
 import PortfolioPage from '../../components/templates/PortfolioPage';
-import requestUser from '../../api/requestUser';
-import requestPreferenceInfo from '../../api/requestPreferenceInfo';
+import fetchUser from '../../api/fetchUser';
+import fetchPreferenceInfo from '../../api/fetchPreferenceInfo';
 import { Switch, Route } from 'react-router-dom';
 import PATHS from '../../constants/paths';
 import '../../sass/app.scss';
 import Main from '../MainPage';
-import requestPortfolio from '../../api/requestPortfolio';
+import fetchPortfolio from '../../api/fetchPortfolio';
 import setCookie from '../../utils/setCookie';
 import getCookie from '../../utils/getCookie';
 import uuid from 'uuid-random';
@@ -70,12 +70,13 @@ const App = ({
     if (!token) return;
 
     const initializeUserState = async () => {
-      const { user } = await requestUser();
+      const { user } = await fetchUser();
       let preferenceInfoResponse;
 
       if (user?.preferenceInfoId) {
-        preferenceInfoResponse = await requestPreferenceInfo(user);
+        preferenceInfoResponse = await fetchPreferenceInfo(user);
       }
+
       onInitialStatesFetched(user, preferenceInfoResponse?.preferenceInfo);
     };
 
@@ -100,7 +101,7 @@ const App = ({
     if (!currentUser) return;
 
     const fetchStaticPortfolio = async () => {
-      const staticPortfolioResponse = await requestPortfolio(currentUser.uid);
+      const staticPortfolioResponse = await fetchPortfolio(currentUser.uid);
       onStaticPortfolioFetched(staticPortfolioResponse.portfolio);
     };
 

@@ -2,14 +2,14 @@
   position: fixed;
   width: 100%;
   display: grid;
-  grid-template-columns: minmax(500px, 4fr) 1fr;
+  grid-template-columns: minmax(500px, 5fr) 1fr;
   margin-top: 5rem;
   align-items: flex-start;
   height: 100%
 }
 
 .stock_details_left {
-  min-width: 1200px;
+  min-width: 1000px;
   height: 100%;
 }
 
@@ -34,10 +34,13 @@
 
 .stock_item.chart {
   min-height: 420px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .chart_stick:hover {
-    opacity: 0.2;
+  opacity: 0.2;
 }
 
 .chart_wrapper {

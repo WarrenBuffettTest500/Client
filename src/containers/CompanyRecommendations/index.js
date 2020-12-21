@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import Card from '../../components/atoms/Card';
 import { useHistory } from 'react-router-dom';
 import PATHS from '../../constants/paths';
-import requestCompanyProfiles from '../../api/requestCompanyProfiles';
+import fetchCompanyProfiles from '../../api/fetchCompanyProfiles';
 import { useSelector, useDispatch } from 'react-redux';
 import { setRecommendationSymbolList, setCompanyProfileList } from '../../store/stock';
 import { useInfinteScroll } from '../../hooks';
@@ -30,7 +30,7 @@ const CompanyRecommendations = ({
   const onIntersection = async ([{ isIntersecting }]) => {
     if (!recommendationSymbolList.length || !isIntersecting) return;
 
-    const data = await requestCompanyProfiles(recommendationSymbolList);
+    const data = await fetchCompanyProfiles(recommendationSymbolList);
 
     dispatch(setRecommendationSymbolList(recommendationSymbolList?.slice(1)));
     dispatch(setCompanyProfileList([...companyProfileList, data]));
@@ -40,7 +40,7 @@ const CompanyRecommendations = ({
     if (!recommendationSymbolList.length) return;
 
     (async () => {
-      const data = await requestCompanyProfiles(recommendationSymbolList);
+      const data = await fetchCompanyProfiles(recommendationSymbolList);
 
       dispatch(setRecommendationSymbolList(recommendationSymbolList?.slice(1)));
       dispatch(setCompanyProfileList([data]));

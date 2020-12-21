@@ -10,7 +10,7 @@ import requestPortfolioItemDelete from '../../../api/requestPortfolioItemDelete'
 import concatRealPrice from '../../../utils/concatRealPrice';
 import CircleChart from '../../molecules/CircleChart';
 import calculateProportions from '../../../utils/calculateProportions';
-import requestPortfolio from '../../../api/requestPortfolio';
+import fetchPortfolio from '../../../api/fetchPortfolio';
 import commaNumber from 'comma-number';
 import { useToasts } from 'react-toast-notifications';
 import TOAST_APPEARANCES from '../../../constants/toastAppearances';
@@ -39,7 +39,7 @@ const PortfolioPage = ({
 
   useEffect(() => {
     const fetchStaticPortfolio = async () => {
-      const staticPortfolioResponse = await requestPortfolio(portfolioOwnerUid);
+      const staticPortfolioResponse = await fetchPortfolio(portfolioOwnerUid);
       setLocalStaticPortfolio(staticPortfolioResponse.portfolio);
     };
 
@@ -158,8 +158,7 @@ const PortfolioPage = ({
     }
 
     const fetchStaticPortfolio = async () => {
-      const staticPortfolioResponse = await requestPortfolio(currentUser.uid);
-
+      const staticPortfolioResponse = await fetchPortfolio(currentUser.uid);
       onStaticPortfolioFetched(staticPortfolioResponse.portfolio);
     };
 

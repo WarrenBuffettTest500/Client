@@ -1,7 +1,7 @@
 import METHODS from '../constants/methods';
 import PATHS from '../constants/paths';
 
-const requestRecommendations = async (recommendationCriterion, currentUser, page) => {
+const fetchRecommendations = async (recommendationCriterion, currentUser, page) => {
   let fetchUrl;
 
   if (recommendationCriterion === 'preference') {
@@ -23,4 +23,4 @@ const requestRecommendations = async (recommendationCriterion, currentUser, page
   return await response.json();
 };
 
-export default requestRecommendations;
+export default fetchRecommendations;

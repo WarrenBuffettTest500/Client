@@ -1,9 +1,10 @@
 import METHODS from '../constants/methods';
 import PATHS from '../constants/paths';
 
-const requestStockDetails = async (keyword, interval = '1day') => {
+const fetchStockDetails = async (keyword, interval = '1day') => {
   try {
-    const response = await fetch(`${PATHS.HOST}${PATHS.SERVER_PORT}${PATHS.STOCK_DETAILS}/${keyword}/${interval}`, {
+    const response = await fetch(
+      `${PATHS.HOST}${PATHS.SERVER_PORT}${PATHS.STOCK_DETAILS}/${keyword}/${interval}`, {
       method: METHODS.GET,
       headers: {
         'Content-Type': 'application/json',
@@ -19,4 +20,4 @@ const requestStockDetails = async (keyword, interval = '1day') => {
   }
 };
 
-export default requestStockDetails;
+export default fetchStockDetails;
