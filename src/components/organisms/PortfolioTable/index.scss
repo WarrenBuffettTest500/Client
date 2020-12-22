@@ -1,0 +1,31 @@
+.portfolio_table_header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 10px;
+
+  h3 {
+    color: white;
+    margin-block-start: 0;
+    margin-block-end: 0;
+  }
+}
+
+.portfolio_table {
+  color: white;
+  border-collapse: collapse;
+  width: 100%;
+
+  tr:nth-child(even) {
+    background-color: #0d1a35;
+  }
+}
+
+.portfolio_table_narrow {
+  width: 4%;
+}
+
+.portfolio_table_wide {
+  width: 14%;
+}
+

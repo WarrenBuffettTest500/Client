@@ -238,7 +238,7 @@ const Main = ({ setIsModalOpen }) => {
       <div className='recommended_portfolios_title'>
         {
           (!currentUser || (currentUser && recommendationCriterion === 'random'))
-            ? <span>주식을 등록하시면 포트폴리오를 추천해 드려요</span>
+            ? <span>투자성향 또는 주식을 등록하시면 포트폴리오를 추천해 드려요</span>
             : <span>
               {
                 `${currentUser.displayName}님의 ${recommendationCriterion === 'preference' ? '투자 성향' : '보유 주식'}을 분석해 추천 포트폴리오를 모아봤어요`
