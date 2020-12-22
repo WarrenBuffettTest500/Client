@@ -14,6 +14,7 @@ const PATHS = {
   COMPANY_PROFILES: '/company_profiles',
   RECOMMENDATION_STOCK_LIST: '/recommendation_stock_list',
   VIEWS: '/views',
+  PORTFOLIOS: '/portfolios',
 };
 
 export default PATHS;

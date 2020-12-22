@@ -20,11 +20,11 @@ const PortfolioTable = ({
   const createClickHandler = () => {
     onCreateButtonClick();
   };
-  const editClickHandler = () => {
-    onEditButtonClick();
+  const editClickHandler = (id, symbol, quantity, avgPrice) => {
+    onEditButtonClick(id, symbol, quantity, avgPrice);
   };
-  const deleteClickHandler = () => {
-    onDeleteButtonClick();
+  const deleteClickHandler = id => {
+    onDeleteButtonClick(id);
   };
 
   return (

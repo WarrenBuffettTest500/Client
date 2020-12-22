@@ -78,7 +78,10 @@ const StockDetails = () => {
 
       setCurrentClickedTab(interval);
     } catch (error) {
-      console.error(error.message);
+      addToast('오류가 발생했어요. 조금 이따 다시 시도해 주세요.', {
+        appearance: TOAST_APPEARANCES.ERROR,
+        autoDismiss: true,
+      });
     }
   };
 
@@ -156,7 +159,7 @@ const StockDetails = () => {
           }
         </div>
         <div className='card_list_title'>
-          <p>성격이 비슷한 기업들을 알려드릴게요</p>
+          <p>성격이 비슷한 기업들을 알려드려요</p>
         </div>
         <div className='stock_item card_list'>
           {
