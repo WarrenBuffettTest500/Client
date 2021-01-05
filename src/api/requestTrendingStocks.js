@@ -3,7 +3,7 @@ import PATHS from '../constants/paths';
 
 const requestTrendingStocks = async () => {
   const host
-    = process.env === 'development'
+    = process.env.NODE_ENV === 'development'
       ? process.env.REACT_APP_LOCALHOST
       : process.env.REACT_APP_PROD_SERVER_HOST;
 
