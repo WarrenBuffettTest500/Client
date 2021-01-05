@@ -40,7 +40,7 @@ const App = ({
   const loginButtonClickHandler = () => {
     setIsAuthModalOpen(true);
   };
-  console.log(process.env);
+
   useEffect(() => {
     if (!currentUser) {
       setRecommendationCriterion('random');
