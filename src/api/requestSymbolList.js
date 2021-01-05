@@ -2,8 +2,13 @@ import METHODS from '../constants/methods';
 import PATHS from '../constants/paths';
 
 const requestSymbolList = async () => {
+  const host
+    = process.env === 'development'
+      ? process.env.REACT_APP_LOCALHOST
+      : process.env.REACT_APP_PROD_SERVER_HOST;
+
   const response = await fetch(
-    `${PATHS.HOST}${PATHS.SERVER_PORT}${PATHS.COMPANY_PROFILES}${PATHS.SYMBOL}`, {
+    `${host}${PATHS.SERVER_PORT}${PATHS.COMPANY_PROFILES}${PATHS.SYMBOL}`, {
     method: METHODS.GET,
     headers: {
       'Content-Type': 'application/json',

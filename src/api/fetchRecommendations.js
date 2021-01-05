@@ -2,14 +2,18 @@ import METHODS from '../constants/methods';
 import PATHS from '../constants/paths';
 
 const fetchRecommendations = async (recommendationCriterion, currentUser, page) => {
+  const host
+    = process.env === 'development'
+      ? process.env.REACT_APP_LOCALHOST
+      : process.env.REACT_APP_PROD_SERVER_HOST;
   let fetchUrl;
 
   if (recommendationCriterion === 'preference') {
-    fetchUrl = `${PATHS.HOST}${PATHS.SERVER_PORT}${PATHS.USERS}/${currentUser.uid}/portfolios/recommendations/preference/?page=${page}`;
+    fetchUrl = `${host}${PATHS.SERVER_PORT}${PATHS.USERS}/${currentUser.uid}/portfolios/recommendations/preference/?page=${page}`;
   } else if (recommendationCriterion === 'portfolio') {
-    fetchUrl = `${PATHS.HOST}${PATHS.SERVER_PORT}${PATHS.USERS}/${currentUser.uid}/portfolios/recommendations/portfolio/?page=${page}`;
+    fetchUrl = `${host}${PATHS.SERVER_PORT}${PATHS.USERS}/${currentUser.uid}/portfolios/recommendations/portfolio/?page=${page}`;
   } else {
-    fetchUrl = `${PATHS.HOST}${PATHS.SERVER_PORT}/portfolios/random`;
+    fetchUrl = `${host}${PATHS.SERVER_PORT}/portfolios/random`;
   }
 
   const response = await fetch(fetchUrl, {

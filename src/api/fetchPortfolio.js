@@ -2,8 +2,13 @@ import METHODS from '../constants/methods';
 import PATHS from '../constants/paths';
 
 const fetchPortfolio = async portfolioOwnerUid => {
+  const host
+    = process.env === 'development'
+      ? process.env.REACT_APP_LOCALHOST
+      : process.env.REACT_APP_PROD_SERVER_HOST;
+
   const portfolioResponse = await fetch(
-    `${PATHS.HOST}${PATHS.SERVER_PORT}${PATHS.USERS}/${portfolioOwnerUid}/portfolio`, {
+    `${host}${PATHS.SERVER_PORT}${PATHS.USERS}/${portfolioOwnerUid}/portfolio`, {
     method: METHODS.GET,
     headers: {
       'Content-Type': 'application/json',
