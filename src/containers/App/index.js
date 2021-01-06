@@ -42,6 +42,24 @@ const App = ({
   };
 
   useEffect(() => {
+    const check = async () => {
+      const res = await fetch(
+        'http://localhost:8080', {
+        'method': 'GET',
+        'headers': {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+
+      const response = await res.json();
+      console.log(response);
+    };
+
+    check();
+  }, []);
+
+  useEffect(() => {
     if (!currentUser) {
       setRecommendationCriterion('random');
 
