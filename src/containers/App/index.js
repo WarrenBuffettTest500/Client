@@ -43,15 +43,18 @@ const App = ({
 
   useEffect(() => {
     const check = async () => {
+      const host
+        = process.env.NODE_ENV === 'development'
+          ? process.env.REACT_APP_LOCALHOST
+          : process.env.REACT_APP_PROD_SERVER_HOST;
       const res = await fetch(
-        'http://localhost:8080', {
+        `${host}/8080`, {
         'method': 'GET',
         'headers': {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
-
       const response = await res.json();
       console.log(response);
     };
