@@ -8,7 +8,7 @@ const fetchStockDetails = async (keyword, interval = '1day') => {
       : process.env.REACT_APP_PROD_SERVER_HOST;
 
   const response = await fetch(
-    `${host}${PATHS.SERVER_PORT}${PATHS.STOCK_DETAILS}/${keyword}/${interval}`, {
+    `${host}${PATHS.STOCK_DETAILS}/${keyword}/${interval}`, {
     method: METHODS.GET,
     headers: {
       'Content-Type': 'application/json',

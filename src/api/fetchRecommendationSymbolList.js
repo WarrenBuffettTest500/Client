@@ -8,7 +8,7 @@ const fetchRecommendationSymbolList = async keyword => {
       : process.env.REACT_APP_PROD_SERVER_HOST;
 
   const response = await fetch(
-    `${host}${PATHS.SERVER_PORT}${PATHS.COMPANY_PROFILES}${PATHS.RECOMMENDATION_STOCK_LIST}/${keyword}`, {
+    `${host}${PATHS.COMPANY_PROFILES}${PATHS.RECOMMENDATION_STOCK_LIST}/${keyword}`, {
     method: METHODS.GET,
     headers: {
       'Content-Type': 'application/json',

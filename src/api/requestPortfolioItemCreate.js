@@ -8,7 +8,7 @@ const requestPortfolioItemCreate = async (userUid, data) => {
       : process.env.REACT_APP_PROD_SERVER_HOST;
 
   const response = await fetch(
-    `${host}${PATHS.SERVER_PORT}${PATHS.USERS}/${userUid}/portfolio_items`, {
+    `${host}${PATHS.USERS}/${userUid}/portfolio_items`, {
     method: METHODS.POST,
     headers: {
       'Content-Type': 'application/json',

@@ -8,7 +8,7 @@ const fetchPortfolio = async portfolioOwnerUid => {
       : process.env.REACT_APP_PROD_SERVER_HOST;
 
   const portfolioResponse = await fetch(
-    `${host}${PATHS.SERVER_PORT}${PATHS.USERS}/${portfolioOwnerUid}/portfolio`, {
+    `${host}${PATHS.USERS}/${portfolioOwnerUid}/portfolio`, {
     method: METHODS.GET,
     headers: {
       'Content-Type': 'application/json',

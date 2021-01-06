@@ -8,7 +8,7 @@ const requestUserPreferenceIdUpdate = async (user, info) => {
       : process.env.REACT_APP_PROD_SERVER_HOST;
 
   const response = await fetch(
-    `${host}${PATHS.SERVER_PORT}${PATHS.USERS}/${user.uid}`, {
+    `${host}${PATHS.USERS}/${user.uid}`, {
     method: METHODS.PUT,
     headers: {
       'Content-Type': 'application/json',

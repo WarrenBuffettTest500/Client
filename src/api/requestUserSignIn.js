@@ -1,5 +1,4 @@
 import METHODS from '../constants/methods';
-import PATHS from '../constants/paths';
 
 const requestUserSignIn = async (userInfo, path) => {
   const host
@@ -7,7 +6,7 @@ const requestUserSignIn = async (userInfo, path) => {
       ? process.env.REACT_APP_LOCALHOST
       : process.env.REACT_APP_PROD_SERVER_HOST;
 
-  const response = await fetch(`${host}${PATHS.SERVER_PORT}${path}`, {
+  const response = await fetch(`${host}/${path}`, {
     method: METHODS.POST,
     headers: {
       'Content-Type': 'application/json',

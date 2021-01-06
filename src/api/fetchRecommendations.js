@@ -9,11 +9,11 @@ const fetchRecommendations = async (recommendationCriterion, currentUser, page) 
   let fetchUrl;
 
   if (recommendationCriterion === 'preference') {
-    fetchUrl = `${host}${PATHS.SERVER_PORT}${PATHS.USERS}/${currentUser.uid}/portfolios/recommendations/preference/?page=${page}`;
+    fetchUrl = `${host}${PATHS.USERS}/${currentUser.uid}/portfolios/recommendations/preference/?page=${page}`;
   } else if (recommendationCriterion === 'portfolio') {
-    fetchUrl = `${host}${PATHS.SERVER_PORT}${PATHS.USERS}/${currentUser.uid}/portfolios/recommendations/portfolio/?page=${page}`;
+    fetchUrl = `${host}${PATHS.USERS}/${currentUser.uid}/portfolios/recommendations/portfolio/?page=${page}`;
   } else {
-    fetchUrl = `${host}${PATHS.SERVER_PORT}/portfolios/random`;
+    fetchUrl = `${host}/portfolios/random`;
   }
 
   const response = await fetch(fetchUrl, {

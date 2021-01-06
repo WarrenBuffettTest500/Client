@@ -52,7 +52,6 @@ const App = ({
         'method': 'GET',
         'headers': {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
       const response = await res.json();

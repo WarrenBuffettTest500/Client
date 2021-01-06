@@ -8,7 +8,7 @@ const requestPortfolioItemUpdate = async (userUid, data, portfolioItemId) => {
       : process.env.REACT_APP_PROD_SERVER_HOST;
 
   const response = await fetch(
-    `${host}${PATHS.SERVER_PORT}${PATHS.USERS}/${userUid}/portfolio_items/${portfolioItemId}`, {
+    `${host}${PATHS.USERS}/${userUid}/portfolio_items/${portfolioItemId}`, {
     method: METHODS.PUT,
     headers: {
       'Content-Type': 'application/json',

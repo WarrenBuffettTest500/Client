@@ -8,7 +8,7 @@ const fetchPreferenceInfo = async user => {
       : process.env.REACT_APP_PROD_SERVER_HOST;
 
   const response = await fetch(
-    `${host}${PATHS.SERVER_PORT}${PATHS.USERS}/${user.uid}/preference_infos/${user.preferenceInfoId}`, {
+    `${host}}${PATHS.USERS}/${user.uid}/preference_infos/${user.preferenceInfoId}`, {
     method: METHODS.GET,
     headers: {
       'Content-Type': 'application/json',

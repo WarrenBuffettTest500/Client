@@ -1,5 +1,4 @@
 import METHODS from '../constants/methods';
-import PATHS from '../constants/paths';
 
 const requestTrendingStocks = async () => {
   const host
@@ -8,7 +7,7 @@ const requestTrendingStocks = async () => {
       : process.env.REACT_APP_PROD_SERVER_HOST;
 
   const response = await fetch(
-    `${host}${PATHS.SERVER_PORT}/hits/trending`, {
+    `${host}/hits/trending`, {
     method: METHODS.GET,
     headers: {
       'Content-Type': 'application/json',
