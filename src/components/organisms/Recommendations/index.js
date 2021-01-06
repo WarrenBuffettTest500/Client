@@ -9,8 +9,8 @@ const Recommendations = ({
 }) => {
   const cardRefs = useRef({});
 
-  const recommendationClickHandler = () => {
-    onRecommendationClick();
+  const recommendationClickHandler = portfolio => {
+    onRecommendationClick(portfolio);
   };
 
   return (
