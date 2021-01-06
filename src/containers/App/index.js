@@ -48,7 +48,7 @@ const App = ({
           ? process.env.REACT_APP_LOCALHOST
           : process.env.REACT_APP_PROD_SERVER_HOST;
       const res = await fetch(
-        `${host}/8080`, {
+        `${host}`, {
         'method': 'GET',
         'headers': {
           'Content-Type': 'application/json',
