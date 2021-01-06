@@ -2,13 +2,13 @@ import METHODS from '../constants/methods';
 import PATHS from '../constants/paths';
 
 const fetchUser = async () => {
-  const host
+  const serverRoot
     = process.env.NODE_ENV === 'development'
       ? process.env.REACT_APP_LOCALHOST
-      : process.env.REACT_APP_PROD_SERVER_HOST;
+      : process.env.REACT_APP_PROD_SERVER_ROOT;
 
   const response = await fetch(
-    `${host}${PATHS.USERS}/current_user`, {
+    `${serverRoot}${PATHS.USERS}/current_user`, {
     method: METHODS.GET,
     headers: {
       'Content-Type': 'application/json',

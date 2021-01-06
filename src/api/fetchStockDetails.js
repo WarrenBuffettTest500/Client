@@ -2,13 +2,13 @@ import METHODS from '../constants/methods';
 import PATHS from '../constants/paths';
 
 const fetchStockDetails = async (keyword, interval = '1day') => {
-  const host
+  const serverRoot
     = process.env.NODE_ENV === 'development'
       ? process.env.REACT_APP_LOCALHOST
-      : process.env.REACT_APP_PROD_SERVER_HOST;
+      : process.env.REACT_APP_PROD_SERVER_ROOT;
 
   const response = await fetch(
-    `${host}${PATHS.STOCK_DETAILS}/${keyword}/${interval}`, {
+    `${serverRoot}${PATHS.STOCK_DETAILS}/${keyword}/${interval}`, {
     method: METHODS.GET,
     headers: {
       'Content-Type': 'application/json',

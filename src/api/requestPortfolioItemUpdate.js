@@ -2,13 +2,13 @@ import METHODS from '../constants/methods';
 import PATHS from '../constants/paths';
 
 const requestPortfolioItemUpdate = async (userUid, data, portfolioItemId) => {
-  const host
+  const serverRoot
     = process.env.NODE_ENV === 'development'
       ? process.env.REACT_APP_LOCALHOST
-      : process.env.REACT_APP_PROD_SERVER_HOST;
+      : process.env.REACT_APP_PROD_SERVER_ROOT;
 
   const response = await fetch(
-    `${host}${PATHS.USERS}/${userUid}/portfolio_items/${portfolioItemId}`, {
+    `${serverRoot}${PATHS.USERS}/${userUid}/portfolio_items/${portfolioItemId}`, {
     method: METHODS.PUT,
     headers: {
       'Content-Type': 'application/json',
