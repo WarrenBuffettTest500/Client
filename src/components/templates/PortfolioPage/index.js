@@ -1,21 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import PortfolioItemInputModal from '../../molecules/PortfolioItemInputModal';
-import AddIcon from '@material-ui/icons/Add';
-import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
-import ClearRoundedIcon from '@material-ui/icons/ClearRounded';
-import Button from '../../atoms/Button';
 import { Decimal } from 'decimal.js';
 import requestPortfolioItemDelete from '../../../api/requestPortfolioItemDelete';
 import concatRealPrice from '../../../utils/concatRealPrice';
 import CircleChart from '../../molecules/CircleChart';
 import calculateProportions from '../../../utils/calculateProportions';
-import requestPortfolio from '../../../api/requestPortfolio';
-import commaNumber from 'comma-number';
+import fetchPortfolio from '../../../api/fetchPortfolio';
 import { useToasts } from 'react-toast-notifications';
 import TOAST_APPEARANCES from '../../../constants/toastAppearances';
 import PortfolioDashboard from '../../organisms/PortfolioDashboard';
 import LoadingIndicator from '../../molecules/LoadingIndicator';
+import PortfolioTable from '../../organisms/PortfolioTable';
 
 const PortfolioPage = ({
   currentUser,
@@ -39,7 +35,7 @@ const PortfolioPage = ({
 
   useEffect(() => {
     const fetchStaticPortfolio = async () => {
-      const staticPortfolioResponse = await requestPortfolio(portfolioOwnerUid);
+      const staticPortfolioResponse = await fetchPortfolio(portfolioOwnerUid);
       setLocalStaticPortfolio(staticPortfolioResponse.portfolio);
     };
 
@@ -60,6 +56,8 @@ const PortfolioPage = ({
 
       return;
     }
+
+    setIsLoading(true);
 
     const setPortfolioPageData = async () => {
       const portfolioWithRealPrice = await concatRealPrice(localStaticPortfolio);
@@ -156,8 +154,7 @@ const PortfolioPage = ({
     }
 
     const fetchStaticPortfolio = async () => {
-      const staticPortfolioResponse = await requestPortfolio(currentUser.uid);
-
+      const staticPortfolioResponse = await fetchPortfolio(currentUser.uid);
       onStaticPortfolioFetched(staticPortfolioResponse.portfolio);
     };
 
@@ -173,14 +170,17 @@ const PortfolioPage = ({
               {
                 isLoading
                   ? <LoadingIndicator />
-                  : <CircleChart data={chartData} type='pie' page={'portfolio'} />
+                  : <CircleChart
+                    data={chartData}
+                    type='pie'
+                    category='portfolioDashboard'
+                  />
               }
             </div>
             : <div className='comment_wrapper' onClick={createClickHandler}>
-              주식을 등록하고 포트폴리오를 관리하세요
+              <h3>주식을 등록하고 포트폴리오를 관리하세요</h3>
             </div>
         }
-
         {
           currentUser.uid === portfolioOwnerUid
           && <PortfolioDashboard
@@ -189,95 +189,17 @@ const PortfolioPage = ({
             earningsRate={dashboardData.earningsRate}
           />
         }
-        <div className='table_wrapper'>
-          <div className='table_header'>
-            <h3>주식 목록</h3>
-            {
-              currentUser.uid === portfolioOwnerUid
-              && <Button onClick={createClickHandler}>
-                <AddIcon className='portfolio_item_create_button' />
-              </Button>
-            }
-          </div>
-          <table className='table'>
-            <tbody>
-              <tr>
-                <th>기업</th>
-                {
-                  currentUser.uid === portfolioOwnerUid
-                  && <>
-                    <th>보유량</th>
-                    <th>평단가</th>
-                  </>
-                }
-                <th>현재가</th>
-                {
-                  currentUser.uid === portfolioOwnerUid
-                  && <>
-                    <th>손익</th>
-                    <th>수익률</th>
-                    <th>평가금액</th>
-                    <th>매입금액</th>
-                    <th>수정</th>
-                    <th>삭제</th>
-                  </>
-                }
-              </tr>
-              {
-                dynamicPortfolio.map(item => {
-                  const { id, symbol, quantity, avgPrice, price } = item;
-                  return (
-                    <tr key={id}>
-                      <td className='table_symbol'>
-                        {
-                          <Link to={`/stock_details/${symbol}`}>
-                            {symbol}
-                          </Link>
-                        }
-                      </td>
-                      {
-                        currentUser.uid === portfolioOwnerUid
-                        && <>
-                          <td className='table_quantity'>{`${commaNumber(quantity)}주`}</td>
-                          <td className='table_avg_price'>{`$${commaNumber(avgPrice)}`}</td>
-                        </>
-                      }
-                      <td className='table_price'>
-                        {`$${commaNumber(new Decimal(price).toDecimalPlaces(2).toString())}`}
-                      </td>
-                      {
-                        currentUser.uid === portfolioOwnerUid
-                        && <>
-                          <td className='table_return'>{`$${commaNumber(new Decimal(price).minus(new Decimal(avgPrice)).times(new Decimal(quantity)).toDecimalPlaces(2).toString())}`}</td>
-                          <td className='table_earnings_rate'>{`${commaNumber((new Decimal(price).dividedBy(new Decimal(avgPrice))).minus(1).times(100).toDecimalPlaces(2).toString())}%`}</td>
-                          <td className='table_current_total'>{`$${commaNumber(new Decimal(price).times(new Decimal(quantity)).toDecimalPlaces(2).toString())}`}</td>
-                          <td className='table_buying_total'>{`$${commaNumber(new Decimal(avgPrice).times(new Decimal(quantity)).toDecimalPlaces(2).toString())}`}</td>
-                          <td className='table_update'>
-                            <Button
-                              className='portfolio_item_edit_button'
-                              onClick={editClickHandler.bind(null, id, symbol, quantity, avgPrice)}
-                            >
-                              <EditOutlinedIcon />
-                            </Button>
-                          </td>
-                          <td className='table_remove'>
-                            <Button
-                              className='portfolio_item_remove_button'
-                              onClick={deleteClickHandler.bind(null, id)}
-                            >
-                              <ClearRoundedIcon />
-                            </Button>
-                          </td>
-                        </>
-                      }
-                    </tr>
-                  );
-                })
-              }
-            </tbody>
-          </table>
+        <div className='portfolio_table_wrapper'>
+          <PortfolioTable
+            currentUser={currentUser}
+            portfolioOwnerUid={portfolioOwnerUid}
+            portfolio={dynamicPortfolio}
+            onCreateButtonClick={createClickHandler}
+            onEditButtonClick={editClickHandler}
+            onDeleteButtonClick={deleteClickHandler}
+          />
         </div>
-      </div>
+      </div >
       {
         isInputModalOpen
         && <PortfolioItemInputModal

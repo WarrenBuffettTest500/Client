@@ -4,7 +4,7 @@ import ModalOverlay from '../../atoms/ModalOverlay';
 import Button from '../../atoms/Button';
 import requestPortfolioItemCreate from '../../../api/requestPortfolioItemCreate';
 import requestPortfolioItemUpdate from '../../../api/requestPortfolioItemUpdate';
-import requestPortfolio from '../../../api/requestPortfolio';
+import fetchPortfolio from '../../../api/fetchPortfolio';
 import { useToasts } from 'react-toast-notifications';
 import TOAST_APPEARANCES from '../../../constants/toastAppearances';
 import { RESPONSE_RESULTS } from '../../../constants/responses';
@@ -44,8 +44,6 @@ const PortfolioItemInputModal = ({
       return;
     }
 
-    let hasItemInPortfolio = false;
-
     const portfolioItem = {
       symbol,
       avgPrice,
@@ -65,7 +63,7 @@ const PortfolioItemInputModal = ({
     }
 
     const response
-      = portfolioItemToEdit || hasItemInPortfolio
+      = portfolioItemToEdit
         ? await requestPortfolioItemUpdate(currentUser.uid, portfolioItem, portfolioItemToEdit.portfolioItemId)
         : await requestPortfolioItemCreate(currentUser.uid, portfolioItem);
 
@@ -79,7 +77,7 @@ const PortfolioItemInputModal = ({
     }
 
     const fetchStaticPortfolio = async () => {
-      const staticPortfolioResponse = await requestPortfolio(currentUser.uid);
+      const staticPortfolioResponse = await fetchPortfolio(currentUser.uid);
 
       onStaticPortfolioFetched(staticPortfolioResponse.portfolio);
     };
@@ -88,6 +86,12 @@ const PortfolioItemInputModal = ({
     setPortfolioItemToEdit(null);
     setIsInputModalOpen(false);
     setSubmitType('new');
+  };
+
+  const keyPressHandler = event => {
+    if (event.key !== 'Enter') return;
+
+    portfolioItemSumbitHandler();
   };
 
   return (
@@ -101,16 +105,19 @@ const PortfolioItemInputModal = ({
           title='티커'
           value={symbol}
           onChange={event => setSymbol(event.target.value.toUpperCase())}
+          onKeyPress={keyPressHandler}
         />
         <ModalInputField
           title='평균단가'
           value={avgPrice}
           onChange={event => setAvgPrice(event.target.value)}
+          onKeyPress={keyPressHandler}
         />
         <ModalInputField
           title='보유 수량'
           value={quantity}
           onChange={event => setQuantity(event.target.value)}
+          onKeyPress={keyPressHandler}
         />
         <Button
           className='portfolio_item_sumbit_button'

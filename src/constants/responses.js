@@ -7,4 +7,5 @@ export const RESPONSE_RESULTS = {
 
 export const RESPONSE_MESSAGES = {
   NOT_FOUND: 'not found',
+  ALREADY_SIGNED_UP: 'already signed up',
 };

@@ -15,10 +15,10 @@ const Header = ({
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
 
   const homeButtonClickHandler = () => {
-    if (pathname === '/') {
+    if (pathname === PATHS.ROOT) {
       window.location.reload();
     } else {
-      history.push('/');
+      history.push(PATHS.ROOT);
     }
   };
 
@@ -31,6 +31,12 @@ const Header = ({
     setIsUserModalOpen(false);
   };
 
+  const logoutClickHandler = () => {
+    history.push(PATHS.ROOT);
+    onLogoutClick();
+    setIsUserModalOpen(false);
+  };
+
   return (
     <header className='header_items_wrapper'>
       <div className='header_item'>
@@ -38,7 +44,7 @@ const Header = ({
           className='logo'
           onClick={homeButtonClickHandler}
         >
-          <h2>Warren Buffett Test 500</h2>
+          <h2>WarrenBuffettTest500</h2>
         </div>
       </div>
       <div className='header_item'>
@@ -74,7 +80,7 @@ const Header = ({
           <Button
             className='logout_button'
             text='로그아웃'
-            onClick={onLogoutClick}
+            onClick={logoutClickHandler}
           />
         </Modal>
       }

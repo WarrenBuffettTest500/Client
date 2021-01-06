@@ -1,14 +1,14 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import Button from '../../atoms/Button';
 import PATHS from '../../../constants/paths';
 import { authService, provider } from '../../../config/firebase';
 import requestUserSignIn from '../../../api/requestUserSignIn';
 import { useToasts } from 'react-toast-notifications';
 import TOAST_APPEARANCES from '../../../constants/toastAppearances';
-import { RESPONSE_RESULTS } from '../../../constants/responses';
+import { RESPONSE_RESULTS, RESPONSE_MESSAGES } from '../../../constants/responses';
 import Modal from '../../atoms/Modal';
 import ModalOverlay from '../../atoms/ModalOverlay';
+import GoogleAuthButton from '../GoogleAuthButton';
 
 const LoginModal = ({
   setIsModalOpen,
@@ -17,7 +17,7 @@ const LoginModal = ({
   const { addToast } = useToasts();
   const history = useHistory();
 
-  const googleAuthClickHandler = async event => {
+  const googleAuthClickHandler = async authType => {
     const { user } = await authService.signInWithPopup(provider);
     const userInfo = {
       uid: user.uid,
@@ -26,7 +26,7 @@ const LoginModal = ({
       photoURL: user.photoURL,
     };
 
-    if (event.target.name === 'login with google') {
+    if (authType === 'login') {
       try {
         const { result, user, token } = await requestUserSignIn(userInfo, PATHS.LOGIN);
 
@@ -54,27 +54,23 @@ const LoginModal = ({
       }
     } else {
       try {
-        const { result, user, token } = await requestUserSignIn(userInfo, PATHS.SIGNUP);
-
-        if (result === RESPONSE_RESULTS.FAILURE) {
-          localStorage.setItem('token', token);
-          onLogin(user);
-          setIsModalOpen(false);
-          addToast('이미 회원가입했습니다', {
-            appearance: TOAST_APPEARANCES.INFO,
-            autoDismiss: true,
-          });
-
-          return;
-        }
+        const { result, user, token, message } = await requestUserSignIn(userInfo, PATHS.SIGNUP);
 
         localStorage.setItem('token', token);
         onLogin(user);
         setIsModalOpen(false);
-        addToast('회원가입에 성공했습니다', {
-          appearance: TOAST_APPEARANCES.INFO,
-          autoDismiss: true,
-        });
+
+        if (message === RESPONSE_MESSAGES.ALREADY_SIGNED_UP) {
+          addToast('이미 회원가입했습니다. 로그인합니다.', {
+            appearance: TOAST_APPEARANCES.INFO,
+            autoDismiss: true,
+          });
+        } else if (result === RESPONSE_RESULTS.OK) {
+          addToast('회원가입에 성공했습니다', {
+            appearance: TOAST_APPEARANCES.INFO,
+            autoDismiss: true,
+          });
+        }
 
         history.push(PATHS.PREFERENCES);
       } catch (error) {
@@ -90,13 +86,13 @@ const LoginModal = ({
     <>
       <ModalOverlay setIsModalOpen={setIsModalOpen} />
       <Modal className='auth_modal'>
-        <Button
-          onClick={googleAuthClickHandler}
-          text='login with google'
+        <GoogleAuthButton
+          authType='login'
+          onClick={() => googleAuthClickHandler('login')}
         />
-        <Button
-          onClick={googleAuthClickHandler}
-          text='signup with google'
+        <GoogleAuthButton
+          authType='signup'
+          onClick={() => googleAuthClickHandler('signup')}
         />
       </Modal>
     </>

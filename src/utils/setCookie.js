@@ -4,10 +4,15 @@ const setCookie = (name, value, days) => {
   if (days) {
     const date = new Date();
     date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-    expires = '; expires=' + date.toUTCString();
+    expires = `; expires=${date.toUTCString()}`;
   }
 
-  document.cookie = name + '=' + (value || '') + expires + '; path=/' + '; Domain=localhost';
+  const domain
+    = process.env.NODE_ENV === 'development'
+      ? 'localhost'
+      : '.warrenbuffett-test500.site';
+
+  document.cookie = `${name}=${value || ''}${expires}; path=/; Domain=${domain}`;
 };
 
 export default setCookie;

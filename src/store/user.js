@@ -32,4 +32,11 @@ const userSlice = createSlice({
 
 export default userSlice.reducer;
 
-export const { setCurrentUser, removeCurrentUser, setPreferenceInfo, setStaticPortfolio, setRecommendationCriterion, initializeUserStates } = userSlice.actions;
+export const {
+  setCurrentUser,
+  removeCurrentUser,
+  setPreferenceInfo,
+  setStaticPortfolio,
+  setRecommendationCriterion,
+  initializeUserStates,
+} = userSlice.actions;

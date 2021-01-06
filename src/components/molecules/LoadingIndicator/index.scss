@@ -1,10 +1,10 @@
 @keyframes v_bar_grow {
-  0% {height:20px;}
-  20% {height:45px;}
-  40% {height:60px;}
-  60% {height:60px;}
-  80% {height:45px;}
-  100% {height:20px;}
+  0% { height:20px; }
+  20% { height:45px; }
+  40% { height:60px; }
+  60% { height:60px; }
+  80% { height:45px; }
+  100% { height:20px; }
 }
 
 .loading_indicator {
@@ -38,7 +38,7 @@
 
 .loading_indicator_wrapper {
   width: 100%;
-  height: 100%;
+  min-height: 60px;
   display: flex;
   justify-content: center;
   align-items: center;

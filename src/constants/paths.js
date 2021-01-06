@@ -1,7 +1,4 @@
 const PATHS = {
-  HOST: 'http://localhost',
-  CLIENT_PORT: ':3000',
-  SERVER_PORT: ':8080',
   ROOT: '/',
   SIGNUP: '/signup',
   LOGIN: '/login',
@@ -14,6 +11,7 @@ const PATHS = {
   COMPANY_PROFILES: '/company_profiles',
   RECOMMENDATION_STOCK_LIST: '/recommendation_stock_list',
   VIEWS: '/views',
+  PORTFOLIOS: '/portfolios',
 };
 
 export default PATHS;

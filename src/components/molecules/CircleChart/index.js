@@ -4,7 +4,7 @@ import * as d3 from 'd3';
 import commaNumber from 'comma-number';
 import PATHS from '../../../constants/paths';
 
-const CircleChart = ({ data, type, total, page }) => {
+const CircleChart = ({ data, type, total, category }) => {
   const svgRef = useRef();
   const history = useHistory();
 
@@ -73,14 +73,12 @@ const CircleChart = ({ data, type, total, page }) => {
 
     svg.selectAll('path')
       .on('mouseenter', function() {
+        d3.select(this).style('cursor', 'pointer');
+        if (category === 'recommended') return;
         d3.select(this)
           .transition()
           .duration(450)
           .attr('d', arcOver);
-
-        if (page === 'portfolio') {
-          d3.select(this).style('cursor', 'pointer');
-        }
       })
       .on('mouseleave', function() {
         d3.select(this)
@@ -90,7 +88,7 @@ const CircleChart = ({ data, type, total, page }) => {
           .style('cursor', 'default');
       });
 
-    if (page === 'portfolio') {
+    if (category === 'portfolioDashboard') {
       svg.selectAll('path')
         .on('click', event => {
           const { name: symbol } = event.target.__data__.data;

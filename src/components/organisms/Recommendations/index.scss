@@ -1,0 +1,10 @@
+.recommended_portfolios_wrapper {
+  width: 90vw;
+  margin: 0 auto 80px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(32rem, max-content));
+  justify-content: space-evenly;
+  justify-items: center;
+  background-color: #142649;
+  padding: 10px 0;
+}

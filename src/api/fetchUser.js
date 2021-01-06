@@ -1,9 +1,14 @@
 import METHODS from '../constants/methods';
 import PATHS from '../constants/paths';
 
-const requestUser = async () => {
+const fetchUser = async () => {
+  const serverRoot
+    = process.env.NODE_ENV === 'development'
+      ? process.env.REACT_APP_LOCALHOST
+      : process.env.REACT_APP_PROD_SERVER_ROOT;
+
   const response = await fetch(
-    `${PATHS.HOST}${PATHS.SERVER_PORT}${PATHS.USERS}/current_user`, {
+    `${serverRoot}${PATHS.USERS}/current_user`, {
     method: METHODS.GET,
     headers: {
       'Content-Type': 'application/json',
@@ -14,4 +19,4 @@ const requestUser = async () => {
   return await response.json();
 };
 
-export default requestUser;
+export default fetchUser;

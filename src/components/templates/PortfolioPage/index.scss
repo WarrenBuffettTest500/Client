@@ -6,7 +6,7 @@
 
 .comment_wrapper,
 .graphs_wrapper,
-.table_wrapper {
+.portfolio_table_wrapper {
   margin: 10px auto;
   border-radius: 0.3rem;
   box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.3);
@@ -27,45 +27,6 @@
 }
 
 .comment_wrapper,
-.table_wrapper {
+.portfolio_table_wrapper {
   padding: 20px;
-}
-
-.table_header {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin-bottom: 10px;
-
-  h3 {
-    color: white;
-    margin-block-start: 0;
-    margin-block-end: 0;
-  }
-}
-
-table {
-  color: white;
-  border-collapse: collapse;
-  width: 100%;
-}
-
-.table_symbol,
-.table_update,
-.table_remove {
-  width: 4%;
-}
-
-.table_quantity,
-.table_avg_price,
-.table_price,
-.table_return,
-.table_earnings_rate,
-.table_current_total,
-.table_buying_total {
-  width: 14%;
-}
-
-tr:nth-child(even) {
-  background-color: #0d1a35;
 }

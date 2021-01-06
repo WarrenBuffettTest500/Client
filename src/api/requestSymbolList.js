@@ -2,22 +2,23 @@ import METHODS from '../constants/methods';
 import PATHS from '../constants/paths';
 
 const requestSymbolList = async () => {
-  try {
-    const response = await fetch(
-      `${PATHS.HOST}${PATHS.SERVER_PORT}${PATHS.COMPANY_PROFILES}${PATHS.SYMBOL}`, {
-      method: METHODS.GET,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+  const serverRoot
+    = process.env.NODE_ENV === 'development'
+      ? process.env.REACT_APP_LOCALHOST
+      : process.env.REACT_APP_PROD_SERVER_ROOT;
 
-    const { result, data } = await response.json();
-    const symbolList = data.map(item => item.symbol);
+  const response = await fetch(
+    `${serverRoot}${PATHS.COMPANY_PROFILES}${PATHS.SYMBOL}`, {
+    method: METHODS.GET,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
 
-    return { result, symbolList };
-  } catch (error) {
-    alert(error.message);
-  }
+  const { result, data } = await response.json();
+  const symbolList = data.map(item => item.symbol);
+
+  return { result, symbolList };
 };
 
 export default requestSymbolList;
