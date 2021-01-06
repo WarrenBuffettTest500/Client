@@ -6,7 +6,7 @@ const requestUserSignIn = async (userInfo, path) => {
       ? process.env.REACT_APP_LOCALHOST
       : process.env.REACT_APP_PROD_SERVER_HOST;
 
-  const response = await fetch(`${host}/${path}`, {
+  const response = await fetch(`${host}${path}`, {
     method: METHODS.POST,
     headers: {
       'Content-Type': 'application/json',
