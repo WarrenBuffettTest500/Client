@@ -13,7 +13,7 @@ const GoogleAuthButton = ({
     <Button
       className='google_auth_button'
       onClick={clickHandler}
-      imgSrc='/images/G-logo.png'
+      imgSrc='/images/G-logo.jpg'
       alt='Google logo'
       text={`${authType === 'login' ? 'Login' : 'Signup'} with Google`}
       textClassName='google_auth_text'
