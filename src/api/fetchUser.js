@@ -8,7 +8,7 @@ const fetchUser = async () => {
       : process.env.REACT_APP_PROD_SERVER_ROOT;
 
   const response = await fetch(
-    `${serverRoot}${PATHS.USERS}/current_user`, {
+    `${serverRoot}${PATHS.USERS}/current-user`, {
     method: METHODS.GET,
     headers: {
       'Content-Type': 'application/json',
