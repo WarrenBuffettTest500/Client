@@ -7,6 +7,10 @@
 - [https://github.com/WarrenBuffettTest500/Client](https://github.com/WarrenBuffettTest500/Client) (프론트엔드)
 - [https://github.com/WarrenBuffettTest500/Server](https://github.com/WarrenBuffettTest500/Server) (백엔드)
 
+### 🎬 **시연 영상**
+
+[https://s3-us-west-2.amazonaws.com/secure.notion-static.com/830f66d2-ce3f-46a9-b7eb-d135fb6fe89b/__.mp4](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/830f66d2-ce3f-46a9-b7eb-d135fb6fe89b/__.mp4)
+
 ### 📢 **프로젝트 발표 영상**
 
 - [https://youtu.be/jMw5MIxLY3o?t=3443](https://youtu.be/jMw5MIxLY3o?t=3443) (57분 24초부터)
@@ -16,24 +20,63 @@
 - [https://warrenbuffett-test500.site/](https://warrenbuffett-test500.site/)
 - 무료 API를 사용하고 있습니다. API 요청 제한 횟수를 넘으면 웹사이트가 정상적으로 작동하지 않거나 일부 내용이 undefined로 나타날 수 있습니다.
 
-### 🖥 **실행 방법 및 환경변수 설정**
+### 🎮 실행 방법
 
-```
-npm install
-```
-- 클라이언트 환경변수
-    - REACT_APP_API_KEY='your firebase api key'
-    - REACT_APP_AUTH_DOMAIN='your firebase auth domain'
-    - REACT_APP_PROJECT_ID='your firebase project ID'
-    - REACT_APP_STORAGE_BUCKET='your firebase storage bucket'
-    - REACT_APP_MESSAGING_SENDER_ID='your firebase messaging sending ID'
-    - REACT_APP_APP_ID='your firebase app ID'
-    - REACT_APP_DB_URL='your firebase database url'
-    - REACT_APP_X_RAPIDAPI_KEY='your rapidapi key'
-- 서버 환경변수
-    - JWT_SECRET_KEY='set JWT secret key'
-    - X_RAPIDAPI_KEY='your rapidapi key'
+- 프론트엔드
+    - Git에서 프로젝트를 클론받습니다.
 
+        ```jsx
+        git clone https://github.com/WarrenBuffettTest500/Client.git
+        cd Client
+        npm install
+        ```
+
+    - root 디렉토리에 .env 파일을 만들고 환경변수를 설정합니다.
+
+        ```jsx
+        REACT_APP_API_KEY=<firebase api key>
+        REACT_APP_AUTH_DOMAIN=<firebase auth domain>
+        REACT_APP_PROJECT_ID=<firebase project id>
+        REACT_APP_STORAGE_BUCKET=<firebase storage bucket>
+        REACT_APP_MESSAGING_SENDER_ID=<firebase sender id>
+        REACT_APP_APP_ID=<firebase app id>
+        REACT_APP_DB_URL=<firebase database url>
+        REACT_APP_X_RAPIDAPI_KEY=<rapidapi key> // 주식 정보를 불러올 때 사용합니다.
+        REACT_APP_LOCALHOST=http://localhost:8080
+        ```
+
+    - 애플리케이션을 실행합니다.
+
+        ```jsx
+        npm start
+        ```
+
+- 백엔드
+    - Git에서 프로젝트를 클론받습니다.
+
+        ```jsx
+        git clone https://github.com/WarrenBuffettTest500/Server.git
+        cd Server
+        npm install
+        ```
+
+    - root 디렉토리에 .env 파일을 만들고 환경변수를 설정합니다.
+
+        ```jsx
+        PORT=8080
+        JWT_SECRET_KEY=some_long_random_string_to_use_as_jwt_secret_key
+        MYSQL_HOST=<mySQL url>
+        MYSQL_USERNAME=<mySQL username>
+        MYSQL_PASSWORD=<mySQL password>
+        MYSQL_DATABASE=<mySQL database>
+        X_RAPIDAPI_KEY=<rapidapi key> // 주식 정보를 불러올 때 사용합니다.
+        ```
+
+    - 서버를 실행합니다.
+
+        ```jsx
+        npm run dev
+        ```
 
 ---
 
@@ -175,3 +218,5 @@ npm install
 - 또한 등락을 보여주지 않을 땐 그때그때 정보만 서버에서 클라이언트로 보내주기 때문에 이용자들 사이에 순위가 다르게 뜨는 것이 문제가 되지 않았는데 순위 등락을 보여주려니 이용자들 사이(특히 방금 접속한 이용자)에 등락이 다르게 나타나는 문제가 생길 것 같았습니다.
 - 이런 문제를 해결하려면 데이터베이스에 trendingStocks와 같은 테이블을 새로 만들고 previous와 current 행을 계속해서 업데이트해야 한다고 생각했습니다.
 - 사전 기획의 중요성을 깨달은 사례 가운데 하나입니다.
+
+---
