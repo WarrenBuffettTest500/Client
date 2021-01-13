@@ -9,7 +9,7 @@
 
 ### 🎬 **시연 영상**
 
-[https://s3-us-west-2.amazonaws.com/secure.notion-static.com/830f66d2-ce3f-46a9-b7eb-d135fb6fe89b/__.mp4](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/830f66d2-ce3f-46a9-b7eb-d135fb6fe89b/__.mp4)
+![preview](/README.assets/preview.gif)
 
 ### 📢 **프로젝트 발표 영상**
 
