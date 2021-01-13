@@ -104,6 +104,7 @@
     - Express
     - MySQL (Google Cloud)
     - Sequelize
+    - AWS (CodePipeline, Elastic Beanstalk)
 
 ### 🕹 기능 (각 소제목 옆 괄호는 관련 mySQL 모델 이름)
 
